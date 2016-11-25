@@ -1,0 +1,70 @@
+[
+    {
+        "merged": "D:\\Open\\CisCoderFramework\\ABase\\build\\intermediates\\res\\merged\\debug\\layout\\loading_layout.xml",
+        "source": "D:\\Open\\CisCoderFramework\\ABase\\res\\layout\\loading_layout.xml"
+    },
+    {
+        "merged": "D:\\Open\\CisCoderFramework\\ABase\\build\\intermediates\\res\\merged\\debug\\layout\\slider_indicator_layout.xml",
+        "source": "D:\\Open\\CisCoderFramework\\ABase\\res\\layout\\slider_indicator_layout.xml"
+    },
+    {
+        "merged": "D:\\Open\\CisCoderFramework\\ABase\\build\\intermediates\\res\\merged\\debug\\layout\\city_pop.xml",
+        "source": "D:\\Open\\CisCoderFramework\\ABase\\res\\layout\\city_pop.xml"
+    },
+    {
+        "merged": "D:\\Open\\CisCoderFramework\\ABase\\build\\intermediates\\res\\merged\\debug\\layout\\residemenu.xml",
+        "source": "D:\\Open\\CisCoderFramework\\ABase\\res\\layout\\residemenu.xml"
+    },
+    {
+        "merged": "D:\\Open\\CisCoderFramework\\ABase\\build\\intermediates\\res\\merged\\debug\\layout\\slider_indicator_corner_bg.xml",
+        "source": "D:\\Open\\CisCoderFramework\\ABase\\res\\layout\\slider_indicator_corner_bg.xml"
+    },
+    {
+        "merged": "D:\\Open\\CisCoderFramework\\ABase\\build\\intermediates\\res\\merged\\debug\\layout\\slider_render_type_text.xml",
+        "source": "D:\\Open\\CisCoderFramework\\ABase\\res\\layout\\slider_render_type_text.xml"
+    },
+    {
+        "merged": "D:\\Open\\CisCoderFramework\\ABase\\build\\intermediates\\res\\merged\\debug\\layout\\bottom_tab.xml",
+        "source": "D:\\Open\\CisCoderFramework\\ABase\\res\\layout\\bottom_tab.xml"
+    },
+    {
+        "merged": "D:\\Open\\CisCoderFramework\\ABase\\build\\intermediates\\res\\merged\\debug\\layout\\residemenu_item.xml",
+        "source": "D:\\Open\\CisCoderFramework\\ABase\\res\\layout\\residemenu_item.xml"
+    },
+    {
+        "merged": "D:\\Open\\CisCoderFramework\\ABase\\build\\intermediates\\res\\merged\\debug\\layout\\slider_layout.xml",
+        "source": "D:\\Open\\CisCoderFramework\\ABase\\res\\layout\\slider_layout.xml"
+    },
+    {
+        "merged": "D:\\Open\\CisCoderFramework\\ABase\\build\\intermediates\\res\\merged\\debug\\layout\\widget_linelayout.xml",
+        "source": "D:\\Open\\CisCoderFramework\\ABase\\res\\layout\\widget_linelayout.xml"
+    },
+    {
+        "merged": "D:\\Open\\CisCoderFramework\\ABase\\build\\intermediates\\res\\merged\\debug\\layout\\dialog_layout_confirm.xml",
+        "source": "D:\\Open\\CisCoderFramework\\ABase\\res\\layout\\dialog_layout_confirm.xml"
+    },
+    {
+        "merged": "D:\\Open\\CisCoderFramework\\ABase\\build\\intermediates\\res\\merged\\debug\\layout\\widget_tips.xml",
+        "source": "D:\\Open\\CisCoderFramework\\ABase\\res\\layout\\widget_tips.xml"
+    },
+    {
+        "merged": "D:\\Open\\CisCoderFramework\\ABase\\build\\intermediates\\res\\merged\\debug\\layout\\materialdialog_layout.xml",
+        "source": "D:\\Open\\CisCoderFramework\\ABase\\res\\layout\\materialdialog_layout.xml"
+    },
+    {
+        "merged": "D:\\Open\\CisCoderFramework\\ABase\\build\\intermediates\\res\\merged\\debug\\layout\\city_picker.xml",
+        "source": "D:\\Open\\CisCoderFramework\\ABase\\res\\layout\\city_picker.xml"
+    },
+    {
+        "merged": "D:\\Open\\CisCoderFramework\\ABase\\build\\intermediates\\res\\merged\\debug\\layout\\sweet_alert.xml",
+        "source": "D:\\Open\\CisCoderFramework\\ABase\\res\\layout\\sweet_alert.xml"
+    },
+    {
+        "merged": "D:\\Open\\CisCoderFramework\\ABase\\build\\intermediates\\res\\merged\\debug\\layout\\slider_render_type_default.xml",
+        "source": "D:\\Open\\CisCoderFramework\\ABase\\res\\layout\\slider_render_type_default.xml"
+    },
+    {
+        "merged": "D:\\Open\\CisCoderFramework\\ABase\\build\\intermediates\\res\\merged\\debug\\layout\\widget_gallery_pop.xml",
+        "source": "D:\\Open\\CisCoderFramework\\ABase\\res\\layout\\widget_gallery_pop.xml"
+    }
+]

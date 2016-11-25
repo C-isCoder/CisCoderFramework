@@ -1,0 +1,70 @@
+[
+    {
+        "merged": "D:\\Open\\CisCoderFramework\\ABase\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\slider_render_type_default.xml",
+        "source": "D:\\Open\\CisCoderFramework\\ABase\\build\\intermediates\\bundles\\debug\\res\\layout\\slider_render_type_default.xml"
+    },
+    {
+        "merged": "D:\\Open\\CisCoderFramework\\ABase\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\dialog_layout_confirm.xml",
+        "source": "D:\\Open\\CisCoderFramework\\ABase\\build\\intermediates\\bundles\\debug\\res\\layout\\dialog_layout_confirm.xml"
+    },
+    {
+        "merged": "D:\\Open\\CisCoderFramework\\ABase\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\slider_indicator_corner_bg.xml",
+        "source": "D:\\Open\\CisCoderFramework\\ABase\\build\\intermediates\\bundles\\debug\\res\\layout\\slider_indicator_corner_bg.xml"
+    },
+    {
+        "merged": "D:\\Open\\CisCoderFramework\\ABase\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\sweet_alert.xml",
+        "source": "D:\\Open\\CisCoderFramework\\ABase\\build\\intermediates\\bundles\\debug\\res\\layout\\sweet_alert.xml"
+    },
+    {
+        "merged": "D:\\Open\\CisCoderFramework\\ABase\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\slider_layout.xml",
+        "source": "D:\\Open\\CisCoderFramework\\ABase\\build\\intermediates\\bundles\\debug\\res\\layout\\slider_layout.xml"
+    },
+    {
+        "merged": "D:\\Open\\CisCoderFramework\\ABase\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\widget_gallery_pop.xml",
+        "source": "D:\\Open\\CisCoderFramework\\ABase\\build\\intermediates\\bundles\\debug\\res\\layout\\widget_gallery_pop.xml"
+    },
+    {
+        "merged": "D:\\Open\\CisCoderFramework\\ABase\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\materialdialog_layout.xml",
+        "source": "D:\\Open\\CisCoderFramework\\ABase\\build\\intermediates\\bundles\\debug\\res\\layout\\materialdialog_layout.xml"
+    },
+    {
+        "merged": "D:\\Open\\CisCoderFramework\\ABase\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\residemenu_item.xml",
+        "source": "D:\\Open\\CisCoderFramework\\ABase\\build\\intermediates\\bundles\\debug\\res\\layout\\residemenu_item.xml"
+    },
+    {
+        "merged": "D:\\Open\\CisCoderFramework\\ABase\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\loading_layout.xml",
+        "source": "D:\\Open\\CisCoderFramework\\ABase\\build\\intermediates\\bundles\\debug\\res\\layout\\loading_layout.xml"
+    },
+    {
+        "merged": "D:\\Open\\CisCoderFramework\\ABase\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\residemenu.xml",
+        "source": "D:\\Open\\CisCoderFramework\\ABase\\build\\intermediates\\bundles\\debug\\res\\layout\\residemenu.xml"
+    },
+    {
+        "merged": "D:\\Open\\CisCoderFramework\\ABase\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\widget_tips.xml",
+        "source": "D:\\Open\\CisCoderFramework\\ABase\\build\\intermediates\\bundles\\debug\\res\\layout\\widget_tips.xml"
+    },
+    {
+        "merged": "D:\\Open\\CisCoderFramework\\ABase\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\widget_linelayout.xml",
+        "source": "D:\\Open\\CisCoderFramework\\ABase\\build\\intermediates\\bundles\\debug\\res\\layout\\widget_linelayout.xml"
+    },
+    {
+        "merged": "D:\\Open\\CisCoderFramework\\ABase\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\slider_render_type_text.xml",
+        "source": "D:\\Open\\CisCoderFramework\\ABase\\build\\intermediates\\bundles\\debug\\res\\layout\\slider_render_type_text.xml"
+    },
+    {
+        "merged": "D:\\Open\\CisCoderFramework\\ABase\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\city_pop.xml",
+        "source": "D:\\Open\\CisCoderFramework\\ABase\\build\\intermediates\\bundles\\debug\\res\\layout\\city_pop.xml"
+    },
+    {
+        "merged": "D:\\Open\\CisCoderFramework\\ABase\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\bottom_tab.xml",
+        "source": "D:\\Open\\CisCoderFramework\\ABase\\build\\intermediates\\bundles\\debug\\res\\layout\\bottom_tab.xml"
+    },
+    {
+        "merged": "D:\\Open\\CisCoderFramework\\ABase\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\city_picker.xml",
+        "source": "D:\\Open\\CisCoderFramework\\ABase\\build\\intermediates\\bundles\\debug\\res\\layout\\city_picker.xml"
+    },
+    {
+        "merged": "D:\\Open\\CisCoderFramework\\ABase\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\slider_indicator_layout.xml",
+        "source": "D:\\Open\\CisCoderFramework\\ABase\\build\\intermediates\\bundles\\debug\\res\\layout\\slider_indicator_layout.xml"
+    }
+]
