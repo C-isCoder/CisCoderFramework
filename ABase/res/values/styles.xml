@@ -17,7 +17,6 @@
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
     </style>
     <!--加载框Style-->
-    <!-- 自定义loading dialog -->
     <style name="loading_dialog" parent="@android:style/Theme.Dialog">
         <item name="android:windowFrame">@null</item>
         <item name="android:windowIsFloating">true</item>

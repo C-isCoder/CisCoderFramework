@@ -13,9 +13,8 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
-import bc.retrofit.HttpService;
-import bc.retrofit.RetrofitClient;
-import bc.utils.DialogUtils;
+import cn.ml.base.retrofit.HttpService;
+import cn.ml.base.retrofit.RetrofitClient;
 import cn.ml.base.utils.MLAppManager;
 import cn.ml.base.utils.MLDialogUtils;
 import cn.ml.base.utils.MLToastUtils;
@@ -62,7 +61,6 @@ public class BaseActivity extends FragmentActivity {
     }
 
 
-
     @Override
     protected void onPause() {
         super.onPause();
@@ -107,7 +105,7 @@ public class BaseActivity extends FragmentActivity {
             if (color != -1) {
                 window.setStatusBarColor(getResources().getColor(color));
             } else {
-                window.setStatusBarColor(getResources().getColor(R.color.top_bar_bg));//app主色调
+                window.setStatusBarColor(Configuration.getAppBarColor());//app主色调
             }
         }
     }
@@ -162,7 +160,7 @@ public class BaseActivity extends FragmentActivity {
      * @return
      */
     protected HttpService request() {
-        DialogUtils.showProgressDialog(getAty());
+        MLDialogUtils.showProgressDialog(getAty());
         return RetrofitClient.getInstance().create();
     }
 
@@ -176,6 +174,7 @@ public class BaseActivity extends FragmentActivity {
     }
 
     //变换操作符省略subscribeOnOn和observeOn的是设置
+    @SuppressWarnings("unchecked")
     final Observable.Transformer schedulersTransformer = new Observable.Transformer() {
         @Override
         public Object call(Object observable) {
@@ -192,15 +191,15 @@ public class BaseActivity extends FragmentActivity {
     //=======================================================================================================
     // ==========加载数据对话框ProgressDialog===========
     public void showProgressDialog() {
-        DialogUtils.showProgressDialog(getAty());
+        MLDialogUtils.showProgressDialog(getAty());
     }
 
     public void showProgressDialog(String message) {
-        DialogUtils.showProgressDialog(getAty(), message);
+        MLDialogUtils.showProgressDialog(getAty(), message);
     }
 
     public void dismissProgressDialog() {
-        DialogUtils.dismissProgressDialog();
+        MLDialogUtils.dismissProgressDialog();
     }
 
     // ==========Toast 提示=========================

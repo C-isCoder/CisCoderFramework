@@ -25,10 +25,11 @@ public class APP extends MLApplication {
     //配置URL TOKEN
     private void initAPIConstants() {
         Configuration.init(this);
-        Configuration.setTOKEN(getToken());
+        Configuration.setToken(getToken());
         Configuration.setApiLoadImage(getString(R.string.API_DEFAULT_HOST));
         Configuration.setApiUploadImage(getString(R.string.API_UPLOAD_IMAGE));
         Configuration.setBase_Download(getString(R.string.BASE_DOWNLOAD));
+        Configuration.setAppBarColor(R.color.top_bar_bg);
     }
 
     public static String getToken() {

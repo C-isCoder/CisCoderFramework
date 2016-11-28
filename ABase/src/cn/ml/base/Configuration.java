@@ -17,15 +17,25 @@ public class Configuration {
     private static String Upload_API = "fileupload/file/uploadImages";
     private static String Base_Download = "http://pkg3.fir.im/";
     //访问图片
-    public static String API_LOAD_IMAGE = "http://114.215.88.167:8080/images/file/";
+    private static String API_LOAD_IMAGE = "http://114.215.88.167:8080/images/file/";
+    //标题栏颜色
+    private static int APP_BAR_COLOR;
 
     private Configuration() {
 
     }
 
+
     public static void init(Context context) {
         setAppContext(context);
-        setAppName(context.getString(R.string.app_name));
+    }
+
+    public static int getAppBarColor() {
+        return APP_BAR_COLOR;
+    }
+
+    public static void setAppBarColor(int appBarColor) {
+        APP_BAR_COLOR = appBarColor;
     }
 
     public static String getToken() {

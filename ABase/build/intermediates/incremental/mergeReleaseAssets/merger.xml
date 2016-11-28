@@ -1,2 +1,2 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merger version="3"><dataSet config="main"><source path="D:\Open\CisCoderFramework\ABase\assets"/><source path="D:\Open\CisCoderFramework\ABase\build\generated\assets\shaders\release"/></dataSet><dataSet config="release"><source path="D:\Open\CisCoderFramework\ABase\build-types\release\assets"/></dataSet></merger>
+<merger version="3"><dataSet config="main"><source path="E:\C_Workspace\a_work\CisCoderFramework\ABase\assets"/><source path="E:\C_Workspace\a_work\CisCoderFramework\ABase\build\generated\assets\shaders\release"/></dataSet><dataSet config="release"><source path="E:\C_Workspace\a_work\CisCoderFramework\ABase\build-types\release\assets"/></dataSet></merger>

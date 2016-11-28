@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/cm_white"
+    android:paddingTop="8dp">
+
+    <ImageView
+        android:id="@+id/item_information_iv_image"
+        android:layout_width="90dp"
+        android:layout_height="70dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:scaleType="fitXY" />
+
+    <TextView
+        android:id="@+id/item_information_tv_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="8dp"
+        android:maxLines="1"
+        android:text="2016-9-26"
+        android:textColor="@color/tv_black1"
+        android:textSize="@dimen/tv_size_body3" />
+
+    <TextView
+        android:id="@+id/item_information_tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@id/item_information_tv_date"
+        android:layout_toRightOf="@id/item_information_iv_image"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:text="八月份全国地价涨超4成"
+        android:textColor="@color/tv_black1"
+        android:textSize="@dimen/tv_size_body2" />
+
+
+    <TextView
+        android:id="@+id/item_information_tv_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/item_information_tv_title"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_toRightOf="@id/item_information_iv_image"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:text="　　随着济南加大对东城区就哭了该就爱了看快加咖喱上课就阿里卡三大金刚克拉十几个刻录机"
+        android:textColor="@color/tv_black2"
+        android:textSize="@dimen/tv_size_body2" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/bg_color" />
+</RelativeLayout>

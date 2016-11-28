@@ -1,2 +1,4 @@
-include ':app', ':permission'
+include ':app'
 include ':ABase'
+include ':permission'
+include ':test'

@@ -673,24 +673,25 @@ containing a value of this type.
         public static int play_hide=0x7f02000b;
         public static int pullview_arrow=0x7f02000c;
         public static int reside_menu_shadow=0x7f02000d;
-        public static int star_f=0x7f02000e;
-        public static int star_n=0x7f02000f;
-        public static int sweet_blue_button_background=0x7f020010;
-        public static int sweet_dialog_background=0x7f020011;
-        public static int sweet_error_center_x=0x7f020012;
-        public static int sweet_error_circle=0x7f020013;
-        public static int sweet_gray_button_background=0x7f020014;
-        public static int sweet_red_button_background=0x7f020015;
-        public static int sweet_success_bow=0x7f020016;
-        public static int sweet_success_circle=0x7f020017;
-        public static int sweet_warning_circle=0x7f020018;
-        public static int sweet_warning_sigh=0x7f020019;
-        public static int test=0x7f02001a;
-        public static int tips_bg=0x7f02001b;
-        public static int tips_error=0x7f02001c;
-        public static int tips_smile=0x7f02001d;
-        public static int tips_success=0x7f02001e;
-        public static int tips_warning=0x7f02001f;
+        public static int slider_indicator_corner_bg=0x7f02000e;
+        public static int star_f=0x7f02000f;
+        public static int star_n=0x7f020010;
+        public static int sweet_blue_button_background=0x7f020011;
+        public static int sweet_dialog_background=0x7f020012;
+        public static int sweet_error_center_x=0x7f020013;
+        public static int sweet_error_circle=0x7f020014;
+        public static int sweet_gray_button_background=0x7f020015;
+        public static int sweet_red_button_background=0x7f020016;
+        public static int sweet_success_bow=0x7f020017;
+        public static int sweet_success_circle=0x7f020018;
+        public static int sweet_warning_circle=0x7f020019;
+        public static int sweet_warning_sigh=0x7f02001a;
+        public static int test=0x7f02001b;
+        public static int tips_bg=0x7f02001c;
+        public static int tips_error=0x7f02001d;
+        public static int tips_smile=0x7f02001e;
+        public static int tips_success=0x7f02001f;
+        public static int tips_warning=0x7f020020;
     }
     public static final class id {
         public static int Accordion=0x7f070008;
@@ -804,15 +805,14 @@ containing a value of this type.
         public static int materialdialog_layout=0x7f030005;
         public static int residemenu=0x7f030006;
         public static int residemenu_item=0x7f030007;
-        public static int slider_indicator_corner_bg=0x7f030008;
-        public static int slider_indicator_layout=0x7f030009;
-        public static int slider_layout=0x7f03000a;
-        public static int slider_render_type_default=0x7f03000b;
-        public static int slider_render_type_text=0x7f03000c;
-        public static int sweet_alert=0x7f03000d;
-        public static int widget_gallery_pop=0x7f03000e;
-        public static int widget_linelayout=0x7f03000f;
-        public static int widget_tips=0x7f030010;
+        public static int slider_indicator_layout=0x7f030008;
+        public static int slider_layout=0x7f030009;
+        public static int slider_render_type_default=0x7f03000a;
+        public static int slider_render_type_text=0x7f03000b;
+        public static int sweet_alert=0x7f03000c;
+        public static int widget_gallery_pop=0x7f03000d;
+        public static int widget_linelayout=0x7f03000e;
+        public static int widget_tips=0x7f03000f;
     }
     public static final class string {
         public static int config_response_error_not_json=0x7f080000;
