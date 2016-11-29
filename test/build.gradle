@@ -39,7 +39,7 @@ dependencies {
     })
     compile 'com.android.support:appcompat-v7:24.2.1'
     testCompile 'junit:junit:4.12'
-    compile(name: 'ABase', ext: 'aar')
+    compile(name: 'library', ext: 'aar')
     compile 'com.github.ybq:Android-SpinKit:1.1.0'
     compile 'com.android.support:recyclerview-v7:24.2.1'
     //网络请求

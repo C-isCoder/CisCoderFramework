@@ -2,7 +2,7 @@ package com.jnbc.myapplication;
 
 import android.app.Activity;
 import android.os.Bundle;
-import cn.ml.base.utils.BCAppUpdateManager;
+import com.baichang.android.library.utils.BCAppUpdateManager;
 
 
 public class MainActivity extends Activity {

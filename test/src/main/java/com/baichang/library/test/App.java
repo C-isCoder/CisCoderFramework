@@ -1,9 +1,9 @@
 package com.baichang.library.test;
 
-import cn.ml.base.Configuration;
-import cn.ml.base.MLApplication;
-import cn.ml.base.retrofit.RetrofitClient;
 
+import com.baichang.android.library.Configuration;
+import com.baichang.android.library.MLApplication;
+import com.baichang.android.library.retrofit.RetrofitClient;
 
 /**
  * Created by iCong on 2016/11/25.

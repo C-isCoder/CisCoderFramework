@@ -8,9 +8,9 @@ import android.util.DisplayMetrics;
 
 import java.util.Locale;
 
-import cn.ml.base.utils.MLAppManager;
-import cn.ml.base.utils.MLDialogUtils;
-import cn.ml.base.utils.MLToastUtils;
+import com.baichang.android.library.utils.MLAppManager;
+import com.baichang.android.library.utils.MLDialogUtils;
+import com.baichang.android.library.utils.MLToastUtils;
 
 /**
  * ViewPager 懒加载

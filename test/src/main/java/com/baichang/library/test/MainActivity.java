@@ -4,15 +4,15 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
+import com.baichang.android.library.BaseActivity;
+import com.baichang.android.library.recycleView.RecyclerViewAdapter;
+import com.baichang.android.library.recycleView.ViewHolder;
+import com.baichang.android.library.retrofit.HttpResultSubscriber;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import cn.ml.base.BaseActivity;
-import cn.ml.base.recycleView.RecyclerViewAdapter;
-import cn.ml.base.recycleView.ViewHolder;
-import cn.ml.base.retrofit.HttpResultSubscriber;
-import cn.ml.base.retrofit.RetrofitClient;
 
 
 public class MainActivity extends BaseActivity {

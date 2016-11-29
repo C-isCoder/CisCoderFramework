@@ -9,8 +9,8 @@ import android.util.Log;
 import com.jnbc.myapplication.R;
 
 import bc.widget.dialog.LoadingDialog;
-import cn.ml.base.utils.MLStrUtil;
-import cn.ml.base.utils.ToolsUtil;
+import com.baichang.android.library.utils.MLStrUtil;
+import com.baichang.android.library.utils.ToolsUtil;
 
 /**
  * Created by iscod.

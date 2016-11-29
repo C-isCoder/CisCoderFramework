@@ -3,8 +3,7 @@ package bc.retrofit;
 
 import java.util.concurrent.TimeUnit;
 
-import bc.http.APIConstants;
-import cn.ml.base.Configuration;
+import com.baichang.android.library.Configuration;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;

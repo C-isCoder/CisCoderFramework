@@ -3,7 +3,7 @@ package bc.retrofit;
 import android.util.Log;
 
 import bc.base.APP;
-import cn.ml.base.utils.MLToastUtils;
+import com.baichang.android.library.utils.MLToastUtils;
 
 /**
  * Created by iscod.

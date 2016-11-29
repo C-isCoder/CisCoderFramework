@@ -1,11 +1,11 @@
 package bc.base;
 
 
+import com.baichang.android.library.Configuration;
+import com.baichang.android.library.MLApplication;
 import com.jnbc.myapplication.R;
 
 import bc.utils.MLCrashHandler;
-import cn.ml.base.Configuration;
-import cn.ml.base.MLApplication;
 
 public class APP extends MLApplication {
 

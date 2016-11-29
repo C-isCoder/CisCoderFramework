@@ -1,8 +1,6 @@
 package bc.retrofit;
 
 
-import android.content.Intent;
-import android.text.TextUtils;
 import android.widget.Toast;
 
 
@@ -10,8 +8,8 @@ import java.net.SocketTimeoutException;
 
 import bc.base.APP;
 import bc.utils.DialogUtils;
-import cn.ml.base.utils.MLToastUtils;
-import cn.ml.base.utils.ToolsUtil;
+import com.baichang.android.library.utils.MLToastUtils;
+import com.baichang.android.library.utils.ToolsUtil;
 import rx.Subscriber;
 
 /**

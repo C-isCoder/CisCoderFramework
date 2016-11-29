@@ -1,4 +1,4 @@
 include ':app'
-include ':ABase'
+include ':library'
 include ':permission'
 include ':test'
