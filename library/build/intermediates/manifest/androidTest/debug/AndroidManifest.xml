@@ -13,7 +13,7 @@
         android:label="Tests for com.baichang.android.library.test"
         android:targetPackage="com.baichang.android.library.test" />
 
-    <application>
+    <application android:allowBackup="true" >
         <uses-library android:name="android.test.runner" />
     </application>
 

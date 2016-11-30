@@ -13,21 +13,24 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 
 public class MainActivity extends BaseActivity {
-    private RecyclerView rvList;
+    @BindView(R.id.recycler_view)
+    RecyclerView rvList;
     private RecyclerViewAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
         initView();
     }
 
     private void initView() {
-        rvList = (RecyclerView) findViewById(R.id.recycler_view);
         adapter = new RecyclerViewAdapter<InformationData>(getAty(), R.layout.item_information_list) {
             @Override
             protected void setItemData(ViewHolder holder, InformationData itemData, int position) {
