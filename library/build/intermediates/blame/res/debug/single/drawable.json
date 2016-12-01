@@ -72,12 +72,12 @@
         "source": "E:\\C_Workspace\\CisCoderFramework\\library\\res\\drawable\\tips_bg.9.png"
     },
     {
-        "merged": "E:\\C_Workspace\\CisCoderFramework\\library\\build\\intermediates\\res\\merged\\debug\\drawable\\play_hide.png",
-        "source": "E:\\C_Workspace\\CisCoderFramework\\library\\res\\drawable\\play_hide.png"
-    },
-    {
         "merged": "E:\\C_Workspace\\CisCoderFramework\\library\\build\\intermediates\\res\\merged\\debug\\drawable\\sweet_red_button_background.xml",
         "source": "E:\\C_Workspace\\CisCoderFramework\\library\\res\\drawable\\sweet_red_button_background.xml"
+    },
+    {
+        "merged": "E:\\C_Workspace\\CisCoderFramework\\library\\build\\intermediates\\res\\merged\\debug\\drawable\\play_hide.png",
+        "source": "E:\\C_Workspace\\CisCoderFramework\\library\\res\\drawable\\play_hide.png"
     },
     {
         "merged": "E:\\C_Workspace\\CisCoderFramework\\library\\build\\intermediates\\res\\merged\\debug\\drawable\\floating_acition_button_shadow.png",

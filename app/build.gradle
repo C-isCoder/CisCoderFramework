@@ -29,7 +29,5 @@ android {
 dependencies {
     //compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:appcompat-v7:22.2.1'
-    //compile 'com.jakewharton:butterknife:8.0.0'
-    //apt 'com.jakewharton:butterknife-compiler:8.1.0'
     compile project(':library')
 }

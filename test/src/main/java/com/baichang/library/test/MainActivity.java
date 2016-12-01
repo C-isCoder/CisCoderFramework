@@ -8,6 +8,8 @@ import com.baichang.android.library.BaseActivity;
 import com.baichang.android.library.recycleView.RecyclerViewAdapter;
 import com.baichang.android.library.recycleView.ViewHolder;
 import com.baichang.android.library.retrofit.HttpResultSubscriber;
+import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout;
+import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayoutDirection;
 
 import java.util.HashMap;
 import java.util.List;
@@ -20,10 +22,13 @@ import butterknife.ButterKnife;
 public class MainActivity extends BaseActivity {
     @BindView(R.id.recycler_view)
     RecyclerView rvList;
+    @BindView(R.id.refresh)
+    SwipyRefreshLayout mRefresh;
     private RecyclerViewAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setSystemBarColor(R.color.app_btn_color);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
@@ -31,6 +36,12 @@ public class MainActivity extends BaseActivity {
     }
 
     private void initView() {
+        //rvList = (RecyclerView) findViewById(R.id.recycler_view);
+        mRefresh.setColorSchemeColors(getResources().getColor(R.color.app_btn_color));
+        mRefresh.setOnRefreshListener(direction -> {
+            mRefresh.setDirection(SwipyRefreshLayoutDirection.BOTH);
+            mRefresh.setRefreshing(false);
+        });
         adapter = new RecyclerViewAdapter<InformationData>(getAty(), R.layout.item_information_list) {
             @Override
             protected void setItemData(ViewHolder holder, InformationData itemData, int position) {
