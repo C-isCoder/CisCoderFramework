@@ -8,10 +8,13 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/app" />
-            <option value="$PROJECT_DIR$/library" />
-            <option value="$PROJECT_DIR$/permission" />
+            <option value="$PROJECT_DIR$/comment" />
+            <option value="$PROJECT_DIR$/imageloader" />
+            <option value="$PROJECT_DIR$/request" />
             <option value="$PROJECT_DIR$/test" />
+            <option value="$PROJECT_DIR$/umShare" />
+            <option value="$PROJECT_DIR$/utils" />
+            <option value="$PROJECT_DIR$/widget" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

@@ -21,9 +21,8 @@
         android:layout_alignParentRight="true"
         android:layout_marginRight="8dp"
         android:maxLines="1"
-        android:text="2016-9-26"
-        android:textColor="@color/tv_black1"
-        android:textSize="@dimen/tv_size_body3" />
+        android:textColor="@android:color/black"
+        android:textSize="14sp" />
 
     <TextView
         android:id="@+id/item_information_tv_title"
@@ -33,9 +32,8 @@
         android:layout_toRightOf="@id/item_information_iv_image"
         android:ellipsize="end"
         android:maxLines="1"
-        android:text="八月份全国地价涨超4成"
-        android:textColor="@color/tv_black1"
-        android:textSize="@dimen/tv_size_body2" />
+        android:textColor="@android:color/black"
+        android:textSize="14sp" />
 
 
     <TextView
@@ -48,9 +46,8 @@
         android:layout_toRightOf="@id/item_information_iv_image"
         android:ellipsize="end"
         android:maxLines="2"
-        android:text="　　随着济南加大对东城区就哭了该就爱了看快加咖喱上课就阿里卡三大金刚克拉十几个刻录机"
-        android:textColor="@color/tv_black2"
-        android:textSize="@dimen/tv_size_body2" />
+        android:textColor="@android:color/black"
+        android:textSize="14sp" />
 
     <View
         android:layout_width="match_parent"

@@ -1,3 +1,164 @@
 <resources>
-    <string name="app_name">佰倡测试</string>
+    <!--通用-->
+    <string name="check_net_work">请检查网络</string>
+    <!--首页刷新-->
+    <string name="smoothlistview_header_hint_normal">下拉刷新</string>
+    <string name="smoothlistview_header_hint_ready">松开刷新数据</string>
+    <string name="smoothlistview_header_hint_loading">正在加载...</string>
+    <string name="smoothlistview_header_last_time">上次更新时间：</string>
+    <string name="smoothlistview_footer_hint_normal">查看更多</string>
+    <string name="smoothlistview_footer_hint_ready">松开载入更多</string>
+    <!--==============================================================================-->
+    <!--==============================================================================-->
+    <!--==============================================================================-->
+    <!--==============================================================================-->
+    <string name="app_name">惠售房</string>
+    <string name="login">登录</string>
+    <string name="register">注册</string>
+    <string name="password">密码</string>
+    <string name="account">手机号</string>
+    <string name="save">保存</string>
+    <string name="submit">提交</string>
+    <string name="exit">退出登录</string>
+    <string name="confirm">确定</string>
+    <string name="get">获取</string>
+    <string name="cancel">取消</string>
+    <string name="sign">签到</string>
+    <string name="edit">编辑</string>
+    <string name="city">济南</string>
+    <string name="take">拍照</string>
+    <string name="image">相册</string>
+    <string name="setting">设置</string>
+    <string name="select_city">选择城市</string>
+    <string name="please_select">请选择</string>
+    <string name="register_account">注册账号</string>
+    <string name="forget_psw">忘记密码？</string>
+    <string name="register_now">立即注册</string>
+    <string name="code">验证码</string>
+    <string name="get_code">获取验证码</string>
+    <string name="confirm_password">确认密码</string>
+    <string name="agree_agreement">我已阅读并同意</string>
+    <string name="register_agree">注册协议</string>
+    <string name="register_agreement">《用户注册协议》</string>
+    <string name="forget">忘记密码</string>
+    <string name="modify_info">修改XX</string>
+    <string name="dialog_title">查看回复</string>
+    <string name="message_detail">消息详情</string>
+    <!--时间单位秒-->
+    <string name="second">%dS</string>
+    <!--==============================================================================-->
+    <!--===============================TipsMessage==================================-->
+    <!--==============================================================================-->
+    <string name="modify_success">修改成功</string>
+    <string name="modify_error">修改失败</string>
+    <string name="get_rest">重新获取</string>
+    <string name="submit_success">修改失败</string>
+    <string name="submit_error">提交失败</string>
+    <string name="get_error">获取失败</string>
+    <string name="get_success">获取成功</string>
+    <string name="register_success">注册成功</string>
+    <string name="register_error">注册失败</string>
+    <string name="please_bind_dialog_content">请先绑定银行卡</string>
+    <string name="please_input_right_phone">请输入正确的手机号！！！</string>
+    <string name="please_agreement">请先同意注册协议</string>
+    <string name="please_input_confirm_password">请再次输入密码</string>
+    <string name="two_times_password_no_match">两次密码不一致</string>
+    <string name="please_input_old_psw">请输入旧密码</string>
+    <string name="please_input_account">请输入您的手机号</string>
+    <string name="please_input_psw">请输入您的密码</string>
+    <string name="please_input_new_psw">请输入新密码</string>
+    <string name="please_input_code">输入验证码</string>
+    <string name="please_input_user">请输入用户名</string>
+
+    <!--============================================================-->
+    <!--====================手势密码=================================-->
+    <!--============================================================-->
+    <string name="sure_restore_gesture">确认要清除手势密码吗？</string>
+    <string name="please_input_gesture">请输入手势密码解锁</string>
+    <string name="gesture_error_times_out">错误次数过多,请稍后再试 %d</string>
+    <string name="clean_success">清除成功</string>
+    <string name="draw_gesture">绘制手势密码</string>
+    <string name="draw_fail">与上一次绘制不一致，请重新绘制</string>
+    <string name="set_password_success">密码设置成功</string>
+    <string name="least_count">最少连接4个点，请重新输入</string>
+    <string name="draw_again">再次绘制手势密码</string>
+    <string name="gesture_password_true">解锁成功</string>
+    <string name="gesture_password_false">手势密码错误</string>
+    <!--============================================================-->
+    <!--=========================楼盘详情============================-->
+    <!--============================================================-->
+    <string name="now_look">马上带看</string>
+    <string name="report_online">在线报备</string>
+    <string name="type_detail">户型详情</string>
+    <string name="type_name">户型名称：</string>
+    <string name="type_favorable">户型优惠：</string>
+    <string name="type_desc">户型说明：</string>
+    <string name="type_image">户型图</string>
+    <!--============================================================-->
+    <!--=========================客户============================-->
+    <!--============================================================-->
+    <string name="client">客户</string>
+    <string name="client_tips">未补全客户电话</string>
+    <string name="client_search">搜索客户</string>
+    <string name="client_screen">筛选</string>
+    <string name="client_add">添加客户</string>
+    <string name="client_detail">客户详情</string>
+    <string name="client_state">客户动态</string>
+    <string name="client_report">客户报备</string>
+    <string name="client_name">姓名: </string>
+    <string name="client_sex">性别: </string>
+    <string name="client_phone">手机: </string>
+    <string name="client_contacts">通讯录</string>
+    <string name="client_strength">意向强度</string>
+    <string name="client_layout">意向户型</string>
+    <string name="client_price">意向价格</string>
+    <string name="client_area">意向面积</string>
+    <string name="client_city">意向城市</string>
+    <string name="client_business">意向商圈</string>
+    <string name="client_type">意向类型</string>
+    <string name="client_edit">编辑客户</string>
+    <string name="client_add_report">添加报备</string>
+    <string name="client_select">选择客户</string>
+    <string name="report_success">报备成功</string>
+    <string name="report_error">报备失败</string>
+    <string name="report_star">****</string>
+    <string name="client_add_report_agreement">惠售房报备客户安全协议</string>
+    <!--============================================================-->
+    <!--=========================咨询============================-->
+    <!--============================================================-->
+    <string name="information">资讯</string>
+    <string name="information_detail">资讯详情</string>
+    <!--============================================================-->
+    <!--=========================我的============================-->
+    <!--============================================================-->
+    <string name="me">我的</string>
+    <string name="me_message">我的消息</string>
+    <string name="me_wallet">我的钱包</string>
+    <string name="me_collect">我的收藏</string>
+    <string name="me_about">关于我们</string>
+    <string name="me_hot">客户热线</string>
+    <string name="me_suggest">投诉建议</string>
+    <string name="me_name">姓名: </string>
+    <string name="me_true">已审核</string>
+    <string name="me_audit">审核</string>
+    <string name="me_setting">设置</string>
+    <string name="me_setting_gesture">手势密码</string>
+    <string name="me_setting_card">绑定银行卡</string>
+    <string name="me_setting_modify_phone">修改手机号</string>
+    <string name="me_setting_modify_psw">修改密码</string>
+    <string name="me_setting_user">用户协议</string>
+    <string name="me_identity">身份认证</string>
+    <!--============================================================-->
+    <!--=========================身份认证============================-->
+    <!--============================================================-->
+    <string name="me_relay_name">真实姓名：</string>
+    <string name="me_audit_city">所属城市：</string>
+    <string name="me_audit_store">项目/门店：</string>
+    <string name="me_audit_address">地址：</string>
+    <string name="me_relay_name_input">请输入姓名</string>
+    <string name="me_audit_city_input">请选择城市</string>
+    <string name="me_audit_store_input">请输入项目/门店</string>
+    <string name="me_audit_address_input">请输入项目/门店地址</string>
+    <string name="me_message_detail">消息详情</string>
+    <string name="me_wallet_take">提现</string>
 </resources>

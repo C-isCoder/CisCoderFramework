@@ -1,0 +1,48 @@
+apply plugin: 'com.android.library'
+apply plugin: 'maven'
+android {
+    compileSdkVersion 22
+    buildToolsVersion "25.0.0"
+
+    defaultConfig {
+        minSdkVersion 14
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    //图片加载
+    compile 'com.github.bumptech.glide:glide:3.7.0'
+    provided 'com.baichang.android:comment:1.0.0'
+    provided 'com.android.support:support-v4:22.2.1'
+}
+uploadArchives {
+    configuration = configurations.archives
+    repositories {
+        mavenDeployer {
+            snapshotRepository(url: 'http://svn.weiidu.com:8081/nexus/content/repositories/snapshots/') {
+                authentication(userName: 'admin', password: 'bcadmin')
+            }
+            repository(url: 'http://svn.weiidu.com:8081/nexus/content/repositories/android/') {
+                authentication(userName: 'admin', password: 'bcadmin')
+            }
+            pom.project {
+                version '1.0.0'
+                artifactId 'imageLoader'
+                groupId 'com.baichang.android'
+                packaging 'aar'
+                description 'imageloader lib'
+            }
+        }
+    }
+}
+
+artifacts {
+    archives file('imageloader.aar')
+}

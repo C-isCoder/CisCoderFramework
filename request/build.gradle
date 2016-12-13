@@ -1,0 +1,53 @@
+apply plugin: 'com.android.library'
+apply plugin: 'maven'
+
+android {
+    compileSdkVersion 22
+    buildToolsVersion "25.0.0"
+
+    defaultConfig {
+        minSdkVersion 14
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile 'com.squareup.retrofit2:retrofit:2.1.0'//网络请求
+    compile 'com.squareup.retrofit2:converter-gson:2.0.0'//JSON解析
+    compile 'com.squareup.okhttp3:okhttp-urlconnection:3.2.0'//网络请求
+    compile 'com.squareup.retrofit2:adapter-rxjava:2.1.0'//RxJava
+    compile 'io.reactivex:rxandroid:1.2.1'//RxAndroid
+    compile 'com.squareup.okhttp3:logging-interceptor:3.3.1'//网络请求拦截器
+    compile 'com.android.support:appcompat-v7:22.2.1'
+    provided 'com.baichang.android:comment:1.0.0'//基础组件
+}
+uploadArchives {
+    configuration = configurations.archives
+    repositories {
+        mavenDeployer {
+            snapshotRepository(url: 'http://svn.weiidu.com:8081/nexus/content/repositories/snapshots/') {
+                authentication(userName: 'admin', password: 'bcadmin')
+            }
+            repository(url: 'http://svn.weiidu.com:8081/nexus/content/repositories/android/') {
+                authentication(userName: 'admin', password: 'bcadmin')
+            }
+            pom.project {
+                version '1.0.0'
+                artifactId 'request'
+                groupId 'com.baichang.android'
+                packaging 'aar'
+                description 'request library'
+            }
+        }
+    }
+}
+
+artifacts {
+    archives file('request.aar')
+}
+

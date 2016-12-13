@@ -1,0 +1,42 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/transparent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <Button
+        android:id="@+id/photo_select_btn_cancel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/app_photo_btn_cancel"
+        android:minHeight="48dp"
+        android:text="@string/cancel"
+        android:textColor="@color/cm_white"
+        android:textSize="@dimen/tv_size_subhead" />
+
+    <Button
+        android:id="@+id/photo_select_btn_image"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/photo_select_btn_cancel"
+        android:layout_marginBottom="32dp"
+        android:background="@drawable/app_btn_bg"
+        android:minHeight="48dp"
+        android:text="@string/image"
+        android:textColor="@color/cm_white"
+        android:textSize="@dimen/tv_size_subhead" />
+
+    <Button
+        android:id="@+id/photo_select_btn_take"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/photo_select_btn_image"
+        android:layout_marginBottom="16dp"
+        android:minHeight="48dp"
+        android:text="@string/take"
+        android:textColor="@color/cm_white"
+        android:background="@drawable/app_btn_bg"
+        android:textSize="@dimen/tv_size_subhead" />
+</RelativeLayout>

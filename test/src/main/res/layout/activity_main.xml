@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
@@ -7,32 +8,57 @@
     android:background="@color/bg_color"
     android:fitsSystemWindows="true"
     android:orientation="vertical"
-    tools:context="com.baichang.library.test.MainActivity">
+    tools:context="com.baichang.library.test.comment.MainActivity">
 
-    <android.support.v7.widget.Toolbar
+    <Button
+        android:id="@+id/button"
         android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:background="@color/app_btn_color"
-        android:gravity="center">
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:minHeight="48dp"
+        android:text="GO"
+        android:textColor="@color/app_tv_red"
+        android:textSize="16sp"
+        android:visibility="visible" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="测试"
-            android:textColor="@color/cm_white"
-            android:textSize="@dimen/tv_size_subhead" />
-    </android.support.v7.widget.Toolbar>
-
-    <com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout
-        android:id="@+id/refresh"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/refresh_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recycler_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-    </com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout>
+            android:layout_height="match_parent"
+            android:visibility="visible" />
+    </android.support.v4.widget.SwipeRefreshLayout>
 
+
+    <com.baichang.android.library.widget.BCHttpsWebView
+        android:id="@+id/web_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/text_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:ellipsize="marquee"
+            android:padding="16dp"
+            android:textColor="@color/app_tv_red"
+            android:textSize="14sp" />
+    </ScrollView>
+
+    <ImageView
+        android:id="@+id/image_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="center"
+        android:visibility="gone" />
 </LinearLayout>

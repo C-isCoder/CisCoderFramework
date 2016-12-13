@@ -1,14 +1,13 @@
 apply plugin: 'com.android.application'
 apply plugin: 'me.tatarka.retrolambda'
-apply plugin: 'android-apt'
-
+apply plugin: 'com.jakewharton.butterknife'
 android {
     compileSdkVersion 22
-    buildToolsVersion "24.0.0"
+    buildToolsVersion "25.0.0"
 
     defaultConfig {
         applicationId "com.baichang.library.test"
-        minSdkVersion 21
+        minSdkVersion 14
         targetSdkVersion 22
         versionCode 1
         versionName "1.0"
@@ -19,16 +18,21 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-
     compileOptions {
-        targetCompatibility 1.8
-        sourceCompatibility 1.8
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 }
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.android.support:appcompat-v7:22.2.1'
-    compile 'com.baichang.android:library:1.0.0'
-    apt 'com.jakewharton:butterknife-compiler:8.4.0'
+
+    compile 'com.baichang.android:request:1.0.0'//网络请求
+    compile 'com.baichang.android:imageLoader:1.0.0'//图片加载
+    compile 'com.baichang.android:comment:1.0.0'//基础组件
+    compile 'com.baichang.android:widget:1.0.0'//控件
+    compile 'com.baichang.android:utils:1.0.0'//工具集合
+
+    compile 'com.jakewharton:butterknife:8.4.0'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
 }
