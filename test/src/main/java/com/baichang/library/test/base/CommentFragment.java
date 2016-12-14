@@ -1,6 +1,7 @@
 package com.baichang.library.test.base;
 
-import com.baichang.android.library.comment.BaseFragment;
+
+import com.baichang.android.common.BaseFragment;
 
 /**
  * Created by iscod.

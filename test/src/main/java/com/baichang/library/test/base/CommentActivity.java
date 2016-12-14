@@ -2,7 +2,8 @@ package com.baichang.library.test.base;
 
 import android.os.Bundle;
 
-import com.baichang.android.library.comment.BaseActivity;
+import com.baichang.android.common.BaseActivity;
+
 
 /**
  * Created by iscod.

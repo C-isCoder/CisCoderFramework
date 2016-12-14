@@ -1,7 +1,7 @@
 package com.baichang.library.test.base;
 
 
-import com.baichang.android.library.comment.BCApplication;
+import com.baichang.android.common.BCApplication;
 
 public class AppDiskCache {
 

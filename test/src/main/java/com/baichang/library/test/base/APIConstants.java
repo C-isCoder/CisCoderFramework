@@ -6,9 +6,9 @@ public class APIConstants {
     //WebView
     public static final String API_WEB_VIEW = "http://114.215.88.167:8080/houseswill/";
     //上传图片
-    public static final String API_UPLOAD_IMAGE = "http://114.215.88.167:8080/fileupload/file/";
+    public static final String API_UPLOAD_IMAGE = "http://115.28.157.154:8080/fileserver/";
     //加载图片
-    public static final String API_LOAD_IMAGE = "http://114.215.88.167:8080/images/file/";
+    public static final String API_LOAD_IMAGE = "http://115.28.157.154:80/";
     //下载
     public static final String API_DOWNLOAD = "https://sm.wdjcdn.com/release/files/jupiter/5.24.1.12069/";
     //上传

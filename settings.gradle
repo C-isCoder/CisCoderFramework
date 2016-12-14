@@ -1,6 +1,6 @@
 include ':utils'
 include':umShare'
-include ':comment'
+include ':common'
 include ':request'
 include ':imageloader'
 include ':widget'

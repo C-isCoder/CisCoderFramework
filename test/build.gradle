@@ -29,7 +29,7 @@ dependencies {
 
     compile 'com.baichang.android:request:1.0.0'//网络请求
     compile 'com.baichang.android:imageLoader:1.0.0'//图片加载
-    compile 'com.baichang.android:comment:1.0.0'//基础组件
+    compile 'com.baichang.android:common:1.0.0'//基础组件
     compile 'com.baichang.android:widget:1.0.0'//控件
     compile 'com.baichang.android:utils:1.0.0'//工具集合
 

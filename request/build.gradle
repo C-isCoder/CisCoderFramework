@@ -24,7 +24,7 @@ dependencies {
     compile 'io.reactivex:rxandroid:1.2.1'//RxAndroid
     compile 'com.squareup.okhttp3:logging-interceptor:3.3.1'//网络请求拦截器
     compile 'com.android.support:appcompat-v7:22.2.1'
-    provided 'com.baichang.android:comment:1.0.0'//基础组件
+    provided 'com.baichang.android:common:1.0.0'//基础组件
 }
 uploadArchives {
     configuration = configurations.archives

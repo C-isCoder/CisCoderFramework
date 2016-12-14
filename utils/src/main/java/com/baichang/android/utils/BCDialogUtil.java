@@ -236,15 +236,15 @@ public class BCDialogUtil {
      * @param items
      * @param listener
      */
-    public static void getDialogItem(Context context, int colorRes, String title, String[] items, final DialogInterface.OnClickListener listener, DialogInterface.OnDismissListener dismissListener) {
+    public static void getDialogItem(Context context, int colorRes, String title, String[] items, final DialogInterface.OnClickListener listener) {
         AlertDialog builder = BCDialogUtil.getAlertDialog(context)
-                .setItems(items, listener).setTitle(title).setOnDismissListener(dismissListener).create();
+                .setItems(items, listener).setTitle(title).create();
         builder.show();
         BCDialogUtil.setDialogTitleColor(builder, colorRes);
     }
 
-    public static AlertDialog getDialog(Context context, int colorRes, String title, String content, DialogInterface.OnClickListener sureListener, DialogInterface.OnClickListener cancelListener, DialogInterface.OnDismissListener dismissListener) {
-        builder = BCDialogUtil.getAlertDialog(context).setNegativeButton("取消", cancelListener).setPositiveButton("确认", sureListener).setOnDismissListener(dismissListener).create();
+    public static AlertDialog getDialog(Context context, int colorRes, String title, String content, DialogInterface.OnClickListener sureListener, DialogInterface.OnClickListener cancelListener) {
+        builder = BCDialogUtil.getAlertDialog(context).setNegativeButton("取消", cancelListener).setPositiveButton("确认", sureListener).create();
         builder.setTitle(title);
         builder.setMessage(content);
         builder.show();

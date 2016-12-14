@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merger version="3"><dataSet config="main"><source path="E:\C_Workspace\CisCoderFramework\umShare\assets"/><source path="E:\C_Workspace\CisCoderFramework\umShare\build\generated\assets\shaders\release"/></dataSet><dataSet config="release"><source path="E:\C_Workspace\CisCoderFramework\umShare\src\release\assets"/></dataSet></merger>

@@ -8,7 +8,7 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/comment" />
+            <option value="$PROJECT_DIR$/common" />
             <option value="$PROJECT_DIR$/imageloader" />
             <option value="$PROJECT_DIR$/request" />
             <option value="$PROJECT_DIR$/test" />

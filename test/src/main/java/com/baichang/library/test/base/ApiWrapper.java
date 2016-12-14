@@ -1,6 +1,6 @@
 package com.baichang.library.test.base;
 
-import com.baichang.android.library.request.retrofit.HttpFactory;
+import com.baichang.android.request.HttpFactory;
 import com.baichang.library.test.data.InformationData;
 
 import java.util.List;

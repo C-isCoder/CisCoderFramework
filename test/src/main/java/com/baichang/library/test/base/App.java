@@ -2,10 +2,11 @@ package com.baichang.library.test.base;
 
 
 import android.content.Context;
+import android.text.TextUtils;
 
-import com.baichang.android.library.comment.BCApplication;
-import com.baichang.android.library.comment.ConfigurationImpl;
-import com.baichang.android.library.comment.Configuration;
+import com.baichang.android.common.BCApplication;
+import com.baichang.android.common.Configuration;
+import com.baichang.android.common.ConfigurationImpl;
 import com.baichang.library.test.R;
 
 
@@ -65,7 +66,7 @@ public class App extends BCApplication implements Configuration {
 
     @Override
     public String getToken() {
-        return TOKEN == null ? AppDiskCache.getToken() : TOKEN;
+        return TextUtils.isEmpty(TOKEN) ? AppDiskCache.getToken() : TOKEN;
     }
 
     @Override
