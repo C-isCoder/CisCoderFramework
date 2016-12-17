@@ -8,6 +8,8 @@ import com.baichang.android.common.BCApplication;
 import com.baichang.android.common.Configuration;
 import com.baichang.android.common.ConfigurationImpl;
 import com.baichang.library.test.R;
+import com.squareup.leakcanary.LeakCanary;
+import com.umeng.socialize.PlatformConfig;
 
 
 /**
@@ -23,12 +25,18 @@ public class App extends BCApplication implements Configuration {
     @Override
     public void onCreate() {
         super.onCreate();
-        initAPIConstants();
+        //配置URL TOKEN
+        ConfigurationImpl.init(this);
+        //友盟分享
+        initShare();
+        LeakCanary.install(this);
     }
 
-    //配置URL TOKEN
-    private void initAPIConstants() {
-        ConfigurationImpl.init(this);
+    private void initShare() {
+        //微信
+        PlatformConfig.setWeixin("wx1c368b574b528feb", "97a57cf3088035a6ae84a97e5613b1e6");
+        //qq空间
+        PlatformConfig.setQQZone("1105849494", "vdo9HdxqPdEbGNz6");
     }
 
     public static void setToken(String Token) {
@@ -87,6 +95,6 @@ public class App extends BCApplication implements Configuration {
 
     @Override
     public int getAppBarColor() {
-        return R.color.top_bar_bg;
+        return R.color.app_btn_color;
     }
 }

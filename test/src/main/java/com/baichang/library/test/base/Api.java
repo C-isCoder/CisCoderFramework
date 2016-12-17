@@ -1,7 +1,8 @@
 package com.baichang.library.test.base;
 
 
-import com.baichang.library.test.data.InformationData;
+import com.baichang.library.test.model.InformationData;
+import com.baichang.library.test.model.UserData;
 
 import java.util.List;
 import java.util.Map;
@@ -31,6 +32,7 @@ public interface Api {
     @Multipart
     @POST("file/upload/")
     Observable<List<String>> uploads(@Part List<MultipartBody.Part> files);
+
     //下载
     @GET
     @Streaming
@@ -44,8 +46,8 @@ public interface Api {
     Observable<List<InformationData>> getInformationList(@Body Map<String, String> map);
 
     //Https
-    @POST("user/login")
-    Observable<Boolean> login(@Body Map<String, String> map);
+    @POST("app/user/sign")
+    Observable<UserData> login(@Body Map<String, String> map);
 
     //12306
     @GET("otn/")

@@ -5,6 +5,5 @@
     <com.baichang.android.widget.photoView.PhotoView
         android:id="@+id/fragment_photo_gallery_image_banner_image"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center" />
+        android:layout_height="match_parent" />
 </FrameLayout>

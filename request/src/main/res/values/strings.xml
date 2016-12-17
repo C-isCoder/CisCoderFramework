@@ -1,4 +1,4 @@
 <resources>
-    <string name="net_error_tips"></string>
+    <string name="net_error_tips">连接服务器异常</string>
     <string name="net_request_time_out">请求超时</string>
 </resources>

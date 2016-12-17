@@ -32,7 +32,12 @@ dependencies {
     compile 'com.baichang.android:common:1.0.0'//基础组件
     compile 'com.baichang.android:widget:1.0.0'//控件
     compile 'com.baichang.android:utils:1.0.0'//工具集合
+    compile 'com.baichang.android:qrcode:1.0.0'//二维码
 
     compile 'com.jakewharton:butterknife:8.4.0'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
+
+    testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'//内存泄漏
+    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.4-beta2'
+    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
 }

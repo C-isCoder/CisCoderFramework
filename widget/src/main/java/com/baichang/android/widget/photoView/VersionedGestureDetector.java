@@ -144,7 +144,7 @@ public abstract class VersionedGestureDetector {
 
 							final float vX = mVelocityTracker.getXVelocity(), vY = mVelocityTracker.getYVelocity();
 
-							// If the velocity is greater than minVelocity, call
+							// If the velocity is greater than minVelocity, onResult
 							// listener
 							if (Math.max(Math.abs(vX), Math.abs(vY)) >= mMinimumVelocity) {
 								mListener.onFling(mLastTouchX, mLastTouchY, -vX, -vY);

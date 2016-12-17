@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_dialog"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingBottom="16dp"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:paddingTop="20dp"
+    tools:context="com.baichang.library.test.common.DialogActivity">
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="48dp"
+        android:text="普通Dialog"
+        android:textColor="@color/cm_white"
+        android:textSize="@dimen/cm_tv_button_size" />
+    <Button
+        android:id="@+id/button5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="48dp"
+        android:text="按钮Dialog"
+        android:textColor="@color/cm_white"
+        android:textSize="@dimen/cm_tv_button_size" />
+    <Button
+        android:id="@+id/button1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="48dp"
+        android:text="列表Dialog"
+        android:textColor="@color/cm_white"
+        android:textSize="@dimen/cm_tv_button_size" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="48dp"
+        android:text="日期Dialog"
+        android:textColor="@color/cm_white"
+        android:textSize="@dimen/cm_tv_button_size" />
+
+    <Button
+        android:id="@+id/button3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="48dp"
+        android:text="年份Dialog"
+        android:textColor="@color/cm_white"
+        android:textSize="@dimen/cm_tv_button_size" />
+
+    <Button
+        android:id="@+id/button4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="48dp"
+        android:text="带有输入框的Dialog"
+        android:textColor="@color/cm_white"
+        android:textSize="@dimen/cm_tv_button_size" />
+</LinearLayout>

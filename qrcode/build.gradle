@@ -1,0 +1,51 @@
+apply plugin: 'com.android.library'
+apply plugin: 'maven'
+
+android {
+    compileSdkVersion 22
+    buildToolsVersion "25.0.0"
+
+    defaultConfig {
+        minSdkVersion 14
+        targetSdkVersion 22
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    //provided 'com.android.support:appcompat-v7:22.2.1'
+    //compile 'com.github.piasy:RxQrCode:1.3.0'//二维码
+    compile 'com.google.zxing:core:3.2.1'
+    compile 'cn.bingoogolapple:bga-qrcodecore:1.1.5@aar'
+    compile 'cn.bingoogolapple:bga-zxing:1.1.5@aar'
+}
+uploadArchives {
+    configuration = configurations.archives
+    repositories {
+        mavenDeployer {
+            snapshotRepository(url: 'http://svn.weiidu.com:8081/nexus/content/repositories/snapshots/') {
+                authentication(userName: 'admin', password: 'bcadmin')
+            }
+            repository(url: 'http://svn.weiidu.com:8081/nexus/content/repositories/android/') {
+                authentication(userName: 'admin', password: 'bcadmin')
+            }
+            pom.project {
+                version '1.0.0'
+                artifactId 'qrcode'
+                groupId 'com.baichang.android'
+                packaging 'aar'
+                description 'QrCode library'
+            }
+        }
+    }
+}
+
+artifacts {
+    archives file('qrcode.aar')
+}

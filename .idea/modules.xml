@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/CisCoderFramework.iml" filepath="$PROJECT_DIR$/CisCoderFramework.iml" />
       <module fileurl="file://$PROJECT_DIR$/common/common.iml" filepath="$PROJECT_DIR$/common/common.iml" />
       <module fileurl="file://$PROJECT_DIR$/imageloader/imageloader.iml" filepath="$PROJECT_DIR$/imageloader/imageloader.iml" />
+      <module fileurl="file://$PROJECT_DIR$/qrcode/qrcode.iml" filepath="$PROJECT_DIR$/qrcode/qrcode.iml" />
       <module fileurl="file://$PROJECT_DIR$/request/request.iml" filepath="$PROJECT_DIR$/request/request.iml" />
       <module fileurl="file://$PROJECT_DIR$/test/test.iml" filepath="$PROJECT_DIR$/test/test.iml" />
       <module fileurl="file://$PROJECT_DIR$/umShare/umShare.iml" filepath="$PROJECT_DIR$/umShare/umShare.iml" />

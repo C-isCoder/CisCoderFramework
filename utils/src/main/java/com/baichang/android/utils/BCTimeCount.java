@@ -16,14 +16,14 @@ public class BCTimeCount extends CountDownTimer {
      * @param countDownInterval The interval along the way to receive
      *                          {@link #onTick(long)} callbacks.
      */
-    public BCTimeCount(long millisInFuture, long countDownInterval) {
+    private BCTimeCount(long millisInFuture, long countDownInterval) {
         super(millisInFuture, countDownInterval);
     }
 
     /**
      * @param millisInFuture    总时长 毫秒
      * @param countDownInterval 每次执行减少的时长  毫秒
-     * @return
+     * @return BCTimeCount
      */
     public static BCTimeCount create(long millisInFuture, long countDownInterval) {
         if (INSTANCE == null) {
@@ -34,14 +34,16 @@ public class BCTimeCount extends CountDownTimer {
 
     @Override
     public void onTick(long millisUntilFinished) {
-        if (listener == null) return;
-        listener.onTick(millisUntilFinished / 1000);//剩余时间
+        if (listener != null) {
+            listener.onTick(millisUntilFinished / 1000);//剩余时间
+        }
     }
 
     @Override
     public void onFinish() {
-        if (listener == null) return;
-        listener.onFinish();                        //计时完毕
+        if (listener != null) {
+            listener.onFinish();                        //计时完毕
+        }
     }
 
     private TimeCountListener listener;

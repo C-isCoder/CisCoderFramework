@@ -17,6 +17,8 @@ import android.os.Message;
 import android.view.View;
 import android.widget.TextView;
 
+import com.baichang.android.common.ConfigurationImpl;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -44,31 +46,21 @@ public class BCUpdateManager {
     //返回的安装包url
     private String apkUrl = "";
 
-    private AlertDialog noticeDialog;
-
-
-    //	private Dialog downloadDialog;
-     /* 下载包安装路径 */
+    /* 下载包安装路径 */
     private static final String savePath = BCFolderUtil.getUpdate(mContext);
 
     private static final String saveFileName = savePath + "/update.apk";
 
-    /* 进度条与通知ui刷新的handler和msg常量 */
-//    private ProgressBar mProgress;
-
     private ProgressDialog dialog;
-
 
     private static final int DOWN_UPDATE = 1;
 
     private static final int DOWN_OVER = 2;
 
 
-    private static String msg = "";
+    private static String message = "";
 
     private int progress;
-
-    private Thread downLoadThread;
 
     private boolean interceptFlag = false;
 
@@ -90,31 +82,29 @@ public class BCUpdateManager {
     };
 
     public BCUpdateManager(Context context, String apkUrl, String updateMsg) {
-        this.mContext = context;
+        mContext = context;
         this.apkUrl = apkUrl;
         this.updateMsg = updateMsg;
-        msg = updateMsg;
+        message = updateMsg;
         this.mCoerce = false;
     }
 
     public BCUpdateManager(Context context, String apkUrl, String updateMsg, boolean coerce) {
-        this.mContext = context;
+        mContext = context;
         this.apkUrl = apkUrl;
         this.updateMsg = updateMsg;
-        msg = updateMsg;
+        message = updateMsg;
         this.mCoerce = coerce;
     }
 
     //外部接口让主Activity调用
     public void checkUpdateInfo(int colorRes) {
-
         showNoticeDialog(colorRes);
     }
 
     //外部接口让主Activity调用
-    public void checkUpdateInfo_2(int colorRes) {
-
-        showNoticeDialog_2(colorRes);
+    public void checkUpdateInfo() {
+        showNoticeDialog(ConfigurationImpl.get().getAppBarColor());
     }
 
     @SuppressLint("NewApi")
@@ -125,7 +115,6 @@ public class BCUpdateManager {
         } else {
             builder = new Builder(mContext);
         }
-
         builder.setTitle("提示");
         builder.setMessage(updateMsg);
         builder.setPositiveButton("是", new OnClickListener() {
@@ -146,53 +135,34 @@ public class BCUpdateManager {
                 }
             }
         });
-        noticeDialog = builder.create();
+        AlertDialog noticeDialog = builder.create();
         noticeDialog.show();
         setDialogTitleColor(noticeDialog, colorRes);
     }
 
-    public static void setDialogTitleColor(Dialog builder, int color) {
+    /**
+     * 设置Dialog的颜色
+     *
+     * @param dialog Dialog
+     * @param color  颜色
+     */
+    private static void setDialogTitleColor(Dialog dialog, int color) {
         try {
-            Context context = builder.getContext();
-            int divierId = context.getResources().getIdentifier("android:id/titleDivider", null, null);
-            View divider = builder.findViewById(divierId);
+            Context context = dialog.getContext();
+            int dividerId = context.getResources().getIdentifier("android:id/titleDivider", null, null);
+            View divider = dialog.findViewById(dividerId);
             divider.setBackgroundColor(context.getResources().getColor(color));
 
             int alertTitleId = context.getResources().getIdentifier("alertTitle", "id", "android");
-            TextView alertTitle = (TextView) builder.findViewById(alertTitleId);
+            TextView alertTitle = (TextView) dialog.findViewById(alertTitleId);
             alertTitle.setTextColor(context.getResources().getColor(color));
-        } catch (Exception e) {
+        } catch (Exception ignored) {
 
         }
     }
 
-    @SuppressLint("NewApi")
-    private void showNoticeDialog_2(final int colorRes) {
-        Builder builder = null;
-        builder = new Builder(mContext, AlertDialog.THEME_DEVICE_DEFAULT_LIGHT);
-        builder.setTitle("提示");
-        builder.setMessage(updateMsg);
-        builder.setPositiveButton("是", new OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-                showDownloadDialog(colorRes);
-            }
-        });
-        builder.setNegativeButton("否", new OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
-        noticeDialog = builder.create();
-        noticeDialog.setCancelable(false);
-        noticeDialog.show();
-    }
-
-
     public void setMsg(String msg) {
-        BCUpdateManager.msg = msg;
+        BCUpdateManager.message = msg;
     }
 
     private void showDownloadDialog(int colorRes) {
@@ -201,14 +171,12 @@ public class BCUpdateManager {
         dialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
         dialog.setMax(100);
         dialog.setTitle("版本更新");
-        dialog.setMessage(msg);
+        dialog.setMessage(message);
         dialog.setOnCancelListener(new OnCancelListener() {
 
             @Override
             public void onCancel(DialogInterface arg0) {
-                // TODO Auto-generated method stub
                 interceptFlag = true;
-                System.out.println("---cancel");
             }
         });
         dialog.show();
@@ -217,7 +185,7 @@ public class BCUpdateManager {
         downloadApk();
     }
 
-    private Runnable mdownApkRunnable = new Runnable() {
+    private Runnable mDownApkRunnable = new Runnable() {
         @Override
         public void run() {
             try {
@@ -240,24 +208,22 @@ public class BCUpdateManager {
                 byte buf[] = new byte[1024];
 
                 do {
-                    int numread = is.read(buf);
-                    count += numread;
+                    int numRead = is.read(buf);
+                    count += numRead;
                     progress = (int) (((float) count / length) * 100);
                     //更新进度
                     mHandler.sendEmptyMessage(DOWN_UPDATE);
-                    if (numread <= 0) {
+                    if (numRead <= 0) {
                         //下载完成通知安装
                         mHandler.sendEmptyMessage(DOWN_OVER);
                         break;
                     }
-                    fos.write(buf, 0, numread);
+                    fos.write(buf, 0, numRead);
                 } while (!interceptFlag);//点击取消就停止下载.
 
                 fos.close();
                 is.close();
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
 
@@ -269,7 +235,7 @@ public class BCUpdateManager {
      */
 
     private void downloadApk() {
-        downLoadThread = new Thread(mdownApkRunnable);
+        Thread downLoadThread = new Thread(mDownApkRunnable);
         downLoadThread.start();
     }
 
@@ -277,12 +243,12 @@ public class BCUpdateManager {
      * 安装apk
      */
     private void installApk() {
-        File apkfile = new File(saveFileName);
-        if (!apkfile.exists()) {
+        File apkFile = new File(saveFileName);
+        if (!apkFile.exists()) {
             return;
         }
         Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setDataAndType(Uri.fromFile(apkfile),
+        intent.setDataAndType(Uri.fromFile(apkFile),
                 "application/vnd.android.package-archive");
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         mContext.startActivity(intent);

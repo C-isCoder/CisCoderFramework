@@ -22,7 +22,7 @@
         android:layout_marginRight="8dp"
         android:maxLines="1"
         android:textColor="@android:color/black"
-        android:textSize="14sp" />
+        android:textSize="@dimen/cm_tv_size_body2" />
 
     <TextView
         android:id="@+id/item_information_tv_title"
@@ -33,7 +33,7 @@
         android:ellipsize="end"
         android:maxLines="1"
         android:textColor="@android:color/black"
-        android:textSize="14sp" />
+        android:textSize="@dimen/cm_tv_size_body2" />
 
 
     <TextView
@@ -47,7 +47,7 @@
         android:ellipsize="end"
         android:maxLines="2"
         android:textColor="@android:color/black"
-        android:textSize="14sp" />
+        android:textSize="@dimen/cm_tv_size_body2" />
 
     <View
         android:layout_width="match_parent"

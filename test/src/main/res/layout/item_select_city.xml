@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/item_select_city_tv_index"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#F0F0F0"
+        android:paddingLeft="16dp"
+        android:text="G"
+        android:textColor="@color/cm_tv_black2"
+        android:textSize="@dimen/cm_tv_size_body2" />
+
+    <FrameLayout
+        android:id="@+id/item_select_city_item"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/cm_white"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:minHeight="48dp">
+
+
+        <TextView
+            android:id="@+id/item_select_city_tv_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="16dp"
+            android:text="Gjiazhe"
+            android:textColor="@color/cm_tv_black1"
+            android:textSize="@dimen/cm_tv_size_body2" />
+    </FrameLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/cm_driver" />
+</LinearLayout>

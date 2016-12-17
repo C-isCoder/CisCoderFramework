@@ -247,7 +247,7 @@ public class PhotoViewAttacher implements IPhotoView, View.OnTouchListener, Vers
 			imageView = mImageView.get();
 		}
 
-		// If we don't have an ImageView, call cleanup()
+		// If we don't have an ImageView, onResult cleanup()
 		if (null == imageView) {
 			cleanup();
 			throw new IllegalStateException(
@@ -575,7 +575,7 @@ public class PhotoViewAttacher implements IPhotoView, View.OnTouchListener, Vers
 
 		/**
 		 * PhotoView's getScaleType() will just divert to this.getScaleType() so
-		 * only call if we're not attached to a PhotoView.
+		 * only onResult if we're not attached to a PhotoView.
 		 */
 		if (null != imageView && !(imageView instanceof PhotoView)) {
 			if (imageView.getScaleType() != ScaleType.MATRIX) {

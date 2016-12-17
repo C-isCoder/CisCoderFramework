@@ -2,7 +2,8 @@ package com.baichang.library.test.base;
 
 public class APIConstants {
     //请求接口
-    public static final String API_DEFAULT_HOST = "http://114.215.88.167:8080/houseswill/mobile/";
+    //public static final String API_DEFAULT_HOST = "http://114.215.88.167:8080/houseswill/mobile/";
+    public static final String API_DEFAULT_HOST = "https://water.weiidu.com/inter/path/water_mobile/";
     //WebView
     public static final String API_WEB_VIEW = "http://114.215.88.167:8080/houseswill/";
     //上传图片

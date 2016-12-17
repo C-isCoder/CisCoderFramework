@@ -48,10 +48,18 @@ import java.util.GregorianCalendar;
  * @author michael
  */
 public class BCToolsUtil {
+
+    private static final String[] zodiacArr = {"猴", "鸡", "狗", "猪", "鼠", "牛", "虎", "兔", "龙", "蛇", "马", "羊"};
+
+    private static final String[] constellationArr = {"水瓶座", "双鱼座", "牡羊座", "金牛座", "双子座", "巨蟹座", "狮子座", "处女座", "天秤座",
+            "天蝎座", "射手座", "魔羯座"};
+
+    private static final int[] constellationEdgeDay = {20, 19, 21, 21, 21, 22, 23, 23, 23, 23, 22, 22};
+
     /**
      * 获取当前时间
      *
-     * @return
+     * @return String
      */
     public static String getTime() {
         Calendar ca = Calendar.getInstance();
@@ -61,34 +69,38 @@ public class BCToolsUtil {
         int minute = ca.get(Calendar.MINUTE);// 分
         int hour = ca.get(Calendar.HOUR);// 小时
         int second = ca.get(Calendar.SECOND);// 秒
-        return String.format("%d%d%d%d%d%d", year, month, day, minute, hour,
-                second);
+        return String.format("%d%d%d%d%d%d", year, month, day, minute, hour, second);
     }
 
     /**
      * 手机号验证
      *
-     * @param str
-     * @return
+     * @param phone 手机号
+     * @return boolean
      */
-    public static boolean isCellphone(String str) {
+    public static boolean isCellphone(String phone) {
         String s = "^((13[0-9])|(15[0-9])|(18[0-9])|(14[57]))\\d{8}$";
-        return str.matches(s);
+        return phone.matches(s);
     }
 
-
-    public static String MD5(String original) {
+    /**
+     * MD5加密
+     *
+     * @param content 加密内容
+     * @return String
+     */
+    public static String MD5(String content) {
         MessageDigest messageDigest = null;
         try {
             messageDigest = MessageDigest.getInstance("MD5");
             messageDigest.reset();
-            messageDigest.update(original.getBytes("UTF-8"));
+            messageDigest.update(content.getBytes("UTF-8"));
         } catch (Exception e) {
             return null;
         }
 
         byte[] byteArray = messageDigest.digest();
-        StringBuffer md5StrBuff = new StringBuffer();
+        StringBuilder md5StrBuff = new StringBuilder();
         for (int i = 0; i < byteArray.length; i++) {
             if (Integer.toHexString(0xFF & byteArray[i]).length() == 1)
                 md5StrBuff.append("0").append(
@@ -99,6 +111,12 @@ public class BCToolsUtil {
         return md5StrBuff.toString().toLowerCase();
     }
 
+    /**
+     * 创建年龄
+     *
+     * @param birthday 生日
+     * @return Age
+     */
     public static int createAge(String birthday) {
         if (birthday == null) return 0;
         long d = Long.parseLong(birthday);
@@ -111,19 +129,21 @@ public class BCToolsUtil {
         int nowY = now.get(Calendar.YEAR);
         int nowM = now.get(Calendar.MONTH) + 1;
         float m = (nowY - dy + (nowM - dm) / 12f);
-        int t = Integer.parseInt(String.valueOf(new BigDecimal(m).setScale(0, BigDecimal.ROUND_HALF_UP)));
-        return t;
+        return Integer.parseInt(String.valueOf(new BigDecimal(m).setScale(0, BigDecimal.ROUND_HALF_UP)));
     }
 
 
     /**
-     * 根据用户生日计算年龄
+     * 根据用生日计算年龄
+     *
+     * @param strBirthday 生日
+     * @return 年龄
      */
-    public static int getAgeByBirthday(String data) {
+    public static int getAgeByBirthday(String strBirthday) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");//小写的mm表示的是分钟
         Date birthday = null;
         try {
-            birthday = sdf.parse(data);
+            birthday = sdf.parse(strBirthday);
         } catch (ParseException e) {
             return 0;
         }
@@ -157,23 +177,17 @@ public class BCToolsUtil {
         return age;
     }
 
-    public static final String[] zodiacArr = {"猴", "鸡", "狗", "猪", "鼠", "牛", "虎", "兔", "龙", "蛇", "马", "羊"};
-
-    public static final String[] constellationArr = {"水瓶座", "双鱼座", "牡羊座", "金牛座", "双子座", "巨蟹座", "狮子座", "处女座", "天秤座",
-            "天蝎座", "射手座", "魔羯座"};
-
-    public static final int[] constellationEdgeDay = {20, 19, 21, 21, 21, 22, 23, 23, 23, 23, 22, 22};
-
     /**
-     * 根据日期获取生肖
+     * 根据生日获取生肖
      *
-     * @return
+     * @param birthday 生日
+     * @return 生肖
      */
-    public static String getZodica(String date) {
+    public static String getZodica(String birthday) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Date d = null;
         try {
-            d = sdf.parse(date);
+            d = sdf.parse(birthday);
         } catch (ParseException e) {
             return "";
         }
@@ -185,8 +199,8 @@ public class BCToolsUtil {
     /**
      * 根据日期获取星座
      *
-     * @param date
-     * @return
+     * @param date 日期
+     * @return 星座
      */
     public static String getConstellation(String date) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -214,32 +228,18 @@ public class BCToolsUtil {
      * 隐藏键盘
      * 如果输入法在窗口上已经显示，则隐藏，反之则显示
      *
-     * @description
-     * @author marcello
+     * @param context 上下文
      */
     public static void hideKeyboard(Context context) {
         InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
     }
 
-    public static Bitmap readBitMap(Context context, int resId) {
-        BitmapFactory.Options opt = new BitmapFactory.Options();
-        opt.inPreferredConfig = Bitmap.Config.RGB_565;
-        opt.inPurgeable = true;
-        opt.inInputShareable = true;
-        //获取资源图片
-        InputStream is = context.getResources().openRawResource(resId);
-        return BitmapFactory.decodeStream(is, null, opt);
-    }
-
-
     /**
-     * DialogInterface 点击后保存对话框
+     * 保持对话框显示状态
      *
-     * @description
-     * @author marcello
+     * @param dialog Dialog
      */
-
     public static void keepDialog(DialogInterface dialog) {
         try {
             Field field = dialog.getClass().getSuperclass().getDeclaredField("mShowing");
@@ -251,10 +251,9 @@ public class BCToolsUtil {
     }
 
     /**
-     * 点击后让对话框消失
+     * 销毁对话狂  结合 keepDialog
      *
-     * @description
-     * @author marcello
+     * @param dialog Dialog
      */
     public static void distoryDialog(DialogInterface dialog) {
         try {
@@ -267,7 +266,7 @@ public class BCToolsUtil {
     }
 
     /**
-     * 打卡软键盘
+     * 打开软键盘
      *
      * @param mEditText 输入框
      * @param mContext  上下文
@@ -290,24 +289,6 @@ public class BCToolsUtil {
         InputMethodManager imm = (InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
 
         imm.hideSoftInputFromWindow(mEditText.getWindowToken(), 0);
-    }
-
-    public static void setListViewHeightBasedOnChildren(ListView listView) {
-        ListAdapter listAdapter = listView.getAdapter();
-        if (listAdapter == null) {
-            return;
-        }
-        int totalHeight = 0;
-        int size = listAdapter.getCount();
-        for (int i = 0; i < listAdapter.getCount(); i++) {
-            View listItem = listAdapter.getView(i, null, listView);
-            listItem.measure(0, 0);
-            totalHeight += listItem.getMeasuredHeight();
-        }
-
-        ViewGroup.LayoutParams params = listView.getLayoutParams();
-        params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
-        listView.setLayoutParams(params);
     }
 
     /**
@@ -336,10 +317,10 @@ public class BCToolsUtil {
     }
 
     /**
-     * 拨打电话
+     * 拨打电话 拨打界面
      *
-     * @param activity
-     * @param number
+     * @param activity Activity
+     * @param number   电话号码
      */
     public static void call(Activity activity, String number) {
         //跳到拨号界面不呼叫 ACTION_DIAL
@@ -349,10 +330,10 @@ public class BCToolsUtil {
     }
 
     /**
-     * 拨打电话
+     * 拨打电话 直接拨打
      *
-     * @param activity
-     * @param number
+     * @param activity Activity
+     * @param number   电话号码
      */
     public static void callAction(Activity activity, String number) {
         //跳到拨号界面不呼叫 ACTION_DIAL
@@ -362,26 +343,31 @@ public class BCToolsUtil {
     }
 
     /**
-     * 调用发短信界面
+     * 发送短信
      *
-     * @param act
-     * @param number
+     * @param activity Activity
+     * @param number   电话号码
      */
-    public static void sendMessage(Activity act, String number) {
+    public static void sendMessage(Activity activity, String number) {
         Uri uri = Uri.parse("smsto:" + number);
         Intent it = new Intent(Intent.ACTION_SENDTO, uri);
         it.putExtra("sms_body", "");
-        act.startActivity(it);
+        activity.startActivity(it);
     }
 
+    /**
+     * 获取当前IP地址
+     *
+     * @return IP地址
+     */
     public static String getLocalIpAddress() {
         try {
             for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements(); ) {
-                NetworkInterface intf = en.nextElement();
-                for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements(); ) {
-                    InetAddress inetAddress = enumIpAddr.nextElement();
+                NetworkInterface networkInterface = en.nextElement();
+                for (Enumeration<InetAddress> enumIpAddress = networkInterface.getInetAddresses(); enumIpAddress.hasMoreElements(); ) {
+                    InetAddress inetAddress = enumIpAddress.nextElement();
                     if (!inetAddress.isLoopbackAddress()) {
-                        return inetAddress.getHostAddress().toString();
+                        return inetAddress.getHostAddress();
                     }
                 }
             }
@@ -392,39 +378,55 @@ public class BCToolsUtil {
     }
 
     /**
-     * 获取版本号
+     * 获取版本名
+     *
+     * @param context 上下文
+     * @return 版本名
      */
-    //获取当前版本号
-    public static String getVersionName(Context mContext) throws Exception {
+    public static String getVersionName(Context context) {
         // 获取packageManager的实例
-        PackageManager packageManager = mContext.getPackageManager();
+        PackageManager packageManager = context.getPackageManager();
         // getPackageName()是你当前类的包名，0代表是获取版本信息
-        PackageInfo packInfo = packageManager.getPackageInfo(mContext.getPackageName(), 0);
-        String version = packInfo.versionName;
-        return version;
+        try {
+            PackageInfo packInfo = packageManager.getPackageInfo(context.getPackageName(), 0);
+            return packInfo.versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            return "";
+        }
     }
 
-    //获取当前版本号
-    public static String getVersionCode(Context mContext) throws Exception {
+    /**
+     * 获取版本号
+     *
+     * @param context 上下文
+     * @return 版本号
+     */
+    public static String getVersionCode(Context context) {
         // 获取packageManager的实例
-        PackageManager packageManager = mContext.getPackageManager();
+        PackageManager packageManager = context.getPackageManager();
         // getPackageName()是你当前类的包名，0代表是获取版本信息
-        PackageInfo packInfo = packageManager.getPackageInfo(mContext.getPackageName(), 0);
-        int version = packInfo.versionCode;
-        return String.valueOf(version);
+        try {
+            PackageInfo packInfo = packageManager.getPackageInfo(context.getPackageName(), 0);
+            return String.valueOf(packInfo.versionCode);
+        } catch (PackageManager.NameNotFoundException e) {
+            return "";
+        }
     }
 
     /**
      * 获取缓存大小
      *
-     * @param context
-     * @return
-     * @throws Exception
+     * @param context 上下文
+     * @return 缓存
      */
-    public static String getCacheSize(Context context) throws Exception {
-        long cacheSize = getFolderSize(context.getCacheDir());
-        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-            cacheSize += getFolderSize(context.getExternalCacheDir());
+    public static String getCacheSize(Context context) {
+        long cacheSize = 0;
+        try {
+            cacheSize = getFolderSize(context.getCacheDir());
+            if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+                cacheSize += getFolderSize(context.getExternalCacheDir());
+            }
+        } catch (Exception ignored) {
         }
         return getFormatSize(cacheSize);
     }
@@ -432,7 +434,7 @@ public class BCToolsUtil {
     /**
      * 清理缓存
      *
-     * @param context
+     * @param context 上下文
      */
     public static void clearAllCache(Context context) {
         deleteDir(context.getCacheDir());
@@ -464,13 +466,14 @@ public class BCToolsUtil {
                 }
             }
         }
+        assert dir != null;
         return dir.delete();
     }
 
     // 获取文件
     //Context.getExternalFilesDir() --> SDCard/Android/data/你的应用的包名/files/ 目录，一般放一些长时间保存的数据
     //Context.getExternalCacheDir() --> SDCard/Android/data/你的应用包名/cache/目录，一般存放临时缓存数据
-    public static long getFolderSize(File file) throws Exception {
+    private static long getFolderSize(File file) throws Exception {
         long size = 0;
         try {
             File[] fileList = file.listFiles();
@@ -489,10 +492,10 @@ public class BCToolsUtil {
     }
 
     /**
-     * 格式化单位
+     * 格式化磁盘大小
      *
-     * @param size
-     * @return
+     * @param size 大小
+     * @return 大小
      */
     public static String getFormatSize(double size) {
         double kiloByte = size / 1024;
@@ -525,7 +528,7 @@ public class BCToolsUtil {
     /**
      * 获取当前系统时间
      *
-     * @return
+     * @return 当前时间
      */
     public static String getCurrentTime() {
         String str = "";
@@ -536,47 +539,52 @@ public class BCToolsUtil {
     }
 
     /**
-     * 时间的加减
+     * 时间加减
+     *
+     * @param h1 小时
+     * @param m1 分钟
+     * @param h2 要加上的小时
+     * @param m2 要加上的分钟
+     * @return 结果
      */
-    public static String addOrMinusYear(int hour, int min, int h, int m) {
-
-        if (h > 0) {
-            hour += h;
+    public static String HourAddMinus(int h1, int m1, int h2, int m2) {
+        if (h2 > 0) {
+            h1 += h2;
         }
-        if (m > 0) {
-            min += m;
+        if (m2 > 0) {
+            m1 += m2;
         }
-        if (min >= 60) {
-            hour += min / 60;
-            min = min % 60;
+        if (m1 >= 60) {
+            h1 += m1 / 60;
+            m1 = m1 % 60;
         }
-        if (hour >= 24) {
-            hour = 0;
+        if (h1 >= 24) {
+            h1 = 0;
         }
-        return new StringBuilder().append((hour < 10 ? "0" + (hour) : (hour))).append(":").append(((min < 10) ? "0" + (min) : (min))).toString();
+        return String.valueOf((h1 < 10 ? "0" + (h1) : (h1))) + ":" + ((m1 < 10) ? "0" + (m1) : (m1));
     }
 
     /**
      * 数字格式化
      *
-     * @param number
-     * @param code   eg:0.00
+     * @param number 要格式化的数字
+     * @param code   eg:0.00 保留的小数点
      */
     public static String numberFormat(double number, String code) {
         DecimalFormat df = new DecimalFormat(code);
-        return df.format(number).toString();
+        return df.format(number);
     }
 
     /**
      * 检查字段是非为空，并弹出Toast提示
      *
-     * @param context
-     * @param str
-     * @param msgId
-     * @return
+     * @param context 上下文
+     * @param string  字段
+     * @param msgId   资源id
+     * @return 结果
      */
-    public static boolean checkNull(Context context, String str, int msgId) {
-        if (TextUtils.isEmpty(str)) {
+    public static boolean checkNull(Context context, String string, int msgId) {
+        if (TextUtils.isEmpty(string)) {
             Toast.makeText(context, context.getString(msgId), Toast.LENGTH_SHORT).show();
             return true;
         } else {
@@ -584,9 +592,17 @@ public class BCToolsUtil {
         }
     }
 
-    public static boolean checkNull(Context context, String str, String msg) {
-        if (TextUtils.isEmpty(str)) {
-            Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
+    /**
+     * 检查字段是非为空，并弹出Toast提示
+     *
+     * @param context 上下文
+     * @param string  字段
+     * @param message 资源id
+     * @return 结果
+     */
+    public static boolean checkNull(Context context, String string, String message) {
+        if (TextUtils.isEmpty(string)) {
+            Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
             return true;
         } else {
             return false;
@@ -596,13 +612,13 @@ public class BCToolsUtil {
     /**
      * 检查手机号是否正确，并弹出Toast提示
      *
-     * @param context
-     * @param str
-     * @param msgId
+     * @param context 上下文
+     * @param phone   手机号
+     * @param msgId   资源id
      * @return 是返回false不是返回true；
      */
-    public static boolean checkPhone(Context context, String str, int msgId) {
-        if (!BCStringUtil.isMobile(str)) {
+    public static boolean checkPhone(Context context, String phone, int msgId) {
+        if (!BCStringUtil.isMobile(phone)) {
             Toast.makeText(context, context.getString(msgId), Toast.LENGTH_SHORT).show();
             return true;
         } else {
@@ -610,33 +626,46 @@ public class BCToolsUtil {
         }
     }
 
-    public static boolean checkPhone(Context context, String str, String msg) {
-        if (!BCStringUtil.isMobile(str)) {
-            Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
+    /**
+     * 检查手机号是否正确，并弹出Toast提示
+     *
+     * @param context 上下文
+     * @param phone   手机号
+     * @param message 消息
+     * @return 是返回false不是返回true；
+     */
+    public static boolean checkPhone(Context context, String phone, String message) {
+        if (!BCStringUtil.isMobile(phone)) {
+            Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
             return true;
         } else {
             return false;
         }
     }
 
-    // 获得下周星期一的日期
+    /**
+     * 获得下周星期一的日期
+     *
+     * @param count 偏移量
+     * @return 日期
+     */
     public static String getNextMonday(int count) {
-
         Calendar strDate = Calendar.getInstance();
         strDate.add(Calendar.DATE, count);
         GregorianCalendar currentDate = new GregorianCalendar();
         currentDate.set(strDate.get(Calendar.YEAR), strDate.get(Calendar.MONTH), strDate.get(Calendar.DATE));
         Date monday = currentDate.getTime();
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-        String preMonday = df.format(monday);
-        return preMonday;
+        return df.format(monday);
     }
 
     /**
      * 获取打开各种文件的Intent
-     * Created by congxiaodan on 2016/1/14.
+     *
+     * @param filePath 文件路径
+     * @return Intent
      */
-    public static Intent openFile(String filePath) {
+    public static Intent getOpenFileIntent(String filePath) {
         File file = new File(filePath);
         if (!file.exists()) return null;
         /* 取得扩展名 */
@@ -669,130 +698,191 @@ public class BCToolsUtil {
         }
     }
 
-    //Android获取一个用于打开APK文件的intent
-    public static Intent getAllIntent(String param) {
+    /**
+     * Android获取一个用于打开APK文件的intent
+     *
+     * @param filePath 文件路径
+     * @return Intent
+     */
+    public static Intent getAllIntent(String filePath) {
         Intent intent = new Intent();
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.setAction(Intent.ACTION_VIEW);
-        Uri uri = Uri.fromFile(new File(param));
+        Uri uri = Uri.fromFile(new File(filePath));
         intent.setDataAndType(uri, "*/*");
         return intent;
     }
 
-    //Android获取一个用于打开APK文件的intent
-    public static Intent getApkFileIntent(String param) {
+    /**
+     * Android获取一个用于打开APK文件的intent
+     *
+     * @param filePath 文件路径
+     * @return Intent
+     */
+    public static Intent getApkFileIntent(String filePath) {
         Intent intent = new Intent();
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.setAction(Intent.ACTION_VIEW);
-        Uri uri = Uri.fromFile(new File(param));
+        Uri uri = Uri.fromFile(new File(filePath));
         intent.setDataAndType(uri, "application/vnd.android.package-archive");
         return intent;
     }
 
-    //Android获取一个用于打开VIDEO文件的intent
-    public static Intent getVideoFileIntent(String param) {
+    /**
+     * Android获取一个用于打开VIDEO文件的intent
+     *
+     * @param filePath 文件路径
+     * @return Intent
+     */
+    public static Intent getVideoFileIntent(String filePath) {
 
         Intent intent = new Intent("android.intent.action.VIEW");
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.putExtra("oneshot", 0);
         intent.putExtra("configchange", 0);
-        Uri uri = Uri.fromFile(new File(param));
+        Uri uri = Uri.fromFile(new File(filePath));
         intent.setDataAndType(uri, "video/*");
         return intent;
     }
 
-    //Android获取一个用于打开AUDIO文件的intent
-    public static Intent getAudioFileIntent(String param) {
+    /**
+     * Android获取一个用于打开AUDIO文件的intent
+     *
+     * @param filePath 文件路径
+     * @return Intent
+     */
+    public static Intent getAudioFileIntent(String filePath) {
         Intent intent = new Intent("android.intent.action.VIEW");
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.putExtra("oneshot", 0);
         intent.putExtra("configchange", 0);
-        Uri uri = Uri.fromFile(new File(param));
+        Uri uri = Uri.fromFile(new File(filePath));
         intent.setDataAndType(uri, "audio/*");
         return intent;
     }
 
-    //Android获取一个用于打开Html文件的intent
-    public static Intent getHtmlFileIntent(String param) {
-        Uri uri = Uri.parse(param).buildUpon()
+    /**
+     * Android获取一个用于打开Html文件的intent
+     *
+     * @param filePath 文件路径
+     * @return Intent
+     */
+    public static Intent getHtmlFileIntent(String filePath) {
+        Uri uri = Uri.parse(filePath).buildUpon()
                 .encodedAuthority("com.android.htmlfileprovider")
-                .scheme("content").encodedPath(param).build();
+                .scheme("content").encodedPath(filePath).build();
         Intent intent = new Intent("android.intent.action.VIEW");
         intent.setDataAndType(uri, "text/html");
         return intent;
     }
 
-    //Android获取一个用于打开图片文件的intent
-    public static Intent getImageFileIntent(String param) {
+    /**
+     * Android获取一个用于打开图片文件的intent
+     *
+     * @param filePath 文件路径
+     * @return Intent
+     */
+    public static Intent getImageFileIntent(String filePath) {
         Intent intent = new Intent("android.intent.action.VIEW");
         intent.addCategory("android.intent.category.DEFAULT");
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        Uri uri = Uri.fromFile(new File(param));
+        Uri uri = Uri.fromFile(new File(filePath));
         intent.setDataAndType(uri, "image/*");
         return intent;
     }
 
-    //Android获取一个用于打开PPT文件的intent
-    public static Intent getPptFileIntent(String param) {
+    /**
+     * Android获取一个用于打开PPT文件的intent
+     *
+     * @param filePath 文件路径
+     * @return Intent
+     */
+    public static Intent getPptFileIntent(String filePath) {
         Intent intent = new Intent("android.intent.action.VIEW");
         intent.addCategory("android.intent.category.DEFAULT");
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        Uri uri = Uri.fromFile(new File(param));
+        Uri uri = Uri.fromFile(new File(filePath));
         intent.setDataAndType(uri, "application/vnd.ms-powerpoint");
         return intent;
     }
 
-    //Android获取一个用于打开Excel文件的intent
-    public static Intent getExcelFileIntent(String param) {
+    /**
+     * Android获取一个用于打开Excel文件的intent
+     *
+     * @param filePaht 文件路径
+     * @return Intent
+     */
+    public static Intent getExcelFileIntent(String filePaht) {
         Intent intent = new Intent("android.intent.action.VIEW");
         intent.addCategory("android.intent.category.DEFAULT");
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        Uri uri = Uri.fromFile(new File(param));
+        Uri uri = Uri.fromFile(new File(filePaht));
         intent.setDataAndType(uri, "application/vnd.ms-excel");
         return intent;
     }
 
-    //Android获取一个用于打开Word文件的intent
-    public static Intent getWordFileIntent(String param) {
+    /**
+     * Android获取一个用于打开Word文件的intent
+     *
+     * @param filePath 文件路径
+     * @return Intent
+     */
+    public static Intent getWordFileIntent(String filePath) {
         Intent intent = new Intent("android.intent.action.VIEW");
         intent.addCategory("android.intent.category.DEFAULT");
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        Uri uri = Uri.fromFile(new File(param));
+        Uri uri = Uri.fromFile(new File(filePath));
         intent.setDataAndType(uri, "application/msword");
         return intent;
     }
 
-    //Android获取一个用于打开CHM文件的intent
-    public static Intent getChmFileIntent(String param) {
+    /**
+     * Android获取一个用于打开CHM文件的intent
+     *
+     * @param filePath 文件路径
+     * @return Intent
+     */
+    public static Intent getChmFileIntent(String filePath) {
         Intent intent = new Intent("android.intent.action.VIEW");
         intent.addCategory("android.intent.category.DEFAULT");
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        Uri uri = Uri.fromFile(new File(param));
+        Uri uri = Uri.fromFile(new File(filePath));
         intent.setDataAndType(uri, "application/x-chm");
         return intent;
     }
 
-    //Android获取一个用于打开文本文件的intent
-    public static Intent getTextFileIntent(String param, boolean paramBoolean) {
+    /**
+     * Android获取一个用于打开文本文件的intent
+     *
+     * @param filePath     文件路径
+     * @param paramBoolean 是否是文件
+     * @return Intent
+     */
+    public static Intent getTextFileIntent(String filePath, boolean paramBoolean) {
         Intent intent = new Intent("android.intent.action.VIEW");
         intent.addCategory("android.intent.category.DEFAULT");
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         if (paramBoolean) {
-            Uri uri1 = Uri.parse(param);
+            Uri uri1 = Uri.parse(filePath);
             intent.setDataAndType(uri1, "text/plain");
         } else {
-            Uri uri2 = Uri.fromFile(new File(param));
+            Uri uri2 = Uri.fromFile(new File(filePath));
             intent.setDataAndType(uri2, "text/plain");
         }
         return intent;
     }
 
-    //Android获取一个用于打开PDF文件的intent
-    public static Intent getPdfFileIntent(String param) {
+    /**
+     * Android获取一个用于打开PDF文件的intent
+     *
+     * @param filePath 文件路径
+     * @return Intent
+     */
+    public static Intent getPdfFileIntent(String filePath) {
         Intent intent = new Intent("android.intent.action.VIEW");
         intent.addCategory("android.intent.category.DEFAULT");
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        Uri uri = Uri.fromFile(new File(param));
+        Uri uri = Uri.fromFile(new File(filePath));
         intent.setDataAndType(uri, "application/pdf");
         return intent;
     }
@@ -800,8 +890,8 @@ public class BCToolsUtil {
     /**
      * 根据文件路径 获取后缀名字
      *
-     * @param path
-     * @return
+     * @param path 路径
+     * @return 后缀
      */
     public static String getSuffix(String path) {
          /* 取得扩展名 */

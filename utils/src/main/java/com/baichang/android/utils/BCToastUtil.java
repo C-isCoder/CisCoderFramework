@@ -8,15 +8,15 @@ public class BCToastUtil {
     /**
      * 普通Toast
      *
-     * @param context
-     * @param obj
+     * @param context 上下文
+     * @param content 内容
      */
-    public static void showMessage(Context context, Object obj) {
-        if (context == null || obj == null) return;
-        if (obj instanceof String) {
-            Toast.makeText(context, (CharSequence) obj, Toast.LENGTH_SHORT).show();
+    public static void showMessage(Context context, Object content) {
+        if (context == null || content == null) return;
+        if (content instanceof String) {
+            Toast.makeText(context, (CharSequence) content, Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(context, context.getString((Integer) obj), Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, context.getString((Integer) content), Toast.LENGTH_SHORT).show();
         }
     }
 

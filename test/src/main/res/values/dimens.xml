@@ -6,40 +6,10 @@
     <!--抖动动画-抖动距离-->
     <dimen name="spacing_medium">10dp</dimen>
     <!-- ========================== 通用样式 ============================ -->
-
-    <!-- topBar -->
-    <dimen name="topBar_height">50dp</dimen>
-    <dimen name="topBar_left_padding">16dp</dimen>
-    <dimen name="topBar_title_padding">72dp</dimen>
-
-    <dimen name="button_text_size">14sp</dimen>
-    <dimen name="expand_tab_item_height">45dp</dimen>
-    <dimen name="expand_tab_eara_height">380dp</dimen>
-    <dimen name="head_bar_height">45dp</dimen>
-
-    <!-- textview size style -->
-    <dimen name="tv_size_dispaly1">34sp</dimen>
-    <dimen name="tv_size_headline">24sp</dimen>
-    <dimen name="tv_size_title">20sp</dimen>
-    <dimen name="tv_size_subhead">16sp</dimen>
-    <dimen name="tv_size_body2">14sp</dimen>
-    <dimen name="tv_size_body3">12sp</dimen>
-    <dimen name="tv_size_body4">10sp</dimen>
-
-    <!--FloatButton  -->
-    <dimen name="fab_size_normal">56dp</dimen>
-    <dimen name="fab_size_mini">40dp</dimen>
-    <dimen name="fab_icon_size">24dp</dimen>
-    <dimen name="fab_plus_icon_size">14dp</dimen>
-    <dimen name="fab_plus_icon_stroke">2dp</dimen>
-    <dimen name="fab_shadow_offset">3dp</dimen>
-    <dimen name="fab_shadow_radius">9dp</dimen>
-    <dimen name="fab_stroke_width">0.5dp</dimen>
-    <dimen name="fab_actions_spacing">16dp</dimen>
-    <dimen name="fab_shadow_size">8dp</dimen>
-    <dimen name="fab_mini_shadow_size">6dp</dimen>
-    <dimen name="fab_min_significant_scroll">4dp</dimen>
-
-    <!-- ========================== 本项目用的dimens ============================ -->
-
+    <!--magicIndicator-->
+    <dimen name="common_navigator_height">45dp</dimen>
+    <dimen name="navigator_margin_top">5dp</dimen>
+    <dimen name="small_navigator_height">5dp</dimen>
+    <dimen name="navigator_margin_top_large">45dp</dimen>
+    <dimen name="large_navigator_height">65dp</dimen>
 </resources>

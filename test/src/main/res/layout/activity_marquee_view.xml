@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_marquee_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_vertical"
+    android:orientation="vertical"
+    tools:context="com.baichang.library.test.common.MarqueeViewActivity">
+
+    <com.baichang.android.widget.marqueeView.MarqueeView
+        android:id="@+id/marquee_view1"
+        android:layout_width="match_parent"
+        android:layout_height="32dp"
+        android:background="@color/cm_white"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        app:mvAnimDuration="1000"
+        app:mvInterval="3000"
+        app:mvSingleLine="true"
+        app:mvTextColor="@color/app_btn"
+        app:mvTextSize="14sp" />
+
+    <com.baichang.android.widget.marqueeView.MarqueeView
+        android:id="@+id/marquee_view2"
+        android:layout_width="match_parent"
+        android:layout_height="32dp"
+        android:layout_marginTop="16dp"
+        android:background="@color/cm_white"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        app:mvAnimDuration="1000"
+        app:mvInterval="3000"
+        app:mvSingleLine="true"
+        app:mvTextColor="@color/app_btn"
+        app:mvTextSize="14sp" />
+</LinearLayout>

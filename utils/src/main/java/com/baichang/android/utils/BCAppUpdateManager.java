@@ -19,6 +19,8 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.baichang.android.common.ConfigurationImpl;
+
 import java.io.File;
 
 /**
@@ -41,7 +43,7 @@ public class BCAppUpdateManager {
 
     private AlertDialog noticeDialog;
 
-    private static String msg = "";
+    private static String message = "";
 
     private DownloadManager mDownloadManager;
     private long downloadID;
@@ -52,7 +54,7 @@ public class BCAppUpdateManager {
         this.mContext = context;
         this.apkUrl = apkUrl;
         this.updateMsg = updateMsg;
-        msg = updateMsg;
+        message = updateMsg;
         this.mCoerce = false;
         registerReceiver();
     }
@@ -61,7 +63,7 @@ public class BCAppUpdateManager {
         this.mContext = context;
         this.apkUrl = apkUrl;
         this.updateMsg = updateMsg;
-        msg = updateMsg;
+        message = updateMsg;
         this.mCoerce = coerce;
         registerReceiver();
     }
@@ -83,6 +85,11 @@ public class BCAppUpdateManager {
     //外部接口让主Activity调用
     public void checkUpdateInfo(int colorRes) {
         showNoticeDialog(colorRes);
+    }
+
+    //外部接口让主Activity调用
+    public void checkUpdateInfo() {
+        showNoticeDialog(ConfigurationImpl.get().getAppBarColor());
     }
 
     @SuppressLint("NewApi")
@@ -118,24 +125,29 @@ public class BCAppUpdateManager {
         noticeDialog.show();
         setDialogTitleColor(noticeDialog, colorRes);
     }
-
-    public static void setDialogTitleColor(Dialog builder, int color) {
+    /**
+     * 设置Dialog的颜色
+     *
+     * @param dialog Dialog
+     * @param color  颜色
+     */
+    private static void setDialogTitleColor(Dialog dialog, int color) {
         try {
-            Context context = builder.getContext();
+            Context context = dialog.getContext();
             int diverId = context.getResources().getIdentifier("android:id/titleDivider", null, null);
-            View divider = builder.findViewById(diverId);
+            View divider = dialog.findViewById(diverId);
             divider.setBackgroundColor(context.getResources().getColor(color));
 
             int alertTitleId = context.getResources().getIdentifier("alertTitle", "id", "android");
-            TextView alertTitle = (TextView) builder.findViewById(alertTitleId);
+            TextView alertTitle = (TextView) dialog.findViewById(alertTitleId);
             alertTitle.setTextColor(context.getResources().getColor(color));
-        } catch (Exception e) {
+        } catch (Exception ignored) {
 
         }
     }
 
     public void setMsg(String msg) {
-        BCAppUpdateManager.msg = msg;
+        message = msg;
     }
 
     /**

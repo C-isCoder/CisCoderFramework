@@ -48,5 +48,6 @@
     <color name="notice_top_font">#C3912A</color>
     <color name="status_view">#50000000</color>
     <color name="home_tab">#C81623</color>
+    <color name="no_activate">#808080</color>
 
 </resources>

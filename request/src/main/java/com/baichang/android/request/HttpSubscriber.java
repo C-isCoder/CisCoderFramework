@@ -8,6 +8,8 @@ import android.util.Log;
 import android.widget.Toast;
 
 
+import com.baichang.android.common.ConfigurationImpl;
+
 import java.lang.ref.WeakReference;
 import java.net.ConnectException;
 import java.net.SocketTimeoutException;
@@ -46,7 +48,6 @@ public class HttpSubscriber<T> {
     }
 
     /**
-     * 有加载框的请求
      *
      * @param Callback
      * @return
@@ -57,7 +58,8 @@ public class HttpSubscriber<T> {
             public void onStart() {
                 super.onStart();
                 if (!NetWorkStateUtils.isNetworkConnected()) {
-                    Toast.makeText(mContext, R.string.net_error_tips, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ConfigurationImpl.get().getAppContext(),
+                            R.string.net_error_tips, Toast.LENGTH_SHORT).show();
                     onCompleted();
                 }
                 if (mRefresh != null) {
@@ -90,11 +92,14 @@ public class HttpSubscriber<T> {
                     RequestDialogUtils.dismiss();
                 }
                 if (e instanceof SocketTimeoutException) {
-                    Toast.makeText(mContext, R.string.net_request_time_out, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ConfigurationImpl.get().getAppContext(),
+                            R.string.net_request_time_out, Toast.LENGTH_SHORT).show();
                 } else if (e instanceof ConnectException) {
-                    Toast.makeText(mContext, R.string.net_error_tips, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ConfigurationImpl.get().getAppContext(),
+                            R.string.net_error_tips, Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(mContext, e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ConfigurationImpl.get().getAppContext(),
+                            e.getMessage(), Toast.LENGTH_SHORT).show();
                     Log.i(TAG, e.getMessage(), e);
                 }
             }
@@ -121,7 +126,8 @@ public class HttpSubscriber<T> {
             public void onStart() {
                 super.onStart();
                 if (!NetWorkStateUtils.isNetworkConnected()) {
-                    Toast.makeText(mContext, R.string.net_error_tips, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ConfigurationImpl.get().getAppContext(),
+                            R.string.net_error_tips, Toast.LENGTH_SHORT).show();
                     onCompleted();
                 }
                 if (mRefresh != null) {

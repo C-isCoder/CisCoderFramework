@@ -1,7 +1,8 @@
 package com.baichang.library.test.base;
 
 import com.baichang.android.request.HttpFactory;
-import com.baichang.library.test.data.InformationData;
+import com.baichang.library.test.model.InformationData;
+import com.baichang.library.test.model.UserData;
 
 import java.util.List;
 import java.util.Map;
@@ -44,8 +45,8 @@ public class ApiWrapper implements Api {
     }
 
     @Override
-    public Observable<Boolean> login(@Body Map<String, String> map) {
-        return getRequest().login(map).compose(applySchedulers());
+    public Observable<UserData> login(@Body Map<String, String> map) {
+        return HttpFactory.creatHttp(Api.class).login(map).compose(applySchedulers());
     }
 
     @Override

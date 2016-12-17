@@ -24,7 +24,9 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     provided 'com.android.support:support-v4:22.2.1'
-    provided 'com.baichang.android:umShare:1.0.0'
+    provided 'com.baichang.android:common:1.0.0'
+    compile 'com.baichang.android:umShare:1.0.0'
+    compile 'org.greenrobot:eventbus:3.0.0'//EventBus
 }
 uploadArchives {
     configuration = configurations.archives
