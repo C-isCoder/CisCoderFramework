@@ -28,7 +28,6 @@ import java.util.Date;
 public class BCDialogUtil {
 
     private static ProgressDialog sProgressDialog = null;
-    private static AlertDialog sAlertDialog = null;
     private static final int DEFAULT_COLOR = ConfigurationImpl.get().getAppBarColor();
 
     /**
@@ -371,14 +370,14 @@ public class BCDialogUtil {
     public static void showDialog(Context context, int colorRes, String title, String content,
                                   DialogInterface.OnClickListener confirmListener,
                                   DialogInterface.OnClickListener cancelListener) {
-        sAlertDialog = getAlertDialog(context)
+        AlertDialog builder = getAlertDialog(context)
                 .setNegativeButton("取消", cancelListener)
                 .setPositiveButton("确认", confirmListener)
                 .setTitle(title)
                 .setMessage(content)
                 .create();
-        sAlertDialog.show();
-        setDialogTitleColor(sAlertDialog, colorRes);
+        builder.show();
+        setDialogTitleColor(builder, colorRes);
     }
 
     /**
@@ -394,14 +393,14 @@ public class BCDialogUtil {
     public static void showDialog(Context context, String title, String content,
                                   DialogInterface.OnClickListener confirmListener,
                                   DialogInterface.OnClickListener cancelListener) {
-        sAlertDialog = getAlertDialog(context)
+        AlertDialog builder = getAlertDialog(context)
                 .setNegativeButton("取消", cancelListener)
                 .setPositiveButton("确认", confirmListener)
                 .setTitle(title)
                 .setMessage(content)
                 .create();
-        sAlertDialog.show();
-        setDialogTitleColor(sAlertDialog, DEFAULT_COLOR);
+        builder.show();
+        setDialogTitleColor(builder, DEFAULT_COLOR);
     }
 
     /**
@@ -413,12 +412,12 @@ public class BCDialogUtil {
      * @param content  内容
      */
     public static void showDialog(Context context, int colorRes, String title, String content) {
-        sAlertDialog = getAlertDialog(context)
+        AlertDialog builder = getAlertDialog(context)
                 .setTitle(title)
                 .setMessage(content)
                 .create();
-        sAlertDialog.show();
-        setDialogTitleColor(sAlertDialog, colorRes);
+        builder.show();
+        setDialogTitleColor(builder, colorRes);
     }
 
     /**
@@ -429,12 +428,12 @@ public class BCDialogUtil {
      * @param content 内容
      */
     public static void showDialog(Context context, String title, String content) {
-        sAlertDialog = getAlertDialog(context)
+        AlertDialog builder = getAlertDialog(context)
                 .setTitle(title)
                 .setMessage(content)
                 .create();
-        sAlertDialog.show();
-        setDialogTitleColor(sAlertDialog, DEFAULT_COLOR);
+        builder.show();
+        setDialogTitleColor(builder, DEFAULT_COLOR);
     }
 
     /************************************************************************************************************************/
@@ -445,7 +444,6 @@ public class BCDialogUtil {
      * @param color      线的颜色
      */
     private static void setPickerDividerColor(DatePicker datePicker, int color) {
-
         // 获取 mSpinners
         LinearLayout llFirst = (LinearLayout) datePicker.getChildAt(0);
         // 获取 NumberPicker

@@ -9,6 +9,7 @@ import android.view.Window;
 
 import com.baichang.android.request.DownloadUtils;
 import com.baichang.android.request.HttpSubscriber;
+import com.baichang.android.utils.BCAppUpdateManager;
 import com.baichang.android.utils.BCUmUtil;
 import com.baichang.android.utils.BCViewUtil;
 import com.baichang.android.widget.cityPop.BCCitySelectPop;
@@ -57,7 +58,7 @@ public class MainActivity extends CommonActivity {
 
     @OnClick({R.id.button1, R.id.button2, R.id.button3, R.id.button4, R.id.button5, R.id.button6,
             R.id.button7, R.id.button8, R.id.button9, R.id.button0, R.id.button11, R.id.button12,
-            R.id.button13, R.id.button14})
+            R.id.button13, R.id.button14, R.id.button15})
     void onClick(View v) {
         switch (v.getId()) {
             case R.id.button1:
@@ -113,6 +114,12 @@ public class MainActivity extends CommonActivity {
                 BCCitySelectPop pop = new BCCitySelectPop(getAty());
                 pop.setListener(this::showMessage);
                 pop.show(getWindow().getDecorView());
+                break;
+            case R.id.button15:
+                BCAppUpdateManager manager = new BCAppUpdateManager(getAty(),
+                        "https://sm.wdjcdn.com/release/files/jupiter/5.24.1.12069/wandoujia-web_seo_baidu_homepage.apk"
+                        , "修复Bug");
+                manager.checkUpdateInfo();
                 break;
         }
     }
