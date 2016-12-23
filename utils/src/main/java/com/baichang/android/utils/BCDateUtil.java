@@ -620,22 +620,12 @@ public class BCDateUtil {
             return milliseconds + "毫秒";
         }
     }
-
     /**
-     * The main method.
+     * 时间比较
      *
-     * @param args the arguments
-     */
-    public static void main(String[] args) {
-        System.out.println(formatDateStr2Desc("2012-3-2 12:2:20", "MM月dd日  HH:mm"));
-    }
-
-    /**
-     * 时间选择
-     *
-     * @param date1
-     * @param date2
-     * @return
+     * @param date1 日期1
+     * @param date2 日期2
+     * @return  日期1是否大于日期2
      */
     public static boolean compareTime(String date1, String date2) {
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");
@@ -753,7 +743,6 @@ public class BCDateUtil {
         String preMonday = df.format(monday);
         return preMonday;
     }
-
     /**
      * 获得下周某星期的日期
      *

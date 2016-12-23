@@ -41,4 +41,6 @@ dependencies {
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.4-beta2'
     releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
 
+    compile 'com.github.Ajian-studio:GADownloading:v1.0.2'
+    compile 'com.google.android.gms:play-services-appindexing:8.4.0'
 }

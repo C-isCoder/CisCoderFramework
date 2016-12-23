@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 
+import com.baichang.android.imageloader.ImageLoader;
 import com.baichang.android.request.DownloadUtils;
 import com.baichang.android.request.HttpSubscriber;
 import com.baichang.android.utils.BCAppUpdateManager;
@@ -33,6 +34,8 @@ import butterknife.OnClick;
 
 
 public class MainActivity extends CommonActivity {
+    private static final String DOWNLOAD_TEST = "https://sm.wdjcdn.com/release/files/jupiter/5.24.1.12069/wandoujia-web_seo_baidu_homepage.apk";
+    private static final String SHARE_URL_TEST = "http://www.baidu.com";
     private static final String[] IMAGES = new String[]{
             "group1/M00/00/8A/cxydmlhSINOAdClaAAIOEBpej0w098.png",
             "group1/M00/00/8A/cxydmlhSINOAP-a2AAGcq0WFRI4721.png",
@@ -58,7 +61,7 @@ public class MainActivity extends CommonActivity {
 
     @OnClick({R.id.button1, R.id.button2, R.id.button3, R.id.button4, R.id.button5, R.id.button6,
             R.id.button7, R.id.button8, R.id.button9, R.id.button0, R.id.button11, R.id.button12,
-            R.id.button13, R.id.button14, R.id.button15})
+            R.id.button13, R.id.button14, R.id.button15, R.id.button16, R.id.button17})
     void onClick(View v) {
         switch (v.getId()) {
             case R.id.button1:
@@ -68,8 +71,7 @@ public class MainActivity extends CommonActivity {
                 startAct(getAty(), BannerActivity.class, IMAGES);
                 break;
             case R.id.button3:
-                PhotoGalleryData data = new PhotoGalleryData();
-                data.images = IMAGES;
+                PhotoGalleryData data = new PhotoGalleryData(0, IMAGES);
                 startAct(getAty(), PhotoGalleryActivity.class, data);
                 break;
             case R.id.button4:
@@ -79,8 +81,7 @@ public class MainActivity extends CommonActivity {
                 download();
                 break;
             case R.id.button6:
-                BCUmUtil.share(getAty(), "标题", "内容",
-                        "http://www.baidu.com", R.mipmap.ic_launcher, null, true);
+                BCUmUtil.share(getAty(), "标题", "内容", SHARE_URL_TEST, R.mipmap.ic_launcher, null, true);
                 break;
             case R.id.button7:
                 startAct(getAty(), SideViewActivity.class);
@@ -116,10 +117,15 @@ public class MainActivity extends CommonActivity {
                 pop.show(getWindow().getDecorView());
                 break;
             case R.id.button15:
-                BCAppUpdateManager manager = new BCAppUpdateManager(getAty(),
-                        "https://sm.wdjcdn.com/release/files/jupiter/5.24.1.12069/wandoujia-web_seo_baidu_homepage.apk"
-                        , "修复Bug");
+                BCAppUpdateManager manager = new BCAppUpdateManager(getAty(), DOWNLOAD_TEST, "修复Bug");
                 manager.checkUpdateInfo();
+                break;
+            case R.id.button16:
+                startAct(getAty(), CircleRoundActivity.class);
+                break;
+            case R.id.button17:
+                //startAct(getAty(), FunActivity.class);
+                startAct(getAty(), Main2Activity.class);
                 break;
         }
     }

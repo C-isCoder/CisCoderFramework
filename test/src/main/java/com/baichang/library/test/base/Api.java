@@ -38,9 +38,6 @@ public interface Api {
     @Streaming
     Observable<ResponseBody> download(@Url String fileUrl);
 
-    //登陆 不能用这种方式因为 要加密参数 加密的参数要是json
-    //@POST("user/agentLogin")
-    //Observable<UserData> login(@Query("userName") String username, @Query("pwd") String pwd);
     //咨询列表
     @POST("information/findInformationByCityId")
     Observable<List<InformationData>> getInformationList(@Body Map<String, String> map);
@@ -49,12 +46,5 @@ public interface Api {
     @POST("app/user/sign")
     Observable<UserData> login(@Body Map<String, String> map);
 
-    //12306
-    @GET("otn/")
-    Observable<ResponseBody> test();
-
-    //tmall
-    @GET("?ali_trackid=2:mm_26632322_6858406_23810104:1481078586_3k9_1046405187")
-    Observable<ResponseBody> tmall();
 }
 

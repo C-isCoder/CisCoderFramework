@@ -1,4 +1,5 @@
-include ':utils', ':qrcode'
+include ':utils'
+include ':qrcode'
 include ':umShare'
 include ':common'
 include ':request'

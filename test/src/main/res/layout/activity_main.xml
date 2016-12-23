@@ -158,6 +158,23 @@
                 android:text="版本更新"
                 android:textColor="@color/cm_white"
                 android:textSize="@dimen/cm_tv_button_size" />
+            <Button
+                android:id="@+id/button16"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="48dp"
+                android:text="圆形、圆角"
+                android:textColor="@color/cm_white"
+                android:textSize="@dimen/cm_tv_button_size" />
+
+            <Button
+                android:id="@+id/button17"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="48dp"
+                android:text="Fun"
+                android:textColor="@color/cm_white"
+                android:textSize="@dimen/cm_tv_button_size" />
         </LinearLayout>
     </ScrollView>
 

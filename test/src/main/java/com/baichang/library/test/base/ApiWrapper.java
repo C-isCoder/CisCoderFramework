@@ -48,17 +48,6 @@ public class ApiWrapper implements Api {
     public Observable<UserData> login(@Body Map<String, String> map) {
         return HttpFactory.creatHttp(Api.class).login(map).compose(applySchedulers());
     }
-
-    @Override
-    public Observable<ResponseBody> test() {
-        return getRequest().test().compose(applySchedulers());
-    }
-
-    @Override
-    public Observable<ResponseBody> tmall() {
-        return getRequest().tmall().compose(applySchedulers());
-    }
-
     private Api getRequest() {
         return HttpFactory.creat(Api.class);
     }

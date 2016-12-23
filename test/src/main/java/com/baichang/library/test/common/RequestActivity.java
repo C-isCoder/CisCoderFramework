@@ -1,5 +1,6 @@
 package com.baichang.library.test.common;
 
+import android.animation.ValueAnimator;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -7,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
+import android.widget.ViewAnimator;
 
 import com.baichang.android.request.HttpSubscriber;
 import com.baichang.android.widget.recycleView.RecyclerViewAdapter;
@@ -19,6 +21,7 @@ import com.baichang.library.test.base.CommonActivity;
 import com.baichang.library.test.model.InformationData;
 import com.baichang.library.test.model.UserData;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.animation.ViewAnimation;
 
 import java.util.HashMap;
 import java.util.List;

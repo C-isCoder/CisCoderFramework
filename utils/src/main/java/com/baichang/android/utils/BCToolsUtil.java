@@ -644,22 +644,6 @@ public class BCToolsUtil {
     }
 
     /**
-     * 获得下周星期一的日期
-     *
-     * @param count 偏移量
-     * @return 日期
-     */
-    public static String getNextMonday(int count) {
-        Calendar strDate = Calendar.getInstance();
-        strDate.add(Calendar.DATE, count);
-        GregorianCalendar currentDate = new GregorianCalendar();
-        currentDate.set(strDate.get(Calendar.YEAR), strDate.get(Calendar.MONTH), strDate.get(Calendar.DATE));
-        Date monday = currentDate.getTime();
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-        return df.format(monday);
-    }
-
-    /**
      * 获取打开各种文件的Intent
      *
      * @param filePath 文件路径
@@ -895,57 +879,7 @@ public class BCToolsUtil {
      */
     public static String getSuffix(String path) {
          /* 取得扩展名 */
-        String end = path.substring(path.lastIndexOf(".") + 1, path.length()).toLowerCase();
-        /* 依扩展名的类型决定MimeType */
-        if (end.equals("m4a")) {
-            return ".m4a";
-        } else if (end.equals("mp3")) {
-            return ".mp3";
-        } else if (end.equals("mid")) {
-            return ".mid";
-        } else if (end.equals("xmf")) {
-            return ".xmf";
-        } else if (end.equals("ogg")) {
-            return ".ogg";
-        } else if (end.equals("wav")) {
-            return ".wav";
-        } else if (end.equals("3gp")) {
-            return ".3gp";
-        } else if (end.equals("mp4")) {
-            return ".mp4";
-        } else if (end.equals("jpg")) {
-            return ".jpg";
-        } else if (end.equals("gif")) {
-            return ".gif";
-        } else if (end.equals("png")) {
-            return ".png";
-        } else if (end.equals("jpeg")) {
-            return ".jpeg";
-        } else if (end.equals("bmp")) {
-            return ".bmp";
-        } else if (end.equals("apk")) {
-            return ".apk";
-        } else if (end.equals("ppt")) {
-            return ".ppt";
-        } else if (end.equals("xls")) {
-            return ".xls";
-        } else if (end.equals("doc")) {
-            return ".doc";
-        } else if (end.equals("pdf")) {
-            return ".pdf";
-        } else if (end.equals("chm")) {
-            return ".chm";
-        } else if (end.equals("txt")) {
-            return ".txt";
-        } else if (end.equals("docx")) {
-            return ".docx";
-        } else if (end.equals("xlsx")) {
-            return ".xlsx";
-        } else if (end.equals("pptx")) {
-            return ".pptx";
-        } else {
-            return "";
-        }
+        return path.substring(path.lastIndexOf(".") + 1, path.length()).toLowerCase();
     }
 
 }

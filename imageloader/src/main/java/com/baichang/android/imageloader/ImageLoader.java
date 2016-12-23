@@ -53,9 +53,7 @@ public class ImageLoader {
         if (Util.isOnMainThread()) {
             Glide.with(context)
                     .load(Image_API + url + size)
-                    //.error()
                     .crossFade()
-                    //.placeholder(R.mipmap.place_image) 否则第一次进来会不显示图片显示的是占位图
                     .into(imageView);
         }
     }
@@ -166,30 +164,6 @@ public class ImageLoader {
                     .into(imageView);
         }
     }
-
-    /**
-     * Glide 下载图片返回文件
-     * 异步下载
-     *
-     * @param context
-     * @param path
-     * @return
-     */
-    public static File asyDownloadImage2File(Context context, String path) {
-        File file = null;
-        try {
-            file = Glide.with(context)
-                    .load(path)
-                    .downloadOnly(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)//Target.SIZE_ORIGINAL 原图大笑
-                    .get();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
-        return file;
-    }
-
     /**
      * Glide 下载图片返回文件
      * 同步下载
