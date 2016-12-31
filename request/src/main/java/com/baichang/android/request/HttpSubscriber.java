@@ -14,19 +14,107 @@ import java.lang.ref.WeakReference;
 import java.net.ConnectException;
 import java.net.SocketTimeoutException;
 
+import rx.Observable;
 import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action0;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by iscod.
  * Time:2016/9/21-14:03.
  */
 
-public class HttpSubscriber<T> {
+public class HttpSubscriber<T> extends Subscriber<T> {
     private static final String TAG = "Request";
     private Context mContext = null;
     private ProgressDialog mDialog = null;
     private SwipeRefreshLayout mRefresh = null;
 
+    private HttpSuccessListener<T> mSuccessListener;
+    private HttpErrorListener mErrorListener;
+
+    public HttpSubscriber() {
+
+    }
+
+    public HttpSubscriber(HttpSuccessListener<T> successListener) {
+        if (successListener == null)
+            throw new NullPointerException("HttpSuccessListener not null");
+        mSuccessListener = successListener;
+    }
+
+    public HttpSubscriber(HttpSuccessListener<T> successListener, HttpErrorListener errorListener) {
+        if (successListener == null)
+            throw new NullPointerException("HttpSuccessListener not null");
+        if (errorListener == null)
+            throw new NullPointerException("HttpErrorListener not null");
+        mSuccessListener = successListener;
+        mErrorListener = errorListener;
+    }
+
+    @Override
+    public void onCompleted() {
+        RequestDialogUtils.dismiss();
+    }
+
+    @Override
+    public void onError(Throwable e) {
+        RequestDialogUtils.dismiss();
+        if (mErrorListener != null) {
+            mErrorListener.error(e);
+        } else {
+            if (e instanceof SocketTimeoutException) {
+                Toast.makeText(ConfigurationImpl.get().getAppContext(),
+                        R.string.net_request_time_out, Toast.LENGTH_SHORT).show();
+            } else if (e instanceof ConnectException) {
+                Toast.makeText(ConfigurationImpl.get().getAppContext(),
+                        R.string.net_error_tips, Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(ConfigurationImpl.get().getAppContext(),
+                        e.getMessage(), Toast.LENGTH_SHORT).show();
+                Log.i(TAG, e.getMessage(), e);
+            }
+        }
+    }
+
+    @Override
+    public void onNext(T t) {
+        mSuccessListener.success(t);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T> Observable.Transformer<T, T> applySchedulers(final Context context) {
+        return new Observable.Transformer() {
+            @Override
+            public Object call(Object observable) {
+                return ((Observable) observable)
+                        .subscribeOn(Schedulers.newThread())
+                        .unsubscribeOn(Schedulers.newThread())
+                        .doOnSubscribe(new Action0() {
+                            @Override
+                            public void call() {
+                                if (context != null) {
+                                    RequestDialogUtils.show(context);
+                                }
+                            }
+                        })
+                        .subscribeOn(AndroidSchedulers.mainThread())
+                        .observeOn(AndroidSchedulers.mainThread());
+            }
+        };
+    }
+    @SuppressWarnings("unchecked")
+    public static <T> Observable.Transformer<T, T> applySchedulers() {
+        return new Observable.Transformer() {
+            @Override
+            public Object call(Object observable) {
+                return ((Observable) observable)
+                        .subscribeOn(Schedulers.newThread())
+                        .observeOn(AndroidSchedulers.mainThread());
+            }
+        };
+    }
     public HttpSubscriber(Context mContext) {
         if (mContext == null) throw new NullPointerException("Context not null");
         WeakReference<Context> wc = new WeakReference<Context>(mContext);
@@ -43,12 +131,7 @@ public class HttpSubscriber<T> {
         mRefresh = refreshLayout;
     }
 
-    public HttpSubscriber() {
-
-    }
-
     /**
-     *
      * @param Callback
      * @return
      */
@@ -118,7 +201,7 @@ public class HttpSubscriber<T> {
      *
      * @param Callback
      * @param errorBack
-     * @return
+     * @return 已作废
      */
     public Subscriber<T> get(final HttpSuccessListener<T> Callback, final HttpErrorListener errorBack) {
         return new Subscriber<T>() {
@@ -172,4 +255,5 @@ public class HttpSubscriber<T> {
             }
         };
     }
+
 }

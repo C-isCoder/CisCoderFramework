@@ -1,7 +1,7 @@
 package com.baichang.library.test.base;
 
-import com.baichang.android.request.HttpComposeHelper;
 import com.baichang.android.request.HttpFactory;
+import com.baichang.android.request.HttpRxHelper;
 import com.baichang.library.test.model.InformationData;
 import com.baichang.library.test.model.UserData;
 
@@ -25,12 +25,12 @@ import rx.schedulers.Schedulers;
 public class ApiWrapper implements Api {
     @Override
     public Observable<List<String>> upload(@Part MultipartBody.Part file) {
-        return HttpFactory.creatUpload(Api.class).upload(file).compose(HttpComposeHelper.applySchedulers());
+        return HttpFactory.creatUpload(Api.class).upload(file).compose(HttpRxHelper.applySchedulers());
     }
 
     @Override
     public Observable<List<String>> uploads(@Part List<MultipartBody.Part> files) {
-        return HttpFactory.creatUpload(Api.class).uploads(files).compose(HttpComposeHelper.applySchedulers());
+        return HttpFactory.creatUpload(Api.class).uploads(files).compose(HttpRxHelper.applySchedulers());
     }
 
 
@@ -42,30 +42,15 @@ public class ApiWrapper implements Api {
 
     @Override
     public Observable<List<InformationData>> getInformationList(@Body Map<String, String> map) {
-        return HttpFactory.creatHttp(Api.class).getInformationList(map).compose(HttpComposeHelper.applySchedulers());
+        return HttpFactory.creatHttp(Api.class).getInformationList(map).compose(HttpRxHelper.applySchedulers());
     }
 
     @Override
     public Observable<UserData> login(@Body Map<String, String> map) {
-        return HttpFactory.creatHttp(Api.class).login(map).compose(HttpComposeHelper.applySchedulers());
+        return HttpFactory.creatHttp(Api.class).login(map);
     }
     private Api getRequest() {
         return HttpFactory.creat(Api.class);
     }
-
-//    //变换操作符省略subscribeOnOn和observeOn的设置
-//    @SuppressWarnings("unchecked")
-//    final Observable.Transformer schedulersTransformer = new Observable.Transformer() {
-//        @Override
-//        public Object call(Object observable) {
-//            return ((Observable) observable).subscribeOn(Schedulers.newThread())
-//                    .observeOn(AndroidSchedulers.mainThread());
-//        }
-//    };
-//
-//    @SuppressWarnings("unchecked")
-//    public <T> Observable.Transformer<T, T> applySchedulers() {
-//        return (Observable.Transformer<T, T>) schedulersTransformer;
-//    }
 
 }

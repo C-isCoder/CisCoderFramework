@@ -10,7 +10,9 @@ import android.widget.ImageView;
 import android.widget.Toast;
 import android.widget.ViewAnimator;
 
+import com.baichang.android.request.HttpRxHelper;
 import com.baichang.android.request.HttpSubscriber;
+import com.baichang.android.request.HttpSuccessListener;
 import com.baichang.android.widget.recycleView.RecyclerViewAdapter;
 import com.baichang.android.widget.recycleView.RecyclerViewUtils;
 import com.baichang.android.widget.recycleView.ViewHolder;
@@ -102,11 +104,19 @@ public class RequestActivity extends CommonActivity {
         Map<String, String> map = new HashMap<>();
         map.put("stationAccount", "test");
         map.put("stationPwd", "test");
-        request().login(map).subscribe(new HttpSubscriber<UserData>(this).get(user -> {
-            AppDiskCache.setToken(user.token);
-            App.setToken(user.token);
-            showMessage(AppDiskCache.getToken());
-        }));
+//        request().login(map).subscribe(new HttpSubscriber<UserData>(this).get(user -> {
+//            AppDiskCache.setToken(user.token);
+//            App.setToken(user.token);
+//            showMessage(AppDiskCache.getToken());
+//        }));
+        request()
+                .login(map)
+                .compose(HttpRxHelper.applySchedulers(this))
+                .subscribe(new HttpSubscriber<>(userData -> {
+                    AppDiskCache.setToken(userData.token);
+                    App.setToken(userData.token);
+                    showMessage(AppDiskCache.getToken());
+                }));
     }
 
     /**
