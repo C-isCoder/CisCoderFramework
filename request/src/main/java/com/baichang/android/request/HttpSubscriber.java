@@ -27,9 +27,9 @@ import rx.schedulers.Schedulers;
 
 public class HttpSubscriber<T> extends Subscriber<T> {
     private static final String TAG = "Request";
-    private Context mContext = null;
-    private ProgressDialog mDialog = null;
-    private SwipeRefreshLayout mRefresh = null;
+    private static Context sContext = null;
+    private static ProgressDialog sDialog = null;
+    private static SwipeRefreshLayout sRefresh = null;
 
     private HttpSuccessListener<T> mSuccessListener;
     private HttpErrorListener mErrorListener;
@@ -55,12 +55,24 @@ public class HttpSubscriber<T> extends Subscriber<T> {
 
     @Override
     public void onCompleted() {
-        RequestDialogUtils.dismiss();
+        if (sRefresh != null) {
+            sRefresh.setRefreshing(false);
+        } else if (sDialog != null) {
+            sDialog.dismiss();
+        } else if (sContext != null) {
+            RequestDialogUtils.dismiss();
+        }
     }
 
     @Override
     public void onError(Throwable e) {
-        RequestDialogUtils.dismiss();
+        if (sRefresh != null) {
+            sRefresh.setRefreshing(false);
+        } else if (sDialog != null) {
+            sDialog.dismiss();
+        } else if (sContext != null) {
+            RequestDialogUtils.dismiss();
+        }
         if (mErrorListener != null) {
             mErrorListener.error(e);
         } else {
@@ -84,7 +96,9 @@ public class HttpSubscriber<T> extends Subscriber<T> {
     }
 
     @SuppressWarnings("unchecked")
-    public static <T> Observable.Transformer<T, T> applySchedulers(final Context context) {
+    public static <T> Observable.Transformer<T, T> applySchedulers(Context context) {
+        WeakReference<Context> wk = new WeakReference<Context>(context);
+        sContext = wk.get();
         return new Observable.Transformer() {
             @Override
             public Object call(Object observable) {
@@ -94,8 +108,13 @@ public class HttpSubscriber<T> extends Subscriber<T> {
                         .doOnSubscribe(new Action0() {
                             @Override
                             public void call() {
-                                if (context != null) {
-                                    RequestDialogUtils.show(context);
+                                if (!NetWorkStateUtils.isNetworkConnected()) {
+                                    Toast.makeText(ConfigurationImpl.get().getAppContext(),
+                                            R.string.net_error_tips, Toast.LENGTH_SHORT).show();
+                                } else {
+                                    if (sContext != null) {
+                                        RequestDialogUtils.show(sContext);
+                                    }
                                 }
                             }
                         })
@@ -104,6 +123,65 @@ public class HttpSubscriber<T> extends Subscriber<T> {
             }
         };
     }
+
+    @SuppressWarnings("unchecked")
+    public static <T> Observable.Transformer<T, T> applySchedulers(ProgressDialog dialog) {
+        WeakReference<ProgressDialog> wk = new WeakReference<ProgressDialog>(dialog);
+        sDialog = wk.get();
+        return new Observable.Transformer() {
+            @Override
+            public Object call(Object observable) {
+                return ((Observable) observable)
+                        .subscribeOn(Schedulers.newThread())
+                        .unsubscribeOn(Schedulers.newThread())
+                        .doOnSubscribe(new Action0() {
+                            @Override
+                            public void call() {
+                                if (!NetWorkStateUtils.isNetworkConnected()) {
+                                    Toast.makeText(ConfigurationImpl.get().getAppContext(),
+                                            R.string.net_error_tips, Toast.LENGTH_SHORT).show();
+                                } else {
+                                    if (sDialog != null) {
+                                        sDialog.show();
+                                    }
+                                }
+                            }
+                        })
+                        .subscribeOn(AndroidSchedulers.mainThread())
+                        .observeOn(AndroidSchedulers.mainThread());
+            }
+        };
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T> Observable.Transformer<T, T> applySchedulers(SwipeRefreshLayout refresh) {
+        WeakReference<SwipeRefreshLayout> wk = new WeakReference<SwipeRefreshLayout>(refresh);
+        sRefresh = wk.get();
+        return new Observable.Transformer() {
+            @Override
+            public Object call(Object observable) {
+                return ((Observable) observable)
+                        .subscribeOn(Schedulers.newThread())
+                        .unsubscribeOn(Schedulers.newThread())
+                        .doOnSubscribe(new Action0() {
+                            @Override
+                            public void call() {
+                                if (!NetWorkStateUtils.isNetworkConnected()) {
+                                    Toast.makeText(ConfigurationImpl.get().getAppContext(),
+                                            R.string.net_error_tips, Toast.LENGTH_SHORT).show();
+                                } else {
+                                    if (sRefresh != null) {
+                                        sRefresh.setRefreshing(true);
+                                    }
+                                }
+                            }
+                        })
+                        .subscribeOn(AndroidSchedulers.mainThread())
+                        .observeOn(AndroidSchedulers.mainThread());
+            }
+        };
+    }
+
     @SuppressWarnings("unchecked")
     public static <T> Observable.Transformer<T, T> applySchedulers() {
         return new Observable.Transformer() {
@@ -115,26 +193,31 @@ public class HttpSubscriber<T> extends Subscriber<T> {
             }
         };
     }
-    public HttpSubscriber(Context mContext) {
-        if (mContext == null) throw new NullPointerException("Context not null");
-        WeakReference<Context> wc = new WeakReference<Context>(mContext);
-        this.mContext = wc.get();
+
+    @Deprecated
+    public HttpSubscriber(Context context) {
+        if (context == null) throw new NullPointerException("Context not null");
+        WeakReference<Context> wc = new WeakReference<Context>(context);
+        sContext = wc.get();
     }
 
+    @Deprecated
     public HttpSubscriber(ProgressDialog dialog) {
         if (dialog == null) throw new NullPointerException("Progress not null");
-        mDialog = dialog;
+        sDialog = dialog;
     }
 
+    @Deprecated
     public HttpSubscriber(SwipeRefreshLayout refreshLayout) {
         if (refreshLayout == null) throw new NullPointerException("SwipeRefreshLayout not null");
-        mRefresh = refreshLayout;
+        sRefresh = refreshLayout;
     }
 
     /**
      * @param Callback
      * @return
      */
+    @Deprecated
     public Subscriber<T> get(final HttpSuccessListener<T> Callback) {
         return new Subscriber<T>() {
             @Override
@@ -145,33 +228,33 @@ public class HttpSubscriber<T> extends Subscriber<T> {
                             R.string.net_error_tips, Toast.LENGTH_SHORT).show();
                     onCompleted();
                 }
-                if (mRefresh != null) {
-                    mRefresh.setRefreshing(true);
-                } else if (mDialog != null) {
-                    mDialog.show();
-                } else if (mContext != null) {
-                    RequestDialogUtils.show(mContext);
+                if (sRefresh != null) {
+                    sRefresh.setRefreshing(true);
+                } else if (sDialog != null) {
+                    sDialog.show();
+                } else if (sContext != null) {
+                    RequestDialogUtils.show(sContext);
                 }
             }
 
             @Override
             public void onCompleted() {
-                if (mRefresh != null) {
-                    mRefresh.setRefreshing(false);
-                } else if (mDialog != null) {
-                    mDialog.dismiss();
-                } else if (mContext != null) {
+                if (sRefresh != null) {
+                    sRefresh.setRefreshing(false);
+                } else if (sDialog != null) {
+                    sDialog.dismiss();
+                } else if (sContext != null) {
                     RequestDialogUtils.dismiss();
                 }
             }
 
             @Override
             public void onError(Throwable e) {
-                if (mRefresh != null) {
-                    mRefresh.setRefreshing(false);
-                } else if (mDialog != null) {
-                    mDialog.dismiss();
-                } else if (mContext != null) {
+                if (sRefresh != null) {
+                    sRefresh.setRefreshing(false);
+                } else if (sDialog != null) {
+                    sDialog.dismiss();
+                } else if (sContext != null) {
                     RequestDialogUtils.dismiss();
                 }
                 if (e instanceof SocketTimeoutException) {
@@ -203,6 +286,7 @@ public class HttpSubscriber<T> extends Subscriber<T> {
      * @param errorBack
      * @return 已作废
      */
+    @Deprecated
     public Subscriber<T> get(final HttpSuccessListener<T> Callback, final HttpErrorListener errorBack) {
         return new Subscriber<T>() {
             @Override
@@ -213,33 +297,33 @@ public class HttpSubscriber<T> extends Subscriber<T> {
                             R.string.net_error_tips, Toast.LENGTH_SHORT).show();
                     onCompleted();
                 }
-                if (mRefresh != null) {
-                    mRefresh.setRefreshing(true);
-                } else if (mDialog != null) {
-                    mDialog.show();
-                } else if (mContext != null) {
-                    RequestDialogUtils.show(mContext);
+                if (sRefresh != null) {
+                    sRefresh.setRefreshing(true);
+                } else if (sDialog != null) {
+                    sDialog.show();
+                } else if (sContext != null) {
+                    RequestDialogUtils.show(sContext);
                 }
             }
 
             @Override
             public void onCompleted() {
-                if (mRefresh != null) {
-                    mRefresh.setRefreshing(false);
-                } else if (mDialog != null) {
-                    mDialog.dismiss();
-                } else if (mContext != null) {
+                if (sRefresh != null) {
+                    sRefresh.setRefreshing(false);
+                } else if (sDialog != null) {
+                    sDialog.dismiss();
+                } else if (sContext != null) {
                     RequestDialogUtils.dismiss();
                 }
             }
 
             @Override
             public void onError(Throwable e) {
-                if (mRefresh != null) {
-                    mRefresh.setRefreshing(false);
-                } else if (mDialog != null) {
-                    mDialog.dismiss();
-                } else if (mContext != null) {
+                if (sRefresh != null) {
+                    sRefresh.setRefreshing(false);
+                } else if (sDialog != null) {
+                    sDialog.dismiss();
+                } else if (sContext != null) {
                     RequestDialogUtils.dismiss();
                 }
                 if (errorBack != null) {
