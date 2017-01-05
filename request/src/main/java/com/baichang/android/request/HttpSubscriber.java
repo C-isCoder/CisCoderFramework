@@ -57,9 +57,11 @@ public class HttpSubscriber<T> extends Subscriber<T> {
     public void onCompleted() {
         if (sRefresh != null) {
             sRefresh.setRefreshing(false);
-        } else if (sDialog != null) {
+        }
+        if (sDialog != null) {
             sDialog.dismiss();
-        } else if (sContext != null) {
+        }
+        if (sContext != null) {
             RequestDialogUtils.dismiss();
         }
     }
@@ -68,9 +70,11 @@ public class HttpSubscriber<T> extends Subscriber<T> {
     public void onError(Throwable e) {
         if (sRefresh != null) {
             sRefresh.setRefreshing(false);
-        } else if (sDialog != null) {
+        }
+        if (sDialog != null) {
             sDialog.dismiss();
-        } else if (sContext != null) {
+        }
+        if (sContext != null) {
             RequestDialogUtils.dismiss();
         }
         if (mErrorListener != null) {
@@ -241,9 +245,11 @@ public class HttpSubscriber<T> extends Subscriber<T> {
             public void onCompleted() {
                 if (sRefresh != null) {
                     sRefresh.setRefreshing(false);
-                } else if (sDialog != null) {
+                }
+                if (sDialog != null) {
                     sDialog.dismiss();
-                } else if (sContext != null) {
+                }
+                if (sContext != null) {
                     RequestDialogUtils.dismiss();
                 }
             }
@@ -252,9 +258,11 @@ public class HttpSubscriber<T> extends Subscriber<T> {
             public void onError(Throwable e) {
                 if (sRefresh != null) {
                     sRefresh.setRefreshing(false);
-                } else if (sDialog != null) {
+                }
+                if (sDialog != null) {
                     sDialog.dismiss();
-                } else if (sContext != null) {
+                }
+                if (sContext != null) {
                     RequestDialogUtils.dismiss();
                 }
                 if (e instanceof SocketTimeoutException) {
@@ -310,9 +318,11 @@ public class HttpSubscriber<T> extends Subscriber<T> {
             public void onCompleted() {
                 if (sRefresh != null) {
                     sRefresh.setRefreshing(false);
-                } else if (sDialog != null) {
+                }
+                if (sDialog != null) {
                     sDialog.dismiss();
-                } else if (sContext != null) {
+                }
+                if (sContext != null) {
                     RequestDialogUtils.dismiss();
                 }
             }
@@ -321,9 +331,11 @@ public class HttpSubscriber<T> extends Subscriber<T> {
             public void onError(Throwable e) {
                 if (sRefresh != null) {
                     sRefresh.setRefreshing(false);
-                } else if (sDialog != null) {
+                }
+                if (sDialog != null) {
                     sDialog.dismiss();
-                } else if (sContext != null) {
+                }
+                if (sContext != null) {
                     RequestDialogUtils.dismiss();
                 }
                 if (errorBack != null) {
