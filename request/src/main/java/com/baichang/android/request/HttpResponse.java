@@ -8,7 +8,7 @@ public class HttpResponse<T> {
 
     private String msg;
     private BaseRes<T> res;
-    private boolean state;
+    private int state;
 
     public String getMsg() {
         return msg;
@@ -26,18 +26,42 @@ public class HttpResponse<T> {
         this.res = res;
     }
 
-    public boolean isState() {
+    public int getState() {
         return state;
     }
 
-    public void setState(boolean state) {
+    public void setState(int state) {
         this.state = state;
     }
 
     public static class BaseRes<T> {
-        public int code;
-        public String msg;
-        public T data;
+        private int code;
+        private String msg;
+        private T data;
+
+        public String getMsg() {
+            return msg;
+        }
+
+        public void setMsg(String msg) {
+            this.msg = msg;
+        }
+
+        public T getData() {
+            return data;
+        }
+
+        public void setData(T data) {
+            this.data = data;
+        }
+
+        public int getCode() {
+            return code;
+        }
+
+        public void setCode(int code) {
+            this.code = code;
+        }
 
         @Override
         public String toString() {

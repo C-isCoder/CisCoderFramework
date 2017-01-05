@@ -42,7 +42,8 @@ public class ApiWrapper implements Api {
 
     @Override
     public Observable<List<InformationData>> getInformationList(@Body Map<String, String> map) {
-        return HttpFactory.creatHttp(Api.class).getInformationList(map).compose(HttpRxHelper.applySchedulers());
+        //return HttpFactory.creatHttp(Api.class).getInformationList(map).compose(HttpRxHelper.applySchedulers());
+        return HttpFactory.creatHttp(Api.class).getInformationList(map);
     }
 
     @Override
