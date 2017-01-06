@@ -115,10 +115,8 @@ public class HttpSubscriber<T> extends Subscriber<T> {
                                 if (!NetWorkStateUtils.isNetworkConnected()) {
                                     Toast.makeText(ConfigurationImpl.get().getAppContext(),
                                             R.string.net_error_tips, Toast.LENGTH_SHORT).show();
-                                } else {
-                                    if (sContext != null) {
-                                        RequestDialogUtils.show(sContext);
-                                    }
+                                } else if (sContext != null) {
+                                    RequestDialogUtils.show(sContext);
                                 }
                             }
                         })
@@ -144,10 +142,8 @@ public class HttpSubscriber<T> extends Subscriber<T> {
                                 if (!NetWorkStateUtils.isNetworkConnected()) {
                                     Toast.makeText(ConfigurationImpl.get().getAppContext(),
                                             R.string.net_error_tips, Toast.LENGTH_SHORT).show();
-                                } else {
-                                    if (sDialog != null) {
-                                        sDialog.show();
-                                    }
+                                } else if (sDialog != null) {
+                                    sDialog.show();
                                 }
                             }
                         })
@@ -173,10 +169,8 @@ public class HttpSubscriber<T> extends Subscriber<T> {
                                 if (!NetWorkStateUtils.isNetworkConnected()) {
                                     Toast.makeText(ConfigurationImpl.get().getAppContext(),
                                             R.string.net_error_tips, Toast.LENGTH_SHORT).show();
-                                } else {
-                                    if (sRefresh != null) {
-                                        sRefresh.setRefreshing(true);
-                                    }
+                                } else if (sRefresh != null) {
+                                    sRefresh.setRefreshing(true);
                                 }
                             }
                         })
@@ -197,7 +191,14 @@ public class HttpSubscriber<T> extends Subscriber<T> {
             }
         };
     }
-
+    @SuppressWarnings("unchecked")
+    public static <T> Observable.Transformer<T, T> downSchedulers() {
+        return new Observable.Transformer() {
+            public Object call(Object observable) {
+                return ((Observable)observable).subscribeOn(Schedulers.newThread()).observeOn(Schedulers.io());
+            }
+        };
+    }
     @Deprecated
     public HttpSubscriber(Context context) {
         if (context == null) throw new NullPointerException("Context not null");
@@ -234,9 +235,11 @@ public class HttpSubscriber<T> extends Subscriber<T> {
                 }
                 if (sRefresh != null) {
                     sRefresh.setRefreshing(true);
-                } else if (sDialog != null) {
+                }
+                if (sDialog != null) {
                     sDialog.show();
-                } else if (sContext != null) {
+                }
+                if (sContext != null) {
                     RequestDialogUtils.show(sContext);
                 }
             }
@@ -307,9 +310,11 @@ public class HttpSubscriber<T> extends Subscriber<T> {
                 }
                 if (sRefresh != null) {
                     sRefresh.setRefreshing(true);
-                } else if (sDialog != null) {
+                }
+                if (sDialog != null) {
                     sDialog.show();
-                } else if (sContext != null) {
+                }
+                if (sContext != null) {
                     RequestDialogUtils.show(sContext);
                 }
             }

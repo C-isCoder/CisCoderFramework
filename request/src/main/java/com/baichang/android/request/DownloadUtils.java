@@ -33,7 +33,6 @@ import rx.schedulers.Schedulers;
 public class DownloadUtils {
     private static Context sContext;
 
-    //写入文件文件
     private static final String TAG = "DownLoad";
     //文件后缀
     private static String fileSuffix = "";
@@ -49,9 +48,7 @@ public class DownloadUtils {
         sContext = wc.get();
         sSuccessListener = listener;
         setProgress();
-        observable.subscribeOn(Schedulers.newThread())
-                .observeOn(Schedulers.io())
-                .subscribe(new DownloadSubscriber(null));
+        observable.subscribe(new DownloadSubscriber(null));
     }
 
     public static void down(Context context, String fileName, Observable<ResponseBody> observable, HttpSuccessListener<File> listener) {
@@ -59,9 +56,7 @@ public class DownloadUtils {
         sContext = wc.get();
         sSuccessListener = listener;
         setProgress();
-        observable.subscribeOn(Schedulers.newThread())
-                .observeOn(Schedulers.io())
-                .subscribe(new DownloadSubscriber(fileName));
+        observable.subscribe(new DownloadSubscriber(fileName));
     }
 
     public static File writeResponseBodyToFile(ResponseBody body, String fileName) {
