@@ -10,4 +10,15 @@
     <dimen name="cm_tv_size_body4">10sp</dimen>
     <dimen name="cm_tv_button_size">16sp</dimen>
 
+    <dimen name="cm_tv_size_body10">10sp</dimen>
+    <dimen name="cm_tv_size_body11">11sp</dimen>
+    <dimen name="cm_tv_size_body12">12sp</dimen>
+    <dimen name="cm_tv_size_body13">13sp</dimen>
+    <dimen name="cm_tv_size_body14">14sp</dimen>
+    <dimen name="cm_tv_size_body15">15sp</dimen>
+    <dimen name="cm_tv_size_body16">16sp</dimen>
+    <dimen name="cm_tv_size_body17">17sp</dimen>
+    <dimen name="cm_tv_size_body18">18sp</dimen>
+    <dimen name="cm_tv_size_body19">19sp</dimen>
+    <dimen name="cm_tv_size_body20">20sp</dimen>
 </resources>

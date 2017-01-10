@@ -84,6 +84,21 @@ public class BCToolsUtil {
     }
 
     /**
+     * 手机号格式化
+     *
+     * @param mobile
+     * @return 123****8900
+     */
+    private String phoneFormat(String mobile) {
+        if (BCStringUtil.isMobile(mobile)) {
+            if (mobile.length() == 11) {
+                mobile = mobile.substring(0, 3) + "****" + mobile.substring(7, 11);
+            }
+        }
+        return mobile;
+    }
+
+    /**
      * MD5加密
      *
      * @param content 加密内容

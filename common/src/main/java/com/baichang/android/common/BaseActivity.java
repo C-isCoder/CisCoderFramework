@@ -1,5 +1,6 @@
 package com.baichang.android.common;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -15,9 +16,10 @@ import com.baichang.android.utils.BCAppManager;
 import com.baichang.android.utils.BCDialogUtil;
 import com.baichang.android.utils.BCToastUtil;
 import com.baichang.android.utils.BCToolsUtil;
+import com.baichang.android.utils.SystemBarTintManager;
 
 
-public class BaseActivity extends FragmentActivity {
+public abstract class BaseActivity extends FragmentActivity {
     private static final String TAG_INTENT_DATA = "Data";
     protected static Context mBaseContext;
 
@@ -81,10 +83,20 @@ public class BaseActivity extends FragmentActivity {
 
     private void initSystemBar() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {//4.4 全透明状态栏
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        }
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {//5.0 全透明实现
+            // 状态栏透明 需要在创建SystemBarTintManager 之前调用。
+            //getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            setTranslucentStatus(true);
+            SystemBarTintManager tintManager = new SystemBarTintManager(this);
+            tintManager.setStatusBarTintEnabled(true);
+            // 使StatusBarTintView 和 actionbar的颜色保持一致，风格统一。
+            if (color != -1) {
+                tintManager.setStatusBarTintResource(color);
+            } else {
+                tintManager.setStatusBarTintResource(ConfigurationImpl.get().getAppBarColor());//app主色调
+            }
+            // 设置状态栏的文字颜色
+            tintManager.setStatusBarDarkMode(false, this);
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {//5.0 全透明实现
             Window window = getWindow();
             window.setBackgroundDrawable(null);
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
@@ -94,9 +106,23 @@ public class BaseActivity extends FragmentActivity {
             if (color != -1) {
                 window.setStatusBarColor(getResources().getColor(color));
             } else {
-                window.setStatusBarColor(ConfigurationImpl.get().getAppBarColor());//app主色调
+                int defColor = getResources().getColor(ConfigurationImpl.get().getAppBarColor());
+                window.setStatusBarColor(defColor);//app主色调
             }
         }
+    }
+
+    @TargetApi(19)
+    private void setTranslucentStatus(boolean on) {
+        Window win = getWindow();
+        WindowManager.LayoutParams winParams = win.getAttributes();
+        final int bits = WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS;
+        if (on) {
+            winParams.flags |= bits;
+        } else {
+            winParams.flags &= ~bits;
+        }
+        win.setAttributes(winParams);
     }
 
     //滑动关闭输入框
@@ -111,9 +137,7 @@ public class BaseActivity extends FragmentActivity {
     }
 
     //返回
-    public void back(View view) {
-        finish();
-    }
+    public abstract void back(View view);
 
     @Override
     protected void onResume() {
@@ -173,4 +197,6 @@ public class BaseActivity extends FragmentActivity {
     protected Activity getAty() {
         return this;
     }
+
+
 }

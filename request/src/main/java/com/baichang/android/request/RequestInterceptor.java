@@ -1,9 +1,7 @@
 package com.baichang.android.request;
 
-import android.util.Log;
-
-
 import com.baichang.android.common.ConfigurationImpl;
+import com.orhanobut.logger.Logger;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -23,7 +21,6 @@ import okio.Buffer;
 public class RequestInterceptor implements Interceptor {
     private static final MediaType MEDIA_TYPE = MediaType.parse("application/json; charset=UTF-8");
     private static final Charset UTF_8 = Charset.forName("UTF-8");
-    private static final String TAG = "Request";
 
     @Override
     public Response intercept(Chain chain) throws IOException {
@@ -39,13 +36,12 @@ public class RequestInterceptor implements Interceptor {
         String token = ConfigurationImpl.get().getToken();
         String md5 = ParameterUtils.MD5(parameter);
         newUrl.addQueryParameter("sign", md5).addQueryParameter("token", token);
-        Log.i(TAG, "<-----------------------------------------------------begin" +
-                "---------------------------------------------------->");
-        Log.d(TAG, "   param->[T_T]  " + parameter);
-        Log.d(TAG, "     url->[=_=]  " + url);
-        Log.d(TAG, "    sign->[o_o]  " + md5);
-        Log.d(TAG, "   token->[$_$]  " + token);
-        Log.d(TAG, "  method->[^_^]  " + originalRequest.method());
+        Logger.i("RequestParams:\n" +
+                "param->[T_T] ：" + parameter + "\n" +
+                "url->[=_=]   ：" + url + "\n" +
+                "sign->[o_o]  ：" + md5 + "\n" +
+                "token->[$_$] ：" + token + "\n" +
+                "method->[^_^]：" + originalRequest.method());
         Request.Builder requestBuilder = originalRequest.newBuilder()
                 .method(originalRequest.method(), originalRequest.body()).url(newUrl.build());
         Request request = requestBuilder.build();

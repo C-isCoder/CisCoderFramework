@@ -2,12 +2,10 @@
 <resources>
 
     <!-- ========================== 通用的color ============================ -->
-    <!--<color name="topBar_bg">@android:color/transparent</color>-->
-    <color name="topBar_bg">@color/top_bar_bg</color>
     <color name="topBar_bg_black">#403f40</color>
     <color name="topBar_title">@color/cm_white</color>
 
-    <!-- commont -->
+    <!-- common -->
     <color name="cm_driver">#F0F0F0</color>
     <color name="cm_white">@android:color/white</color>
     <color name="cm_btn_orange_f">#ef6031</color>
@@ -15,13 +13,11 @@
     <color name="cm_btn_orange_yellow">#F6A50A</color>
     <color name="cm_no_activate">#808080</color>
     <color name="cm_layout_bg">#EFEFEF</color>
-    <color name="top_bar_bg">#E60002</color>
-    <color name="app_btn_color">#E60002</color>
     <!--字体-->
     <color name="cm_tv_black1">#3c3c3c</color>
     <!-- Text -->
     <color name="cm_tv_black2">#727272</color>
-    <!-- Seconddary Text -->
+    <!-- Second_dark Text -->
     <color name="cm_tv_black3">#979797</color>
     <color name="cm_tv_black4">#d1d1d1</color>
     <!-- Hint Text -->
@@ -36,6 +32,7 @@
     <color name="cm_font_orange">#FF6633</color>
     <color name="cm_font_sky_blue">#36BCE2</color>
     <color name="cm_font_sky_green">#8AD06E</color>
+    <color name="btn_no_activate">#808080</color>
 
     <!--背景边框细线-->
     <color name="cm_line_horizontal">#D3D3D3</color>
@@ -48,6 +45,5 @@
     <color name="notice_top_font">#C3912A</color>
     <color name="status_view">#50000000</color>
     <color name="home_tab">#C81623</color>
-    <color name="no_activate">#808080</color>
 
 </resources>

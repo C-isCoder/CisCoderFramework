@@ -7,6 +7,7 @@ import com.baichang.android.common.ConfigurationImpl;
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
 import com.google.gson.reflect.TypeToken;
+import com.orhanobut.logger.Logger;
 
 import org.json.JSONObject;
 
@@ -55,7 +56,7 @@ public class ResponseConverterFactory extends Converter.Factory {
                                                             Annotation[] annotations,
                                                             Retrofit retrofit) {
         TypeAdapter<?> mAdapter = mGson.getAdapter(TypeToken.get(mType));
-        return new BaseResponseBodyConverter<>(mGson, mAdapter, mType);//响应
+        return new BaseResponseBodyConverter<>(mAdapter, mType);//响应
     }
 
     /**
@@ -84,16 +85,13 @@ public class ResponseConverterFactory extends Converter.Factory {
      */
     private class BaseResponseBodyConverter<T> implements Converter<ResponseBody, T> {
         private final TypeAdapter<T> mAdapter;
-        private Gson mGson;
         private Type mType;//泛型，当服务器返回的数据为数组的时候回用到
         //error
         private static final String SERVICE_ERROR = "请求服务器异常";
         private static final String DATA_ERROR = "请求数据异常";
-        private static final String TAG = "Request";
 
-        private BaseResponseBodyConverter(Gson mGson, TypeAdapter<T> mAdapter, Type mType) {
+        private BaseResponseBodyConverter(TypeAdapter<T> mAdapter, Type mType) {
             this.mAdapter = mAdapter;
-            this.mGson = mGson;
             this.mType = mType;
         }
 
@@ -107,14 +105,11 @@ public class ResponseConverterFactory extends Converter.Factory {
         @Override
         public T convert(ResponseBody response) throws IOException {
             String strResponse = response.string();
+            Logger.d("[%s] Answer->->->->", mType);
+            Logger.json(strResponse);
             if (TextUtils.isEmpty(strResponse)) {
                 throw new HttpException(SERVICE_ERROR);
             }
-            Log.i(TAG, "  answer->->->->->->->->->->->->->->->->->->-->->->->->->->-->-" +
-                    ">->->->->->->->->->->->->->->->->->->->->->->->->->");
-            Log.d(TAG, "response->\n" + strResponse + "  ");
-            Log.i(TAG, "<------------------------------------------------------end" +
-                    "------------------------------------------------------>");
             //TODO 以后重构点，不用JSONObject解析，换成Gson。
             try {
                 JSONObject jb = new JSONObject(strResponse);
@@ -134,7 +129,7 @@ public class ResponseConverterFactory extends Converter.Factory {
                     if (TextUtils.isEmpty(parameters)) {
                         throw new HttpException(DATA_ERROR);
                     }
-                    return mGson.fromJson(parameters, mType);
+                    return mAdapter.fromJson(parameters);
                 } else if (ret_state == 30000) {
                     ConfigurationImpl.get().refreshToken();
                     throw new HttpException(jb.getJSONObject("res").getString("msg"));

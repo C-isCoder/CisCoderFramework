@@ -10,6 +10,7 @@ import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.StateListDrawable;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -68,6 +69,10 @@ public class PhotoSelectDialog extends DialogFragment implements View.OnClickLis
      * 按钮圆角
      */
     private static float sRadios;
+    /**
+     * 是否自由裁剪
+     */
+    private static boolean isFree = false;
 
     public PhotoSelectDialog() {
     }
@@ -96,7 +101,7 @@ public class PhotoSelectDialog extends DialogFragment implements View.OnClickLis
         btnTake.setText(sTakeText == null ? "拍照" : sTakeText);
         btnImage.setText(sImageText == null ? "相册" : sImageText);
         btnCancel.setText(sCancelText == null ? "取消" : sCancelText);
-        int pressColor = sPressColor == 0 ? R.color.no_activate : sPressColor;
+        int pressColor = sPressColor == 0 ? R.color.btn_no_activate : sPressColor;
         int normalColor = sNormalColor == 0 ? ConfigurationImpl.get().getAppBarColor() : sNormalColor;
         int stoke = sCancelStroke == 0 ? (int) BCViewUtil.dip2px(getActivity(), 1) : sCancelStroke;
         float radios = sRadios == 0.0 ? BCViewUtil.dip2px(getActivity(), 5) : sRadios;
@@ -183,10 +188,18 @@ public class PhotoSelectDialog extends DialogFragment implements View.OnClickLis
         }
         if (requestCode == 100 && data != null) {
             //相册选择返回
-            BCPhotoFragUtil.photoZoomFree(data.getData());
+            if (isFree) {
+                BCPhotoFragUtil.photoZoomFree(data.getData());
+            } else {
+                BCPhotoFragUtil.photoZoom(data.getData());
+            }
         } else if (requestCode == 101) {
             //拍照返回 调用裁剪
-            BCPhotoFragUtil.photoZoomFree(null);
+            if (isFree) {
+                BCPhotoFragUtil.photoZoomFree(null);
+            } else {
+                BCPhotoFragUtil.photoZoom(null);
+            }
         } else if (requestCode == 102 && resultCode != 0) {
             if (callback != null) {
                 callback.onResult(BCPhotoFragUtil.gePhotoBitmap(), BCPhotoFragUtil.getPhotoPath());
@@ -207,6 +220,19 @@ public class PhotoSelectDialog extends DialogFragment implements View.OnClickLis
     private void setButtonDrawableForColor(Button btn, int pressId, int normalId, float radios) {
         btn.setBackground(BCDrawableUtil.getPressedDrawable(getResources().getColor(pressId),
                 getResources().getColor(normalId), radios));
+    }
+
+    /**
+     * 设置是否 自由裁剪
+     *
+     * @param isFreeCrop 是否自由裁剪
+     */
+    public void setIsFreeCrop(boolean isFreeCrop) {
+        isFree = isFreeCrop;
+    }
+
+    public void show(FragmentManager manager) {
+        this.show(manager, "Photo");
     }
 
     private static OnResultListener resultListener;
@@ -289,6 +315,11 @@ public class PhotoSelectDialog extends DialogFragment implements View.OnClickLis
         public Builder setSelectCallback(PhotoSelectCallback call) {
             callback = call;
             resultListener = null;
+            return this;
+        }
+
+        public Builder setIsFreeCrop(boolean isFreeCrop) {
+            isFree = isFreeCrop;
             return this;
         }
 

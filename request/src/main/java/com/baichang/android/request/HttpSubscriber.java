@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 
 import com.baichang.android.common.ConfigurationImpl;
+import com.orhanobut.logger.Logger;
 
 import java.lang.ref.WeakReference;
 import java.net.ConnectException;
@@ -89,7 +90,7 @@ public class HttpSubscriber<T> extends Subscriber<T> {
             } else {
                 Toast.makeText(ConfigurationImpl.get().getAppContext(),
                         e.getMessage(), Toast.LENGTH_SHORT).show();
-                Log.i(TAG, e.getMessage(), e);
+                Logger.e(e, e.getMessage());
             }
         }
     }
@@ -191,14 +192,16 @@ public class HttpSubscriber<T> extends Subscriber<T> {
             }
         };
     }
+
     @SuppressWarnings("unchecked")
     public static <T> Observable.Transformer<T, T> downSchedulers() {
         return new Observable.Transformer() {
             public Object call(Object observable) {
-                return ((Observable)observable).subscribeOn(Schedulers.newThread()).observeOn(Schedulers.io());
+                return ((Observable) observable).subscribeOn(Schedulers.newThread()).observeOn(Schedulers.io());
             }
         };
     }
+
     @Deprecated
     public HttpSubscriber(Context context) {
         if (context == null) throw new NullPointerException("Context not null");
@@ -277,7 +280,7 @@ public class HttpSubscriber<T> extends Subscriber<T> {
                 } else {
                     Toast.makeText(ConfigurationImpl.get().getAppContext(),
                             e.getMessage(), Toast.LENGTH_SHORT).show();
-                    Log.i(TAG, e.getMessage(), e);
+                    Logger.e(e, e.getMessage());
                 }
             }
 
