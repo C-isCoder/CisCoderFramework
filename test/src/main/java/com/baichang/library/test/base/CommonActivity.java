@@ -1,6 +1,7 @@
 package com.baichang.library.test.base;
 
 import android.os.Bundle;
+import android.view.View;
 import android.view.Window;
 
 import com.baichang.android.common.BaseActivity;
@@ -21,7 +22,12 @@ public class CommonActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
     }
 
-    public Api request() {
+    @Override
+    public void back(View view) {
+        finish();
+    }
+
+    public Api api() {
         if (instance == null) {
             instance = new ApiWrapper();
         }

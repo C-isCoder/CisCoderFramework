@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.baichang.android.imageloader.ImageLoader;
+import com.baichang.android.request.HttpSubscriber;
 import com.baichang.android.request.UploadSubscriber;
 import com.baichang.android.request.UploadUtils;
 import com.baichang.android.widget.photoGallery.PhotoGalleryActivity;
@@ -82,16 +83,18 @@ public class UploadActivity extends CommonActivity {
         Log.d(TAG, "测试图片路径：" + path);
         File file = new File(path);
         Log.d(TAG, "File：" + file.getAbsolutePath());
-        request().upload(UploadUtils.getMultipartBody(file)).subscribe(new UploadSubscriber<List<String>>(this) {
-            @Override
-            public void onNext(List<String> list) {
-                Log.d(TAG, "ImagePath：" + list.get(0));
-                showMessage("上传成功");
-                rvList.setVisibility(View.GONE);
-                ImageLoader.loadImage(getApplicationContext(), list.get(0), ivImage);
-                ivImage.setVisibility(View.VISIBLE);
-            }
-        });
+        api().upload(UploadUtils.getMultipartBody(file))
+                .compose(HttpSubscriber.applySchedulers())
+                .subscribe(new UploadSubscriber<List<String>>(this) {
+                    @Override
+                    public void onNext(List<String> list) {
+                        Log.d(TAG, "ImagePath：" + list.get(0));
+                        showMessage("上传成功");
+                        rvList.setVisibility(View.GONE);
+                        ImageLoader.loadImage(getApplicationContext(), list.get(0), ivImage);
+                        ivImage.setVisibility(View.VISIBLE);
+                    }
+                });
     }
 
     /**
@@ -128,7 +131,8 @@ public class UploadActivity extends CommonActivity {
         ProgressDialog dialog = new ProgressDialog(this);
         dialog.setCancelable(false);
         dialog.setCanceledOnTouchOutside(false);
-        request().uploads(UploadUtils.getMultipartBodysForFile(files))
+        api().uploads(UploadUtils.getMultipartBodysForFile(files))
+                .compose(HttpSubscriber.applySchedulers())
                 .subscribe(new UploadSubscriber<List<String>>(this) {
                     @Override
                     public void onNext(List<String> list) {
@@ -147,7 +151,7 @@ public class UploadActivity extends CommonActivity {
 //        paths.add(path2);
 //        paths.add(path3);
 //        paths.add(path4);
-//        request().uploads(UploadUtils.getMultipartBodysForPath(paths))
+//        api().uploads(UploadUtils.getMultipartBodysForPath(paths))
 //                .subscribe(new HttpSubscriber<List<String>>(this).get(idList -> {
 //                    for (String s : idList) {
 //                        Log.d(TAG, "ImagePath：" + s);

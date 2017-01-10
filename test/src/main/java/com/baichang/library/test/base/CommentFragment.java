@@ -11,7 +11,7 @@ import com.baichang.android.common.BaseFragment;
 public class CommentFragment extends BaseFragment {
     private Api instance;
 
-    public Api request() {
+    public Api api() {
         if (instance == null) {
             instance = new ApiWrapper();
         }

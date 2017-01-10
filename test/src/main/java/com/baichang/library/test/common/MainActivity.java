@@ -4,33 +4,24 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 
-import com.baichang.android.imageloader.ImageLoader;
 import com.baichang.android.request.DownloadUtils;
 import com.baichang.android.request.HttpSubscriber;
 import com.baichang.android.utils.BCAppUpdateManager;
 import com.baichang.android.utils.BCUmUtil;
-import com.baichang.android.utils.BCViewUtil;
 import com.baichang.android.widget.cityPop.BCCitySelectPop;
-import com.baichang.android.widget.marqueeView.MarqueeView;
 import com.baichang.android.widget.photoGallery.PhotoGalleryActivity;
 import com.baichang.android.widget.photoGallery.PhotoGalleryData;
 import com.baichang.library.test.R;
-import com.baichang.library.test.base.App;
 import com.baichang.library.test.base.AppDiskCache;
 import com.baichang.library.test.base.CommonActivity;
 import com.baichang.library.test.common.Indicator.example.ExampleMainActivity;
 import com.baichang.library.test.common.qrcode.QrCodeActivity;
-import com.baichang.library.test.model.UserData;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import rx.Observable;
 
 
 public class MainActivity extends CommonActivity {
@@ -134,7 +125,10 @@ public class MainActivity extends CommonActivity {
      * 下载
      */
     private void download() {
-        DownloadUtils.down(this, request().download("wandoujia-web_seo_baidu_homepage.apk"), file -> {
+        Observable download = api()
+                .download("wandoujia-web_seo_baidu_homepage.apk")
+                .compose(HttpSubscriber.downSchedulers());
+        DownloadUtils.down(this, download, file -> {
             Intent intent = new Intent(Intent.ACTION_VIEW);
             intent.setDataAndType(Uri.fromFile(file), "application/vnd.android.package-archive");
             startActivity(intent);
