@@ -55,7 +55,7 @@ public abstract class RecyclerViewAdapter<E> extends RecyclerView.Adapter<ViewHo
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, final int position) {
         //Log.d("CID", "onBindViewHolder");
         if (getItemViewType(position) == ITEM_TYPE_HEADER) return;
         final int finPos = getFinalPosition(holder);
@@ -64,6 +64,15 @@ public abstract class RecyclerViewAdapter<E> extends RecyclerView.Adapter<ViewHo
                 @Override
                 public void onClick(View v) {
                     listener.ItemOnClick(finPos);
+                }
+            });
+        }
+        if (longClickListener != null) {
+            holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    longClickListener.itemLongClick(finPos);
+                    return true;
                 }
             });
         }
@@ -141,4 +150,11 @@ public abstract class RecyclerViewAdapter<E> extends RecyclerView.Adapter<ViewHo
     }
 
     protected abstract void setItemData(ViewHolder holder, E itemData, int position);
+
+    public OnItemLongClickListener longClickListener;
+
+    public RecyclerViewAdapter<E> setOnItemLongClickListener(OnItemLongClickListener listener) {
+        longClickListener = listener;
+        return this;
+    }
 }
