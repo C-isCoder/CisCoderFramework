@@ -18,6 +18,7 @@ import okio.Buffer;
  * 自定义请求拦截器，处理请求的token，加密，打印日志等
  * Created by iCong on 2016/9/17.
  */
+@Deprecated
 public class RequestInterceptor implements Interceptor {
     private static final MediaType MEDIA_TYPE = MediaType.parse("application/json; charset=UTF-8");
     private static final Charset UTF_8 = Charset.forName("UTF-8");

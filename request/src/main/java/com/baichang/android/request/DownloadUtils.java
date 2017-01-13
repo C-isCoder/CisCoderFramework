@@ -48,7 +48,7 @@ public class DownloadUtils {
         sContext = wc.get();
         sSuccessListener = listener;
         setProgress();
-        observable.subscribe(new DownloadSubscriber(null));
+        observable.subscribeOn(Schedulers.newThread()).observeOn(Schedulers.io()).subscribe(new DownloadSubscriber(null));
     }
 
     public static void down(Context context, String fileName, Observable<ResponseBody> observable, HttpSuccessListener<File> listener) {
@@ -56,7 +56,7 @@ public class DownloadUtils {
         sContext = wc.get();
         sSuccessListener = listener;
         setProgress();
-        observable.subscribe(new DownloadSubscriber(fileName));
+        observable.subscribeOn(Schedulers.newThread()).observeOn(Schedulers.io()).subscribe(new DownloadSubscriber(fileName));
     }
 
     public static File writeResponseBodyToFile(ResponseBody body, String fileName) {

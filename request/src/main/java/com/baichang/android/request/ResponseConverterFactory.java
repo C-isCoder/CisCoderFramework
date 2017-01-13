@@ -105,8 +105,6 @@ public class ResponseConverterFactory extends Converter.Factory {
         @Override
         public T convert(ResponseBody response) throws IOException {
             String strResponse = response.string();
-            Logger.d("[%s] Answer->->->->", mType);
-            Logger.json(strResponse);
             if (TextUtils.isEmpty(strResponse)) {
                 throw new HttpException(SERVICE_ERROR);
             }

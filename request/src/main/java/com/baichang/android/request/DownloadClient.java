@@ -1,13 +1,11 @@
 package com.baichang.android.request;
 
 
-
 import com.baichang.android.common.ConfigurationImpl;
 
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -26,8 +24,7 @@ public class DownloadClient {
 
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
         //官方请求拦截器
-        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
-        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BASIC);
+        HttpLoggerInterceptor loggingInterceptor = new HttpLoggerInterceptor(HttpLoggerInterceptor.Level.DOWNLOAD);
         builder.addInterceptor(loggingInterceptor);
         //设置超时
         builder.connectTimeout(30, TimeUnit.SECONDS);

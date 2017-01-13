@@ -9,8 +9,10 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.baichang.android.request.HttpResponse;
 import com.baichang.android.request.HttpRxHelper;
 import com.baichang.android.request.HttpSubscriber;
+import com.baichang.android.request.HttpSubscriber1;
 import com.baichang.android.widget.recycleView.RecyclerViewAdapter;
 import com.baichang.android.widget.recycleView.RecyclerViewUtils;
 import com.baichang.android.widget.recycleView.ViewHolder;
@@ -22,6 +24,7 @@ import com.baichang.library.test.model.InformationData;
 import com.bumptech.glide.Glide;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
@@ -70,8 +73,8 @@ public class RequestActivity extends CommonActivity {
         rvList.setAdapter(mAdapter);
         rvList.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
                 if (RecyclerViewUtils.isScrollBottom(recyclerView)) {
                     showMessage("滑到底部啦");
                     normalTest();
@@ -127,16 +130,21 @@ public class RequestActivity extends CommonActivity {
 //                        mAdapter.addData(list);
 //                    }
 //                }));
+//        api().getInformationList(map)
+//                .compose(HttpSubscriber.applySchedulers(mRefresh))
+//                .subscribe(new HttpSubscriber<>(list -> {
+//                    if (isFirst) {
+//                        mAdapter.setData(list);
+//                    } else {
+//                        mAdapter.addData(list);
+//                    }
+//                }, throwable -> {
+//                    Log.d("CID", throwable.getMessage());
+//                }));
         api().getInformationList(map)
                 .compose(HttpSubscriber.applySchedulers(mRefresh))
                 .subscribe(new HttpSubscriber<>(list -> {
-                    if (isFirst) {
-                        mAdapter.setData(list);
-                    } else {
-                        mAdapter.addData(list);
-                    }
-                }, throwable -> {
-                    Log.d("CID", throwable.getMessage());
+                    mAdapter.setData(list);
                 }));
     }
 }

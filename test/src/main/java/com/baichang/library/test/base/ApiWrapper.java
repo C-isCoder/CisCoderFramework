@@ -1,7 +1,7 @@
 package com.baichang.library.test.base;
 
 import com.baichang.android.request.HttpFactory;
-import com.baichang.android.request.HttpRxHelper;
+import com.baichang.android.request.HttpResponse;
 import com.baichang.android.request.HttpSubscriber;
 import com.baichang.library.test.model.InformationData;
 import com.baichang.library.test.model.UserData;
@@ -36,12 +36,12 @@ public class ApiWrapper implements Api {
     @Override
     public Observable<ResponseBody> download(@Url String fileUrl) {
         //下载不需要设置线程，底层已经设置
-        return HttpFactory.creatDownload(Api.class).download(fileUrl).compose(HttpSubscriber.downSchedulers());
+        return HttpFactory.creatDownload(Api.class).download(fileUrl);
     }
 
     @Override
     public Observable<List<InformationData>> getInformationList(@Body Map<String, String> map) {
-        //return HttpFactory.creatHttp(Api.class).getInformationList(map).compose(HttpRxHelper.applySchedulers());
+        //return HttpFactory.creatHttp(Api.class).getInformationList(map);
         return HttpFactory.creatHttp(Api.class).getInformationList(map);
     }
 

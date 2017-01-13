@@ -65,12 +65,12 @@ public class HttpResponse<T> {
 
         @Override
         public String toString() {
-            return "\n" + "   [code: " + code + "\n" + "     msg: " + msg + "\n" + "    data: " + data;
+            return "\n" + "   [code: " + code + "\n" + "     msg: " + msg + "\n" + "    data: " + data + "\n";
         }
     }
 
     @Override
     public String toString() {
-        return "[服务器返回信息:]" + "\n" + "msg:" + msg + "\n" + "res:" + res.toString() + "\n" + "state:" + state;
+        return "服务器返回信息:" + "\n" + "msg:" + msg + "\n" + "res:" + res.toString() + "\n" + "state:" + state;
     }
 }

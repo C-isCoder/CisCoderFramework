@@ -1,7 +1,6 @@
 package com.baichang.android.request;
 
 
-
 import com.baichang.android.common.ConfigurationImpl;
 
 import java.io.File;
@@ -12,7 +11,6 @@ import javax.net.ssl.SSLSession;
 
 import okhttp3.Cache;
 import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -32,13 +30,9 @@ public class RetrofitClientHttps {
         File cacheFile = new File(ConfigurationImpl.get().getAppContext().getCacheDir(), "netWorkCache");
         builder.cache(new Cache(cacheFile, 1024 * 1024 * 50));//50MB
         //自定义请求拦截器
-        RequestInterceptor interceptor = new RequestInterceptor();
+        HttpLoggerInterceptor interceptor = new HttpLoggerInterceptor();
         //设置头
         builder.addInterceptor(interceptor);
-        //官方请求拦截器
-        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
-        //loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-        builder.addInterceptor(loggingInterceptor);
         //设置超时
         builder.connectTimeout(8, TimeUnit.SECONDS);
         builder.readTimeout(20, TimeUnit.SECONDS);

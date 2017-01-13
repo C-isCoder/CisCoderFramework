@@ -7,7 +7,10 @@ import android.text.TextUtils;
 import com.baichang.android.common.BCApplication;
 import com.baichang.android.common.Configuration;
 import com.baichang.android.common.ConfigurationImpl;
+import com.baichang.library.test.BuildConfig;
 import com.baichang.library.test.R;
+import com.orhanobut.logger.LogLevel;
+import com.orhanobut.logger.Logger;
 import com.squareup.leakcanary.LeakCanary;
 import com.umeng.socialize.PlatformConfig;
 
@@ -30,8 +33,16 @@ public class App extends BCApplication implements Configuration {
         //友盟分享
         initShare();
         LeakCanary.install(this);
+        //日志
+        initLogger();
     }
 
+    private void initLogger() {
+        Logger.init("BC-LOG")                 // default PRETTYLOGGER or use just init()
+                .methodCount(0)                 // default 2
+                .hideThreadInfo()               // default shown
+                .logLevel(BuildConfig.DEBUG ? LogLevel.FULL : LogLevel.NONE);// default LogLevel.FULL
+    }
     private void initShare() {
         //微信
         PlatformConfig.setWeixin("wx1c368b574b528feb", "97a57cf3088035a6ae84a97e5613b1e6");

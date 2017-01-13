@@ -1,6 +1,7 @@
 package com.baichang.library.test.base;
 
 
+import com.baichang.android.request.HttpResponse;
 import com.baichang.library.test.model.InformationData;
 import com.baichang.library.test.model.UserData;
 
