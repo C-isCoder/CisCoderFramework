@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ProgressBar xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/request_dialog_bar"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_gravity="center" />
+<com.baichang.android.widget.requestDialog.ProgressWheel xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:layout_width="wrap_content"
+  android:layout_height="wrap_content"
+  android:layout_gravity="center"
+  app:matProg_barWidth="5dp"
+  app:matProg_circleRadius="50dp"
+  app:matProg_progressIndeterminate="true" />
