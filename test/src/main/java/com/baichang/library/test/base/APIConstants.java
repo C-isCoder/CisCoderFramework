@@ -17,4 +17,8 @@ public class APIConstants {
 
     //AppDiskCache
     public static final String CACHE_TOKEN = "cache_token";
+
+
+    //页数
+    public static final int PAGE_SIZE = 20;
 }
