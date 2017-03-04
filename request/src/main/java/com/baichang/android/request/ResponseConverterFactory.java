@@ -5,10 +5,14 @@ import android.util.Log;
 
 import com.baichang.android.common.ConfigurationImpl;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
 import com.google.gson.reflect.TypeToken;
+import com.google.gson.stream.JsonReader;
 import com.orhanobut.logger.Logger;
 
+import java.io.Reader;
+import java.io.StringReader;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -127,7 +131,8 @@ public class ResponseConverterFactory extends Converter.Factory {
                     if (TextUtils.isEmpty(parameters)) {
                         throw new HttpException(DATA_ERROR);
                     }
-                    return mAdapter.fromJson(parameters);
+                    return mGson.fromJson(parameters,mType);
+                  //return mAdapter.fromJson(parameters);//解析单纯字符串的时候出问题。
                 } else if (ret_state == 30000) {
                     ConfigurationImpl.get().refreshToken();
                     throw new HttpException(jb.getJSONObject("res").getString("msg"));
