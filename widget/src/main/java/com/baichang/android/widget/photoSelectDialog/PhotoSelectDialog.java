@@ -18,6 +18,7 @@ import android.view.Window;
 import android.widget.Button;
 
 import com.baichang.android.common.ConfigurationImpl;
+import com.baichang.android.utils.BCDensityUtil;
 import com.baichang.android.utils.BCViewUtil;
 import com.baichang.android.utils.bitmap.BCDrawableUtil;
 import com.baichang.android.utils.photo.BCPhotoFragUtil;
@@ -103,8 +104,8 @@ public class PhotoSelectDialog extends DialogFragment implements View.OnClickLis
         btnCancel.setText(sCancelText == null ? "取消" : sCancelText);
         int pressColor = sPressColor == 0 ? R.color.btn_no_activate : sPressColor;
         int normalColor = sNormalColor == 0 ? ConfigurationImpl.get().getAppBarColor() : sNormalColor;
-        int stoke = sCancelStroke == 0 ? (int) BCViewUtil.dip2px(getActivity(), 1) : sCancelStroke;
-        float radios = sRadios == 0.0 ? BCViewUtil.dip2px(getActivity(), 5) : sRadios;
+        int stoke = sCancelStroke == 0 ? BCDensityUtil.dip2px(getActivity(), 1) : sCancelStroke;
+        float radios = sRadios == 0.0 ? BCDensityUtil.dip2px(getActivity(), 5) : sRadios;
         setTakeButtonBackground(pressColor, normalColor, radios);
         setImageButtonBackground(pressColor, normalColor, radios);
         setCancelButtonBackground(pressColor, normalColor, radios, stoke);

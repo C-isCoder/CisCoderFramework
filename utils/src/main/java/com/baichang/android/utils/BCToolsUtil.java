@@ -12,24 +12,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Environment;
 import android.text.TextUtils;
-import android.view.View;
-import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.ListAdapter;
-import android.widget.ListView;
 import android.widget.Toast;
-
-
 import java.io.File;
-import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.net.InetAddress;
@@ -42,7 +31,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Enumeration;
-import java.util.GregorianCalendar;
 
 /**
  * @author michael

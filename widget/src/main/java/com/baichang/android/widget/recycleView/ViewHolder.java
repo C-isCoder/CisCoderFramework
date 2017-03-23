@@ -5,6 +5,7 @@ import android.support.v4.util.SparseArrayCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -16,66 +17,73 @@ import com.baichang.android.imageloader.ImageLoader;
  * Time:2016/9/19-17:07.
  */
 public class ViewHolder extends RecyclerView.ViewHolder {
-    private View mItemView;
-    private SparseArrayCompat<View> mViews;
-    private Context mContext;
 
-    public ViewHolder(Context context, View itemView) {
-        super(itemView);
-        if (context == null) return;
-        mItemView = itemView;
-        mContext = context;
-        mViews = new SparseArrayCompat<View>();
-    }
+  private View mItemView;
+  private SparseArrayCompat<View> mViews;
+  private Context mContext;
 
-    public static ViewHolder get(View headerView) {
-        return new ViewHolder(null, headerView);
+  public ViewHolder(Context context, View itemView) {
+    super(itemView);
+    if (context == null) {
+      return;
     }
+    mItemView = itemView;
+    mContext = context;
+    mViews = new SparseArrayCompat<View>();
+  }
 
-    public static ViewHolder get(Context context, int itemId) {
-        return new ViewHolder(context, LayoutInflater.from(context).inflate(itemId, null));
-    }
+  public static ViewHolder get(View headerView) {
+    return new ViewHolder(null, headerView);
+  }
 
-    public <T extends View> T getView(int viewId) {
-        View view = mViews.get(viewId);
-        if (view == null) {
-            view = mItemView.findViewById(viewId);
-            mViews.put(viewId, view);
-        }
-        return (T) view;
-    }
+  public static ViewHolder get(Context context, int itemId) {
+    return new ViewHolder(context, LayoutInflater.from(context).inflate(itemId, null));
+  }
 
-    public TextView setTextView(int viewId, String content) {
-        TextView textView = getView(viewId);
-        textView.setText(content);
-        return textView;
-    }
+  public static ViewHolder get(ViewGroup parent, int itemId) {
+    return new ViewHolder(parent.getContext(), LayoutInflater.from(parent.getContext()).inflate(itemId, parent, false));
+  }
 
-    public View setVisibility(int viewId, int state) {
-        View view = getView(viewId);
-        view.setVisibility(state);
-        return view;
+  public <T extends View> T getView(int viewId) {
+    View view = mViews.get(viewId);
+    if (view == null) {
+      view = mItemView.findViewById(viewId);
+      mViews.put(viewId, view);
     }
+    return (T) view;
+  }
 
-    public void setImageView(int viewId, String url) {
-        ImageView imageView = getView(viewId);
-        ImageLoader.loadImage(mContext, url, imageView);
-    }
+  public TextView setTextView(int viewId, String content) {
+    TextView textView = getView(viewId);
+    textView.setText(content);
+    return textView;
+  }
 
-    public void setImageView(int viewId, int errorRes, String url) {
-        ImageView imageView = getView(viewId);
-        ImageLoader.loadImageError(mContext, url, errorRes, imageView);
-    }
+  public View setVisibility(int viewId, int state) {
+    View view = getView(viewId);
+    view.setVisibility(state);
+    return view;
+  }
 
-    public ImageView setImageResource(int viewId, int resId) {
-        ImageView imageView = getView(viewId);
-        imageView.setImageResource(resId);
-        return imageView;
-    }
+  public void setImageView(int viewId, String url) {
+    ImageView imageView = getView(viewId);
+    ImageLoader.loadImage(mContext, url, imageView);
+  }
 
-    public ViewHolder setOnClickListener(int viewId, View.OnClickListener listener) {
-        View view = getView(viewId);
-        view.setOnClickListener(listener);
-        return this;
-    }
+  public void setImageView(int viewId, int errorRes, String url) {
+    ImageView imageView = getView(viewId);
+    ImageLoader.loadImageError(mContext, url, errorRes, imageView);
+  }
+
+  public ImageView setImageResource(int viewId, int resId) {
+    ImageView imageView = getView(viewId);
+    imageView.setImageResource(resId);
+    return imageView;
+  }
+
+  public ViewHolder setOnClickListener(int viewId, View.OnClickListener listener) {
+    View view = getView(viewId);
+    view.setOnClickListener(listener);
+    return this;
+  }
 }

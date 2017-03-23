@@ -56,7 +56,7 @@ public abstract class RecyclerViewAdapter<E> extends RecyclerView.Adapter<ViewHo
       return ViewHolder.get(mHeader);//实际上是创建了一个控ViewHolder
     } else {
       if (mContext == null) {
-        return ViewHolder.get(parent.getContext(), itemId);
+        return ViewHolder.get(parent, itemId);
       } else {
         return ViewHolder.get(mContext, itemId);
       }
