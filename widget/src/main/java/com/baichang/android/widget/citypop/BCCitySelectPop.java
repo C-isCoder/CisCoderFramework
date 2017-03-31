@@ -15,7 +15,7 @@ import android.view.ViewGroup.LayoutParams;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
-import com.baichang.android.common.ConfigurationImpl;
+import com.baichang.android.config.ConfigurationImpl;
 import com.baichang.android.widget.R;
 
 

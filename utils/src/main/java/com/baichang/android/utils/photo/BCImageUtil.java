@@ -45,7 +45,6 @@ import android.widget.ImageView;
 
 import com.baichang.android.utils.BCMathUtil;
 
-import com.baichang.android.utils.R;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;

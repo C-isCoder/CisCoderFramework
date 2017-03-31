@@ -10,7 +10,7 @@ import android.view.LayoutInflater;
 import android.widget.LinearLayout;
 
 
-import com.baichang.android.common.ConfigurationImpl;
+import com.baichang.android.config.ConfigurationImpl;
 import com.baichang.android.utils.BCFileUtil;
 import com.baichang.android.widget.R;
 import com.google.gson.JsonArray;

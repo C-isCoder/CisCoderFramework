@@ -3,16 +3,19 @@ package com.baichang.android.common;
 import android.content.Context;
 import android.support.v4.app.Fragment;
 
-import com.baichang.android.utils.BCAppManager;
-import com.baichang.android.utils.BCToastUtil;
+import android.widget.Toast;
 
 
 public class BaseFragment extends Fragment {
     public static final int RESULT_OK = -1;
 
     /*==========Toast 提示===========*/
-    public void showMessage(Object obj) {
-        BCToastUtil.showMessage(getActivity(), obj);
+    public void showMessage(Object content) {
+        if (content instanceof String) {
+            Toast.makeText(getActivity(), (CharSequence) content, Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(getContext(), this.getString((Integer) content), Toast.LENGTH_SHORT).show();
+        }
     }
 
     /*==================跳转页面=======================*/

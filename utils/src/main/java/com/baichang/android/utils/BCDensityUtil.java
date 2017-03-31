@@ -83,7 +83,6 @@ public class BCDensityUtil {
     Resources mResources;
     if (context == null) {
       mResources = Resources.getSystem();
-
     } else {
       mResources = context.getResources();
     }

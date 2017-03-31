@@ -2,7 +2,7 @@ package com.baichang.android.request;
 
 import android.text.TextUtils;
 
-import com.baichang.android.common.ConfigurationImpl;
+import com.baichang.android.config.ConfigurationImpl;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -11,7 +11,7 @@ import java.util.Map;
 
 
 /**
- * Created by iscod on 2016/7/24.
+ * Created by iCong on 2016/7/24.
  */
 public class ParameterUtils {
     private static Gson gson = new GsonBuilder()

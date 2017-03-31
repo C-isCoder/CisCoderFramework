@@ -3,8 +3,7 @@ package com.baichang.android.request;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-
-import com.baichang.android.common.ConfigurationImpl;
+import com.baichang.android.config.ConfigurationImpl;
 
 
 /**

@@ -1,11 +1,12 @@
 apply plugin: 'com.android.library'
 apply plugin: "maven"
 android {
-    compileSdkVersion 22
-    buildToolsVersion "25.0.0"
+    compileSdkVersion 25
+    buildToolsVersion "25.0.2"
 
     defaultConfig {
-        minSdkVersion 14
+        minSdkVersion 16
+        targetSdkVersion 25
     }
     buildTypes {
         release {
@@ -16,9 +17,9 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    provided 'com.android.support:appcompat-v7:22.2.1'
-    provided 'com.baichang.android:utils:1.0.0'
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    provided 'com.android.support:appcompat-v7:25.3.1'
+    provided project(':config')
 }
 uploadArchives {
     configuration = configurations.archives
@@ -31,7 +32,7 @@ uploadArchives {
                 authentication(userName: 'admin', password: 'bcadmin')
             }
             pom.project {
-                version '1.0.0'
+                version '1.0.1'
                 artifactId 'common'
                 groupId 'com.baichang.android'
                 packaging 'aar'

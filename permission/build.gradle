@@ -1,0 +1,50 @@
+apply plugin: 'com.android.library'
+apply plugin: 'maven'
+android {
+    compileSdkVersion 25
+    buildToolsVersion "25.0.2"
+
+    defaultConfig {
+        minSdkVersion 16
+        targetSdkVersion 25
+        versionCode 1
+        versionName "1.0"
+
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile 'com.tbruyelle.rxpermissions:rxpermissions:0.9.3@aar'
+    provided 'io.reactivex:rxandroid:1.2.1'
+}
+uploadArchives {
+    configuration = configurations.archives
+    repositories {
+        mavenDeployer {
+            snapshotRepository(url: 'http://svn.weiidu.com:8081/nexus/content/repositories/snapshots/') {
+                authentication(userName: 'admin', password: 'bcadmin')
+            }
+            repository(url: 'http://svn.weiidu.com:8081/nexus/content/repositories/android/') {
+                authentication(userName: 'admin', password: 'bcadmin')
+            }
+            pom.project {
+                version '1.0.0'
+                artifactId 'permission'
+                groupId 'com.baichang.android'
+                packaging 'aar'
+                description 'permission library'
+            }
+        }
+    }
+}
+
+artifacts {
+    archives file('permission.aar')
+}

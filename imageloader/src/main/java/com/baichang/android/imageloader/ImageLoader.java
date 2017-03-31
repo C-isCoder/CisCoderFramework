@@ -3,14 +3,12 @@ package com.baichang.android.imageloader;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.widget.ImageView;
-
-import com.baichang.android.common.ConfigurationImpl;
+import com.baichang.android.config.ConfigurationImpl;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.Transformation;
 import com.bumptech.glide.request.FutureTarget;
 import com.bumptech.glide.request.target.Target;
 import com.bumptech.glide.util.Util;
-
 import java.io.File;
 import java.util.concurrent.ExecutionException;
 

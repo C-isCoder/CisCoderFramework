@@ -4,9 +4,10 @@ package com.baichang.android.widget.photoGallery;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -18,14 +19,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
-
 import android.widget.ImageView;
 import android.widget.Toast;
-import com.baichang.android.common.ConfigurationImpl;
 import com.baichang.android.imageloader.ImageLoader;
 import com.baichang.android.widget.R;
 import com.baichang.android.widget.photoView.PhotoView;
 import com.baichang.android.widget.photoView.PhotoViewAttacher.OnViewTapListener;
+import com.bumptech.glide.load.resource.bitmap.GlideBitmapDrawable;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -37,7 +37,6 @@ public class PhotoGalleryFragment extends Fragment
   private static final String ARG_PARAM = "param";
 
   private String imageUrl;
-
 
   public PhotoGalleryFragment() {
   }
@@ -68,6 +67,7 @@ public class PhotoGalleryFragment extends Fragment
     View view = inflater.inflate(R.layout.fragment_photo_gallery_image_banner, container, false);
     PhotoView mPhoto = (PhotoView) view.findViewById(R.id.fragment_photo_gallery_image_banner_image);
     mPhoto.setOnViewTapListener(this);
+    mPhoto.setOnLongClickListener(this);
     ImageLoader.loadImage(getActivity().getApplicationContext(), imageUrl, mPhoto);
     return view;
   }
@@ -84,7 +84,7 @@ public class PhotoGalleryFragment extends Fragment
         .setPositiveButton("保存", new DialogInterface.OnClickListener() {
           @Override
           public void onClick(DialogInterface dialog, int which) {
-            BitmapDrawable drawable = (BitmapDrawable) ((ImageView) v).getDrawable();
+            GlideBitmapDrawable drawable = (GlideBitmapDrawable) ((ImageView) v).getDrawable();
             if (drawable != null) {
               saveBitmap(drawable.getBitmap());
             }
@@ -101,7 +101,7 @@ public class PhotoGalleryFragment extends Fragment
     if (TextUtils.isEmpty(path)) {
       Toast.makeText(getActivity(), "保存失败", Toast.LENGTH_SHORT).show();
     } else {
-      Toast.makeText(getActivity(), "保存成功 " + path, Toast.LENGTH_SHORT).show();
+      Toast.makeText(getActivity(), "保存成功,请到相册查看 " + path, Toast.LENGTH_SHORT).show();
     }
   }
 
@@ -113,8 +113,16 @@ public class PhotoGalleryFragment extends Fragment
    * @return 文件路径
    */
   private String saveImageToGallery(Context context, Bitmap bmp) {
+    PackageManager manager = context.getPackageManager();
+    ApplicationInfo info = null;
+    try {
+      info = manager.getApplicationInfo(context.getPackageName(), 0);
+    } catch (PackageManager.NameNotFoundException e) {
+      e.printStackTrace();
+    }
+    String appName = (String) manager.getApplicationLabel(info);
     // 首先保存图片
-    File appDir = new File(Environment.getExternalStorageDirectory(), "bcImages");
+    File appDir = context.getExternalFilesDir(appName);
     if (!appDir.exists()) {
       appDir.mkdir();
     }

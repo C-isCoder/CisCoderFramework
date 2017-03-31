@@ -7,8 +7,8 @@ import android.text.TextUtils;
 import android.view.Gravity;
 import android.widget.TextView;
 
-import com.baichang.android.widget.magicIndicator.buildins.UIUtil;
 import com.baichang.android.widget.magicIndicator.buildins.commonnavigator.abs.IMeasurablePagerTitleView;
+import com.baichang.android.widget.uiutils.UIUtil;
 
 
 /**

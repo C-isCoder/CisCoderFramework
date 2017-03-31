@@ -12,10 +12,10 @@ import android.view.animation.Interpolator;
 
 import com.baichang.android.widget.magicIndicator.FragmentContainerHelper;
 import com.baichang.android.widget.magicIndicator.buildins.ArgbEvaluatorHolder;
-import com.baichang.android.widget.magicIndicator.buildins.UIUtil;
 import com.baichang.android.widget.magicIndicator.buildins.commonnavigator.abs.IPagerIndicator;
 import com.baichang.android.widget.magicIndicator.buildins.commonnavigator.model.PositionData;
 
+import com.baichang.android.widget.uiutils.UIUtil;
 import java.util.Arrays;
 import java.util.List;
 

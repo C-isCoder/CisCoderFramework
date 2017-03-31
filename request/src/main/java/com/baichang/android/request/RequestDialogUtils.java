@@ -4,12 +4,12 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
-import com.baichang.android.common.ConfigurationImpl;
+import com.baichang.android.config.ConfigurationImpl;
 import com.baichang.android.widget.requestDialog.ProgressWheel;
 import java.lang.ref.WeakReference;
 
 /**
- * Created by iscod. Time:2016/12/5-11:36.
+ * Created by iCong. Time:2016/12/5-11:36.
  */
 
 public class RequestDialogUtils {

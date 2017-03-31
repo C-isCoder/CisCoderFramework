@@ -6,8 +6,8 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.view.View;
 
-import com.baichang.android.widget.magicIndicator.buildins.UIUtil;
 import com.baichang.android.widget.magicIndicator.buildins.commonnavigator.abs.IMeasurablePagerTitleView;
+import com.baichang.android.widget.uiutils.UIUtil;
 
 
 /**

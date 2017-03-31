@@ -1,4 +1,4 @@
-package com.baichang.android.widget.roundedImageView;
+package com.baichang.android.widget.roundedimageview;
 
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;

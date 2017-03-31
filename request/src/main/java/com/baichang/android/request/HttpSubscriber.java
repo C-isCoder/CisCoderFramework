@@ -5,7 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.widget.Toast;
-import com.baichang.android.common.ConfigurationImpl;
+import com.baichang.android.config.ConfigurationImpl;
 import com.orhanobut.logger.Logger;
 import java.lang.ref.WeakReference;
 import java.net.ConnectException;

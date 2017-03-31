@@ -1,6 +1,6 @@
 package com.baichang.android.request;
 
-import com.baichang.android.common.ConfigurationImpl;
+import com.baichang.android.config.ConfigurationImpl;
 import com.orhanobut.logger.Logger;
 
 import java.io.IOException;

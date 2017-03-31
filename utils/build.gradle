@@ -1,12 +1,12 @@
 apply plugin: 'com.android.library'
 apply plugin: 'maven'
 android {
-    compileSdkVersion 22
-    buildToolsVersion "25.0.0"
+    compileSdkVersion 25
+    buildToolsVersion "25.0.2"
 
     defaultConfig {
         minSdkVersion 16
-        targetSdkVersion 22
+        targetSdkVersion 25
     }
     buildTypes {
         release {
@@ -22,11 +22,11 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    provided 'com.android.support:support-v4:22.2.1'
-    provided 'com.baichang.android:common:1.0.0'
-    compile 'com.baichang.android:umShare:1.0.0'
-    compile 'org.greenrobot:eventbus:3.0.0'//EventBus
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    //EventBus
+    compile 'org.greenrobot:eventbus:3.0.0'
+    provided 'com.android.support:support-v4:25.3.1'
+    provided project(':config')
 }
 uploadArchives {
     configuration = configurations.archives
@@ -39,7 +39,7 @@ uploadArchives {
                 authentication(userName: 'admin', password: 'bcadmin')
             }
             pom.project {
-                version '1.0.0'
+                version '1.0.1'
                 artifactId 'utils'
                 groupId 'com.baichang.android'
                 packaging 'aar'

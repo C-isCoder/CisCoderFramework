@@ -1,14 +1,11 @@
 package com.baichang.android.request;
 
 
-import com.baichang.android.common.ConfigurationImpl;
-
+import com.baichang.android.config.ConfigurationImpl;
 import java.io.File;
 import java.util.concurrent.TimeUnit;
-
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLSession;
-
 import okhttp3.Cache;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;

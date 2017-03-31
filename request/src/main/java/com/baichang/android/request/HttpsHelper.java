@@ -1,14 +1,12 @@
 package com.baichang.android.request;
 
 
-import com.baichang.android.common.ConfigurationImpl;
-
+import com.baichang.android.config.ConfigurationImpl;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.KeyStore;
 import java.security.SecureRandom;
 import java.security.cert.CertificateFactory;
-
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManagerFactory;

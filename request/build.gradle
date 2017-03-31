@@ -2,11 +2,12 @@ apply plugin: 'com.android.library'
 apply plugin: 'maven'
 
 android {
-    compileSdkVersion 22
-    buildToolsVersion "25.0.0"
+    compileSdkVersion 25
+    buildToolsVersion "25.0.2"
 
     defaultConfig {
-        minSdkVersion 14
+        minSdkVersion 16
+        targetSdkVersion 25
     }
     buildTypes {
         release {
@@ -14,18 +15,23 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-}
-dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.squareup.retrofit2:retrofit:2.1.0'//网络请求
-    compile 'com.squareup.retrofit2:converter-gson:2.1.0'//JSON解析
-    compile 'com.squareup.okhttp3:okhttp-urlconnection:3.2.0'//网络请求
-    compile 'com.squareup.retrofit2:adapter-rxjava:2.1.0'//RxJava
-    compile 'io.reactivex:rxandroid:1.2.1'//RxAndroid
-    compile 'com.android.support:appcompat-v7:22.2.1'
-    provided 'com.baichang.android:common:1.0.0'//基础组件
-    provided 'com.baichang.android:widget:1.0.0'//控件
-    compile 'com.orhanobut:logger:1.15'//打印
+    dependencies {
+        compile fileTree(include: ['*.jar'], dir: 'libs')
+        //网络请求
+        compile 'com.squareup.retrofit2:retrofit:2.1.0'
+        compile 'com.squareup.okhttp3:okhttp-urlconnection:3.2.0'
+        //JSON解析
+        compile 'com.squareup.retrofit2:converter-gson:2.1.0'
+        //RxJava
+        compile 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
+        //RxAndroid
+        compile 'io.reactivex:rxandroid:1.2.1'
+        compile 'com.android.support:appcompat-v7:25.3.1'
+        //打印
+        compile 'com.orhanobut:logger:1.15'
+        provided project(':config')
+        provided project(':widget')
+    }
 }
 uploadArchives {
     configuration = configurations.archives
@@ -38,7 +44,7 @@ uploadArchives {
                 authentication(userName: 'admin', password: 'bcadmin')
             }
             pom.project {
-                version '1.0.0'
+                version '1.0.1'
                 artifactId 'request'
                 groupId 'com.baichang.android'
                 packaging 'aar'

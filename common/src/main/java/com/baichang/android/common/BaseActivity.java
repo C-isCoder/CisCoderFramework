@@ -7,16 +7,11 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-
-import com.baichang.android.utils.BCAppManager;
-import com.baichang.android.utils.BCDialogUtil;
-import com.baichang.android.utils.BCToastUtil;
-import com.baichang.android.utils.BCToolsUtil;
-import com.baichang.android.utils.SystemBarTintManager;
+import android.widget.Toast;
+import com.baichang.android.config.ConfigurationImpl;
 
 
 public abstract class BaseActivity extends FragmentActivity {
@@ -50,15 +45,6 @@ public abstract class BaseActivity extends FragmentActivity {
         if (isSystemBar) {
             initSystemBar();
         }
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        if (mBaseContext != null) {
-            BCToolsUtil.closeSoftInput(mBaseContext);
-        }
-        BCDialogUtil.dismissProgressDialog();
     }
 
     /**
@@ -125,26 +111,12 @@ public abstract class BaseActivity extends FragmentActivity {
         win.setAttributes(winParams);
     }
 
-    //滑动关闭输入框
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        if (event.getAction() == MotionEvent.ACTION_MOVE) {
-            if (mBaseContext != null) {
-                BCToolsUtil.closeSoftInput(mBaseContext);
-            }
-        }
-        return super.onTouchEvent(event);
-    }
-
     //返回
     public abstract void back(View view);
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (mBaseContext != null) {
-            BCToolsUtil.closeSoftInput(mBaseContext);
-        }
     }
 
     @Override
@@ -163,11 +135,6 @@ public abstract class BaseActivity extends FragmentActivity {
         return mIntentData;
     }
 
-
-    /*==========Toast 提示===========*/
-    public void showMessage(Object obj) {
-        BCToastUtil.showMessage(getAty(), obj);
-    }
 
     /*==============跳转页面==============*/
     protected void startAct(Activity act, Class cls) {
@@ -198,5 +165,11 @@ public abstract class BaseActivity extends FragmentActivity {
         return this;
     }
 
-
+    public void showMessage(Object content) {
+        if (content instanceof String) {
+            Toast.makeText(this, (CharSequence) content, Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, this.getString((Integer) content), Toast.LENGTH_SHORT).show();
+        }
+    }
 }

@@ -12,8 +12,8 @@ import android.view.animation.LinearInterpolator;
 
 
 import com.baichang.android.widget.magicIndicator.abs.IPagerNavigator;
-import com.baichang.android.widget.magicIndicator.buildins.UIUtil;
 
+import com.baichang.android.widget.uiutils.UIUtil;
 import java.util.ArrayList;
 import java.util.List;
 

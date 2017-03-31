@@ -16,8 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 
-import com.baichang.android.common.ConfigurationImpl;
-
+import com.baichang.android.config.ConfigurationImpl;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;
 import java.text.ParseException;
