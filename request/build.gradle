@@ -2,12 +2,12 @@ apply plugin: 'com.android.library'
 apply plugin: 'maven'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    compileSdkVersion rootProject.ext.android.compileSdkVersion
+    buildToolsVersion rootProject.ext.android.buildToolsVersion
 
     defaultConfig {
-        minSdkVersion 16
-        targetSdkVersion 25
+        minSdkVersion rootProject.ext.android.minSdkVersion
+        targetSdkVersion rootProject.ext.android.targetSdkVersion
     }
     buildTypes {
         release {
@@ -17,18 +17,13 @@ android {
     }
     dependencies {
         compile fileTree(include: ['*.jar'], dir: 'libs')
-        //网络请求
-        compile 'com.squareup.retrofit2:retrofit:2.1.0'
-        compile 'com.squareup.okhttp3:okhttp-urlconnection:3.2.0'
-        //JSON解析
-        compile 'com.squareup.retrofit2:converter-gson:2.1.0'
-        //RxJava
-        compile 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
-        //RxAndroid
-        compile 'io.reactivex:rxandroid:1.2.1'
-        compile 'com.android.support:appcompat-v7:25.3.1'
-        //打印
-        compile 'com.orhanobut:logger:1.15'
+        compile rootProject.ext.depend.retrofit
+        compile rootProject.ext.depend.urlconnection
+        compile rootProject.ext.depend.gsonconverter
+        compile rootProject.ext.depend.rxjavaadapter
+        compile rootProject.ext.depend.rxandroid
+        compile rootProject.ext.depend.v7
+        compile rootProject.ext.depend.logger
         provided project(':config')
         provided project(':widget')
     }
@@ -37,24 +32,25 @@ uploadArchives {
     configuration = configurations.archives
     repositories {
         mavenDeployer {
-            snapshotRepository(url: 'http://svn.weiidu.com:8081/nexus/content/repositories/snapshots/') {
-                authentication(userName: 'admin', password: 'bcadmin')
+            snapshotRepository(url: rootProject.ext.maven.snapshot) {
+                authentication(userName: rootProject.ext.maven.name,
+                        password: rootProject.ext.maven.password)
             }
-            repository(url: 'http://svn.weiidu.com:8081/nexus/content/repositories/android/') {
-                authentication(userName: 'admin', password: 'bcadmin')
+            repository(url: rootProject.ext.maven.repository) {
+                authentication(userName: rootProject.ext.maven.name,
+                        password: rootProject.ext.maven.password)
             }
             pom.project {
-                version '1.0.1'
-                artifactId 'request'
-                groupId 'com.baichang.android'
-                packaging 'aar'
-                description 'request library'
+                version rootProject.ext.request.version
+                artifactId rootProject.ext.request.artifactId
+                groupId rootProject.ext.request.groupId
+                packaging rootProject.ext.request.packaging
+                description rootProject.ext.request.description
             }
         }
     }
 }
 
 artifacts {
-    archives file('request.aar')
+    archives file(rootProject.ext.request.artifacts)
 }
-

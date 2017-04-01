@@ -2,12 +2,12 @@ apply plugin: 'com.android.library'
 apply plugin: 'maven'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    compileSdkVersion rootProject.ext.android.compileSdkVersion
+    buildToolsVersion rootProject.ext.android.buildToolsVersion
 
     defaultConfig {
-        minSdkVersion 16
-        targetSdkVersion 22
+        minSdkVersion rootProject.ext.android.minSdkVersion
+        targetSdkVersion rootProject.ext.android.targetSdkVersion
     }
     buildTypes {
         release {
@@ -19,31 +19,34 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.google.zxing:core:3.2.1'
-    compile 'cn.bingoogolapple:bga-qrcodecore:1.1.5@aar'
-    compile 'cn.bingoogolapple:bga-zxing:1.1.5@aar'
+    compile rootProject.ext.depend.zxing
+    compile rootProject.ext.depend.qrcodecore
+    compile rootProject.ext.depend.qrzxing
+
 }
 uploadArchives {
     configuration = configurations.archives
     repositories {
         mavenDeployer {
-            snapshotRepository(url: 'http://svn.weiidu.com:8081/nexus/content/repositories/snapshots/') {
-                authentication(userName: 'admin', password: 'bcadmin')
+            snapshotRepository(url: rootProject.ext.maven.snapshot) {
+                authentication(userName: rootProject.ext.maven.name,
+                        password: rootProject.ext.maven.password)
             }
-            repository(url: 'http://svn.weiidu.com:8081/nexus/content/repositories/android/') {
-                authentication(userName: 'admin', password: 'bcadmin')
+            repository(url: rootProject.ext.maven.repository) {
+                authentication(userName: rootProject.ext.maven.name,
+                        password: rootProject.ext.maven.password)
             }
             pom.project {
-                version '1.0.1'
-                artifactId 'qrcode'
-                groupId 'com.baichang.android'
-                packaging 'aar'
-                description 'QrCode library'
+                version rootProject.ext.qrcode.version
+                artifactId rootProject.ext.qrcode.artifactId
+                groupId rootProject.ext.qrcode.groupId
+                packaging rootProject.ext.qrcode.packaging
+                description rootProject.ext.qrcode.description
             }
         }
     }
 }
 
 artifacts {
-    archives file('qrcode.aar')
+    archives file(rootProject.ext.qrcode.artifacts)
 }

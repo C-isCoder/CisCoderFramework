@@ -1,13 +1,12 @@
 apply plugin: 'com.android.library'
 apply plugin: 'maven'
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    compileSdkVersion rootProject.ext.android.compileSdkVersion
+    buildToolsVersion rootProject.ext.android.buildToolsVersion
 
     defaultConfig {
-        minSdkVersion 16
-        targetSdkVersion 25
-
+        minSdkVersion rootProject.ext.android.minSdkVersion
+        targetSdkVersion rootProject.ext.android.targetSdkVersion
     }
     buildTypes {
         release {
@@ -19,10 +18,10 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.android.support:appcompat-v7:25.3.1'
-    provided 'com.android.support:recyclerview-v7:25.3.1'
-    provided 'com.google.code.gson:gson:2.7'
-    compile 'com.youth.banner:banner:1.4.5'
+    compile rootProject.ext.depend.v7
+    provided rootProject.ext.depend.recyclerview
+    provided rootProject.ext.depend.gson
+    compile rootProject.ext.depend.banner
     provided project(':imageloader')
     provided project(':config')
     provided project(':utils')
@@ -31,23 +30,25 @@ uploadArchives {
     configuration = configurations.archives
     repositories {
         mavenDeployer {
-            snapshotRepository(url: 'http://svn.weiidu.com:8081/nexus/content/repositories/snapshots/') {
-                authentication(userName: 'admin', password: 'bcadmin')
+            snapshotRepository(url: rootProject.ext.maven.snapshot) {
+                authentication(userName: rootProject.ext.maven.name,
+                        password: rootProject.ext.maven.password)
             }
-            repository(url: 'http://svn.weiidu.com:8081/nexus/content/repositories/android/') {
-                authentication(userName: 'admin', password: 'bcadmin')
+            repository(url: rootProject.ext.maven.repository) {
+                authentication(userName: rootProject.ext.maven.name,
+                        password: rootProject.ext.maven.password)
             }
             pom.project {
-                version '1.0.1'
-                artifactId 'widget'
-                groupId 'com.baichang.android'
-                packaging 'aar'
-                description 'widget library'
+                version rootProject.ext.widget.version
+                artifactId rootProject.ext.widget.artifactId
+                groupId rootProject.ext.widget.groupId
+                packaging rootProject.ext.widget.packaging
+                description rootProject.ext.widget.description
             }
         }
     }
 }
 
 artifacts {
-    archives file('widget.aar')
+    archives file(rootProject.ext.widget.artifacts)
 }

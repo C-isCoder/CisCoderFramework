@@ -1,12 +1,12 @@
 apply plugin: 'com.android.library'
 apply plugin: 'maven'
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    compileSdkVersion rootProject.ext.android.compileSdkVersion
+    buildToolsVersion rootProject.ext.android.buildToolsVersion
 
     defaultConfig {
-        minSdkVersion 16
-        targetSdkVersion 25
+        minSdkVersion rootProject.ext.android.minSdkVersion
+        targetSdkVersion rootProject.ext.android.targetSdkVersion
     }
     buildTypes {
         release {
@@ -23,32 +23,32 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    //EventBus
-    compile 'org.greenrobot:eventbus:3.0.0'
-    provided 'com.android.support:support-v4:25.3.1'
+    provided rootProject.ext.depend.v4
     provided project(':config')
 }
 uploadArchives {
     configuration = configurations.archives
     repositories {
         mavenDeployer {
-            snapshotRepository(url: 'http://svn.weiidu.com:8081/nexus/content/repositories/snapshots/') {
-                authentication(userName: 'admin', password: 'bcadmin')
+            snapshotRepository(url: rootProject.ext.maven.snapshot) {
+                authentication(userName: rootProject.ext.maven.name,
+                        password: rootProject.ext.maven.password)
             }
-            repository(url: 'http://svn.weiidu.com:8081/nexus/content/repositories/android/') {
-                authentication(userName: 'admin', password: 'bcadmin')
+            repository(url: rootProject.ext.maven.repository) {
+                authentication(userName: rootProject.ext.maven.name,
+                        password: rootProject.ext.maven.password)
             }
             pom.project {
-                version '1.0.1'
-                artifactId 'utils'
-                groupId 'com.baichang.android'
-                packaging 'aar'
-                description 'utils library'
+                version rootProject.ext.utils.version
+                artifactId rootProject.ext.utils.artifactId
+                groupId rootProject.ext.utils.groupId
+                packaging rootProject.ext.utils.packaging
+                description rootProject.ext.utils.description
             }
         }
     }
 }
 
 artifacts {
-    archives file('utils.aar')
+    archives file(rootProject.ext.utils.artifacts)
 }
