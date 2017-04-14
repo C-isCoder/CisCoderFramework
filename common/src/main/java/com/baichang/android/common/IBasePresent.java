@@ -11,4 +11,5 @@ public interface IBasePresent {
   void onDestroy();
 
   void onStart();
+
 }

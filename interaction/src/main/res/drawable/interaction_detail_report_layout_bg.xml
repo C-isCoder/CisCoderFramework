@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+   <solid android:color="@color/interaction_layout_background" />
+   <stroke
+      android:color="@color/interaction_line_horizontal"
+      android:width="1px" />
+</shape>

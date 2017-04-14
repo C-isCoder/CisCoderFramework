@@ -11,24 +11,31 @@ ext {
     ]
 
     depend = [
-            v7           : 'com.android.support:appcompat-v7:25.3.0',
-            v4           : 'com.android.support:support-v4:25.3.0',
-            recyclerview : 'com.android.support:recyclerview-v7:25.3.0',
+            v7                   : 'com.android.support:appcompat-v7:25.3.0',
+            v4                   : 'com.android.support:support-v4:25.3.0',
+            recyclerview         : 'com.android.support:recyclerview-v7:25.3.0',
+            design               : 'com.android.support:design:25.3.0',
 
-            glide        : 'com.github.bumptech.glide:glide:3.7.0',
-            rxpermissions: 'com.tbruyelle.rxpermissions:rxpermissions:0.9.3@aar',
-            rxjava       : 'io.reactivex:rxandroid:1.2.1',
-            rxandroid    : 'io.reactivex:rxandroid:1.2.1',
-            zxing        : 'com.google.zxing:core:3.2.1',
-            qrcodecore   : 'cn.bingoogolapple:bga-qrcodecore:1.1.5@aar',
-            qrzxing      : 'cn.bingoogolapple:bga-zxing:1.1.5@aar',
-            retrofit     : 'com.squareup.retrofit2:retrofit:2.1.0',
-            urlconnection: 'com.squareup.okhttp3:okhttp-urlconnection:3.2.0',
-            rxjavaadapter: 'com.squareup.retrofit2:adapter-rxjava:2.1.0',
-            gsonconverter: 'com.squareup.retrofit2:converter-gson:2.1.0',
-            logger       : 'com.orhanobut:logger:1.15',
-            gson         : 'com.google.code.gson:gson:2.7',
-            banner       : 'com.youth.banner:banner:1.4.5',
+            glide                : 'com.github.bumptech.glide:glide:3.7.0',
+            rxpermissions        : 'com.tbruyelle.rxpermissions:rxpermissions:0.9.3@aar',
+            rxjava               : 'io.reactivex:rxandroid:1.2.1',
+            rxandroid            : 'io.reactivex:rxandroid:1.2.1',
+            zxing                : 'com.google.zxing:core:3.2.1',
+            qrcodecore           : 'cn.bingoogolapple:bga-qrcodecore:1.1.5@aar',
+            qrzxing              : 'cn.bingoogolapple:bga-zxing:1.1.5@aar',
+            retrofit             : 'com.squareup.retrofit2:retrofit:2.1.0',
+            urlconnection        : 'com.squareup.okhttp3:okhttp-urlconnection:3.2.0',
+            rxjavaadapter        : 'com.squareup.retrofit2:adapter-rxjava:2.1.0',
+            gsonconverter        : 'com.squareup.retrofit2:converter-gson:2.1.0',
+            logger               : 'com.orhanobut:logger:1.15',
+            gson                 : 'com.google.code.gson:gson:2.7',
+            banner               : 'com.youth.banner:banner:1.4.5',
+            eventbus             : 'org.greenrobot:eventbus:3.0.0',
+            glide_transformations: 'jp.wasabeef:glide-transformations:2.0.2',
+            glide_gpuimage       : 'jp.co.cyberagent.android.gpuimage:gpuimage-library:1.4.1',
+            boxing               : 'com.bilibili:boxing-impl:0.4.0',
+            picasso              : 'com.squareup.picasso:picasso:2.5.2',
+            swipedelmenulayout   : 'com.github.mcxtzhang:SwipeDelMenuLayout:V1.2.5',
     ]
 
     maven = [
@@ -36,13 +43,15 @@ ext {
             password  : 'bcadmin',
             snapshot  : 'http://svn.weiidu.com:8081/nexus/content/repositories/snapshots/',
             repository: 'http://svn.weiidu.com:8081/nexus/content/repositories/android/',
+            library   : 'com.baichang.android.library',
+            model     : 'com.baichang.android.module',
     ]
     common = [
             version    : '1.0.1',
             artifactId : 'common',
             packaging  : 'aar',
             description: 'common library',
-            groupId    : 'com.baichang.android',
+            groupId    : maven.library,
             artifacts  : 'common.aar'
     ]
     config = [
@@ -50,7 +59,7 @@ ext {
             artifactId : 'config',
             packaging  : 'aar',
             description: 'cofnig library',
-            groupId    : 'com.baichang.android',
+            groupId    : maven.library,
             artifacts  : 'config.aar',
     ]
     imageloader = [
@@ -58,7 +67,7 @@ ext {
             artifactId : 'imageLoader',
             packaging  : 'aar',
             description: 'imageLloader library',
-            groupId    : 'com.baichang.android',
+            groupId    : maven.library,
             artifacts  : 'imageloader.aar',
     ]
     permission = [
@@ -66,7 +75,7 @@ ext {
             artifactId : 'permission',
             packaging  : 'aar',
             description: 'permission library',
-            groupId    : 'com.baichang.android',
+            groupId    : maven.library,
             artifacts  : 'permission.aar',
     ]
     qrcode = [
@@ -74,7 +83,7 @@ ext {
             artifactId : 'qrcode',
             packaging  : 'aar',
             description: 'qrcode library',
-            groupId    : 'com.baichang.android',
+            groupId    : maven.library,
             artifacts  : 'qrcode.aar',
     ]
     request = [
@@ -82,7 +91,7 @@ ext {
             artifactId : 'request',
             packaging  : 'aar',
             description: 'request library',
-            groupId    : 'com.baichang.android',
+            groupId    : maven.library,
             artifacts  : 'request.aar',
     ]
     umShare = [
@@ -90,7 +99,7 @@ ext {
             artifactId : 'umShare',
             packaging  : 'aar',
             description: 'umShare library',
-            groupId    : 'com.baichang.android',
+            groupId    : maven.library,
             artifacts  : 'umShare.aar',
     ]
     utils = [
@@ -98,7 +107,7 @@ ext {
             artifactId : 'utils',
             packaging  : 'aar',
             description: 'utils library',
-            groupId    : 'com.baichang.android',
+            groupId    : maven.library,
             artifacts  : 'utils.aar',
     ]
     widget = [
@@ -106,7 +115,15 @@ ext {
             artifactId : 'widget',
             packaging  : 'aar',
             description: 'widget library',
-            groupId    : 'com.baichang.android',
+            groupId    : maven.library,
             artifacts  : 'widget.aar',
+    ]
+    interaction = [
+            version    : '0.0.1',
+            artifactId : 'interaction',
+            packaging  : 'aar',
+            description: 'Interaction Model',
+            groupId    : maven.model,
+            artifacts  : 'interaction.aar',
     ]
 }

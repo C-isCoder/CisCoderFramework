@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+   xmlns:app="http://schemas.android.com/apk/res-auto"
+   xmlns:tools="http://schemas.android.com/tools"
+   android:layout_width="match_parent"
+   android:layout_height="wrap_content"
+   android:background="@android:color/white"
+   android:orientation="vertical">
+
+   <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:paddingTop="10dp"
+      android:paddingBottom="4dp"
+      android:paddingLeft="10dp"
+      android:paddingRight="10dp"
+      android:gravity="center_vertical"
+      android:orientation="horizontal">
+
+      <com.baichang.android.widget.circleImageView.CircleImageView
+         android:id="@+id/item_interaction_detail_iv_avatar"
+         android:layout_width="30dp"
+         android:layout_height="30dp"
+         app:civ_border_overlay="true" />
+
+      <TextView
+         android:id="@+id/item_interaction_detail_tv_name"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_marginLeft="5dp"
+         android:textColor="@color/cm_tv_black2"
+         android:textSize="@dimen/cm_tv_size_body13"
+         tools:text="最爱啃石头" />
+
+      <TextView
+         android:id="@+id/item_interaction_detail_tv_time"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:gravity="end"
+         android:textColor="@color/cm_tv_black2"
+         android:textSize="@dimen/cm_tv_size_body4"
+         tools:text="一小时前" />
+   </LinearLayout>
+
+   <TextView
+      android:id="@+id/item_interaction_detail_tv_content"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:paddingLeft="45dp"
+      android:paddingRight="10dp"
+      android:autoLink="phone"
+      android:lineSpacingExtra="4dp"
+      android:textColor="@color/cm_tv_black1"
+      android:textSize="@dimen/cm_tv_size_body13"
+      tools:text="6到飞起" />
+
+   <View
+      style="@style/cm_line_horizontal"
+      android:layout_marginTop="8dp"
+      android:layout_marginLeft="45dp" />
+
+   <LinearLayout
+      android:id="@+id/item_interaction_detail_comment_layout"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="10dp"
+      android:layout_marginLeft="45dp"
+      android:layout_marginRight="10dp"
+      android:orientation="vertical" />
+
+   <TextView
+      android:id="@+id/interaction_detail_tv_more"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center_horizontal"
+      android:paddingTop="8dp"
+      android:paddingBottom="8dp"
+      android:clickable="true"
+      android:text="@string/btn_see_more"
+      android:textColor="@drawable/interaction_detail_list_btn_see_more_bg"
+      android:textSize="@dimen/cm_tv_size_body12"
+      android:visibility="gone"
+      tools:visibility="visible" />
+
+   <View
+      style="@style/cm_line_horizontal"
+      android:layout_marginTop="15dp"
+      android:layout_marginLeft="10dp" />
+</LinearLayout>

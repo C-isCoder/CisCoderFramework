@@ -83,7 +83,6 @@
         <item name="android:gravity">center</item>
     </style>
 
-
     <!--list_view样式-->
     <style name="cm_list_view">
         <item name="android:layout_width">match_parent</item>

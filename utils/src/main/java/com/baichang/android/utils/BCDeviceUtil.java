@@ -193,7 +193,6 @@ public final class BCDeviceUtil {
 			try {
 				packInfo = packageManager.getPackageInfo(context.getPackageName(),0);
 			} catch (NameNotFoundException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 	           String version = packInfo.versionCode+"";
@@ -213,7 +212,6 @@ public final class BCDeviceUtil {
 			try {
 				packInfo = packageManager.getPackageInfo(context.getPackageName(),0);
 			} catch (NameNotFoundException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 	           String version = packInfo.versionName+"";

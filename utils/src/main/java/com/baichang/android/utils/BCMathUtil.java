@@ -17,7 +17,6 @@ package com.baichang.android.utils;
 
 import java.math.BigDecimal;
 
-// TODO: Auto-generated Javadoc
 
 /**
  * © 2012 amsoft.cn

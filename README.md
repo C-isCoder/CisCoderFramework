@@ -1,7 +1,16 @@
 # Android框架文档说明
 
 ## 更新说明：
-
+ ### 2017-04-14
+ 
+ * request 网络请求 新增 网络不通畅的提示。
+ * widget 新增 侧滑删除控件。 gitHub : https://github.com/mcxtzhang/SwipeDelMenuLayout
+ 
+ ### 2017-04-06
+ 
+ * 依赖路径优化，区分 library 和 model
+ * 新增互动
+ 
  ### 2017-04-01
  
  * Utils 包移除EventBus的引用
@@ -33,14 +42,16 @@ allprojects {
 }
 ```
 
-* 网络请求 `compile 'com.baichang.android:request:1.0.1'`
-* 图片加载 `compile 'com.baichang.android:imageLoader:1.0.1'`
-* 基础组件 `compile 'com.baichang.android:common:1.0.1'`
-* 控件集合 `compile 'com.baichang.android:widget:1.0.1'`
-* 工具集合 `compile 'com.baichang.android:utils:1.0.1'`
-* 二维码   `compile 'com.baichang.android:qrcode:1.0.1'`
-* 动态权限  `compile 'com.baichang.android:permission:1.0.0'`
-* 基础配置  `compile 'com.baichang.android:config:1.0.0'`
+* 网络请求 `compile 'com.baichang.android.library:request:1.0.1'`
+* 图片加载 `compile 'com.baichang.android.library:imageLoader:1.0.1'`
+* 基础组件 `compile 'com.baichang.android.library:common:1.0.1'`
+* 控件集合 `compile 'com.baichang.android.library:widget:1.0.1'`
+* 工具集合 `compile 'com.baichang.android.library:utils:1.0.1'`
+* 二维码   `compile 'com.baichang.android.library:qrcode:1.0.1'`
+* 动态权限  `compile 'com.baichang.android.library:permission:1.0.0'`
+* 基础配置  `compile 'com.baichang.android.library:config:1.0.0'`
+* 佰昌互动  `compile 'com.baichang.android.module:interaction:0.0.1'`
+* 友盟分享  `compile 'com.baichang.android.library:umShare:1.0.1'`
 
 ## 项目初始化配置
 

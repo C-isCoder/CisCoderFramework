@@ -54,7 +54,6 @@ import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
 
-// TODO: Auto-generated Javadoc
 
 /**
  * © 2012 amsoft.cn

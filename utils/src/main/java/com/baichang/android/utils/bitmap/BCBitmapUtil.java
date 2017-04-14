@@ -148,7 +148,6 @@ public class BCBitmapUtil {
 			try {
 				file.createNewFile();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -183,7 +182,6 @@ public class BCBitmapUtil {
 			}
 
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return file;

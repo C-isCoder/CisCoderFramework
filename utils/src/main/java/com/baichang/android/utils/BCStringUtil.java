@@ -658,10 +658,8 @@ public class BCStringUtil {
 				  	return false;
 				}
 			} catch (NumberFormatException e) {
-				// TODO Auto-generated catch block
 			 	return false;
 			} catch (ParseException e) {
-				// TODO Auto-generated catch block
 			 	return false;
 			}  
 	        if (Integer.parseInt(strMonth) > 12 || Integer.parseInt(strMonth) == 0) {  

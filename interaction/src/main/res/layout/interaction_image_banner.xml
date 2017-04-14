@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+   android:layout_width="match_parent"
+   android:layout_height="match_parent"
+   android:background="@android:color/black"
+   android:orientation="vertical">
+
+   <com.baichang.android.circle.widget.photopreview.PhotoGalleryViewPager
+      android:id="@+id/photo_gallery_image_banner_pager"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent" />
+
+   <TextView
+      android:id="@+id/photo_gallery_image_banner_tv_count"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginBottom="16dp"
+      android:layout_marginRight="16dp"
+      android:layout_gravity="bottom|end"
+      android:paddingTop="2dp"
+      android:paddingBottom="2dp"
+      android:paddingLeft="10dp"
+      android:paddingRight="10dp"
+      android:background="@drawable/interaction_photo_count_bg"
+      android:gravity="center"
+      android:text="0/0"
+      android:textColor="@android:color/white"
+      android:textSize="12sp" />
+</FrameLayout>

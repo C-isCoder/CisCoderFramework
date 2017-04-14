@@ -1,0 +1,210 @@
+package com.baichang.android.circle;
+
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
+import android.support.v7.widget.RecyclerView;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import com.baichang.android.circle.common.InteractionCommonActivity;
+import com.baichang.android.circle.common.InteractionConfig;
+import com.baichang.android.circle.common.InteractionFlag;
+import com.baichang.android.circle.entity.InteractionListData;
+import com.baichang.android.circle.present.Impl.InteractionDetailPresentImpl;
+import com.baichang.android.circle.present.InteractionDetailPresent;
+import com.baichang.android.circle.utils.AnimatorUtil;
+import com.baichang.android.circle.view.InteractionDetailView;
+import com.baichang.android.utils.BCToolsUtil;
+
+public class InteractionDetailActivity extends InteractionCommonActivity
+    implements InteractionDetailView, OnRefreshListener,
+    OnClickListener, OnTouchListener {
+
+  SwipeRefreshLayout mRefresh;
+  RecyclerView rvList;
+  TextView tvSend;
+  EditText etReport;
+  ImageButton btnShare;
+  ImageButton btnCollect;
+  ImageButton mBack;
+  ImageButton btnPraise;
+
+  private InteractionDetailPresent mPresent;
+
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.interaction_activity_detail);
+    mRefresh = (SwipeRefreshLayout) findViewById(R.id.interaction_detail_refresh);
+    rvList = (RecyclerView) findViewById(R.id.interaction_detail_rv_list);
+    tvSend = (TextView) findViewById(R.id.interaction_detail_tv_send);
+    etReport = (EditText) findViewById(R.id.interaction_detail_et_report);
+    btnShare = (ImageButton) findViewById(R.id.interaction_detail_btn_share);
+    btnCollect = (ImageButton) findViewById(R.id.interaction_detail_btn_collect);
+    btnPraise = (ImageButton) findViewById(R.id.interaction_detail_iv_praise);
+
+    btnShare.setOnClickListener(this);
+    btnCollect.setOnClickListener(this);
+    btnPraise.setOnClickListener(this);
+    init();
+  }
+
+  @Override
+  public void back(View view) {
+    onBackPressed();
+  }
+
+  private void init() {
+    View mHeaderView = getLayoutInflater().inflate(
+        R.layout.interaction_activity_detail_header_layout, null);
+    InteractionListData data = (InteractionListData) getIntent()
+        .getSerializableExtra(InteractionFlag.ACTION_INTERACTION_DATA);
+
+    int textColor = InteractionConfig.getInstance().getTextFontColor();
+    if (textColor != -1) {
+      mRefresh.setColorSchemeResources(textColor);
+    } else {
+      mRefresh.setColorSchemeResources(R.color.interaction_text_font);
+    }
+    mRefresh.setOnRefreshListener(this);
+    tvSend.setOnClickListener(this);
+    rvList.setOnTouchListener(this);
+
+    setConfig();
+    mPresent = new InteractionDetailPresentImpl(this);
+    mPresent.attachView(rvList, mHeaderView);
+    mPresent.bindData(data);
+  }
+
+  private void setConfig() {
+    int topColor = InteractionConfig.getInstance().getTopBarColor();
+    if (topColor != -1) {
+      RelativeLayout title = (RelativeLayout) findViewById(R.id.title);
+      title.setBackgroundResource(topColor);
+      TextView tvTitle = (TextView) findViewById(R.id.interaction_top_tv_title);
+      tvTitle.setTextColor(Color.WHITE);
+    }
+    int praiseDrawableRes = InteractionConfig.getInstance().getPraiseDrawableRes();
+    if (praiseDrawableRes != -1) {
+      btnPraise.setImageResource(praiseDrawableRes);
+    }
+    int collectDrawableRes = InteractionConfig.getInstance().getCollectDrawableRes();
+    if (collectDrawableRes != -1) {
+      btnCollect.setImageResource(collectDrawableRes);
+    }
+    int shareDrawableRes = InteractionConfig.getInstance().getShareDrawableRes();
+    if (shareDrawableRes != -1) {
+      btnShare.setImageResource(shareDrawableRes);
+    }
+    int backDrawableRes = InteractionConfig.getInstance().getBackDrawableRes();
+    if (backDrawableRes != -1) {
+      mBack.setImageResource(backDrawableRes);
+    }
+  }
+
+  @Override
+  public void showProgressBar() {
+    mRefresh.setRefreshing(true);
+  }
+
+  @Override
+  public void hideProgressBar() {
+    mRefresh.setRefreshing(false);
+  }
+
+  @Override
+  public void showMsg(String msg) {
+    showMessage(msg);
+  }
+
+  @Override
+  protected void onStart() {
+    super.onStart();
+    mPresent.onStart();
+  }
+
+  @Override
+  protected void onDestroy() {
+    super.onDestroy();
+    mPresent.onDestroy();
+  }
+
+  @Override
+  public Context getContext() {
+    return this;
+  }
+
+  @Override
+  public void setReportHint(String tips) {
+    etReport.setText("");
+    etReport.setHint(tips);
+  }
+
+  @Override
+  public void showInputKeyBord() {
+    etReport.requestFocus();
+    BCToolsUtil.openKeybord(etReport, this);
+  }
+
+  @Override
+  public void hideInputKeyBord() {
+    etReport.clearFocus();
+    BCToolsUtil.closeKeybord(etReport, this);
+  }
+
+  @Override
+  public void scrollToPosition(int position) {
+    rvList.smoothScrollToPosition(position);
+  }
+
+  @Override
+  public void onRefresh() {
+    mPresent.refresh();
+  }
+
+  @Override
+  public void onClick(View v) {
+    int id = v.getId();
+    if (id == btnCollect.getId()) {
+      AnimatorUtil.scale(v).addListener(
+          new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+              btnCollect.setSelected(!btnCollect.isSelected());
+            }
+          });
+      mPresent.collect();
+    } else if (id == btnShare.getId()) {
+      AnimatorUtil.scale(v);
+      mPresent.share();
+    } else if (id == tvSend.getId()) {
+      mPresent.send(etReport.getText().toString());
+    } else if (id == btnPraise.getId()) {
+      AnimatorUtil.scale(v);
+      btnPraise.setSelected(!btnPraise.isSelected());
+      mPresent.praise();
+    }
+  }
+
+  @Override
+  public boolean onTouch(View v, MotionEvent event) {
+    switch (event.getAction()) {
+      case MotionEvent.ACTION_MOVE:
+        hideInputKeyBord();
+        etReport.clearFocus();
+        break;
+    }
+    return false;
+  }
+}

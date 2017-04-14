@@ -35,7 +35,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Pattern;
 
-// TODO: Auto-generated Javadoc
 
 /**
  * © 2012 amsoft.cn

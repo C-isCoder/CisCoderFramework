@@ -15,7 +15,6 @@
  */
 package com.baichang.android.utils.photo;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Interface DCT.
  */

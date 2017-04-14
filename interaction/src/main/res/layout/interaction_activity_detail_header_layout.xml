@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+   xmlns:app="http://schemas.android.com/apk/res-auto"
+   xmlns:tools="http://schemas.android.com/tools"
+   android:layout_width="match_parent"
+   android:layout_height="wrap_content"
+   android:background="@android:color/white"
+   android:orientation="vertical">
+
+   <RelativeLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:padding="10dp">
+
+      <com.baichang.android.widget.circleImageView.CircleImageView
+         android:id="@+id/interaction_detail_iv_avatar"
+         android:layout_width="30dp"
+         android:layout_height="30dp"
+         app:civ_border_overlay="true" />
+
+      <TextView
+         android:id="@+id/interaction_detail_tv_name"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_marginLeft="5dp"
+         android:layout_toRightOf="@id/interaction_detail_iv_avatar"
+         android:textColor="@color/cm_tv_black2"
+         android:textSize="@dimen/cm_tv_size_body13"
+         tools:text="阿拉蕾" />
+
+      <TextView
+         android:id="@+id/interaction_detail_tv_time"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_marginTop="6dp"
+         android:layout_alignBottom="@id/interaction_detail_iv_avatar"
+         android:layout_alignLeft="@id/interaction_detail_tv_name"
+         android:textColor="@color/cm_tv_black2"
+         android:textSize="@dimen/cm_tv_size_body11"
+         tools:text="1个小时前" />
+   </RelativeLayout>
+
+   <TextView
+      android:id="@+id/interaction_detail_tv_title"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="5dp"
+      android:paddingLeft="10dp"
+      android:paddingRight="10dp"
+      android:ellipsize="end"
+      android:maxLines="1"
+      android:textColor="@color/cm_tv_black1"
+      android:textSize="@dimen/cm_tv_size_body14"
+      tools:text="老司机带你与太阳肩并肩" />
+
+   <TextView
+      android:id="@+id/interaction_detail_tv_content"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="10dp"
+      android:paddingLeft="10dp"
+      android:paddingRight="10dp"
+      android:lineSpacingExtra="4dp"
+      android:textColor="@color/cm_tv_black2"
+      android:textSize="@dimen/cm_tv_size_body13"
+      tools:text="长期极影各类进口车，免税车，中东霸道、路虎、卡宴、多种车型任你挑。" />
+
+   <com.baichang.android.circle.widget.photocontents.PhotoContents
+      android:id="@+id/interaction_detail_photo_content"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="10dp"
+      android:paddingLeft="10dp"
+      android:paddingRight="10dp" />
+
+   <RelativeLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center_vertical"
+      android:orientation="horizontal">
+
+      <TextView
+         android:id="@+id/interaction_detail_tv_report"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:paddingTop="10dp"
+         android:paddingBottom="10dp"
+         android:paddingLeft="10dp"
+         android:paddingRight="0dp"
+         android:drawableLeft="@drawable/interaction_ic_report"
+         android:drawablePadding="4dp"
+         android:gravity="center_vertical"
+         android:text="@string/btn_interaction_report"
+         android:textColor="@color/cm_tv_black2"
+         android:textSize="@dimen/cm_tv_size_body10" />
+
+      <ImageView
+         android:id="@+id/interaction_detail_iv_comment"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_alignParentRight="true"
+         android:paddingTop="10dp"
+         android:paddingBottom="10dp"
+         android:paddingLeft="10dp"
+         android:paddingRight="10dp"
+         android:background="@null"
+         android:src="@drawable/interaction_ic_comment" />
+
+   </RelativeLayout>
+
+   <View style="@style/cm_line_horizontal" />
+
+   <TextView
+      android:id="@+id/interaction_detail_tv_count"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:paddingTop="6dp"
+      android:paddingBottom="6dp"
+      android:paddingLeft="10dp"
+      android:textColor="@color/cm_tv_black2"
+      android:textSize="@dimen/cm_tv_size_body12"
+      tools:text="评论（7）" />
+</LinearLayout>

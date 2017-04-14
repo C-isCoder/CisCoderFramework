@@ -1,0 +1,137 @@
+package com.baichang.android.circle.present.Impl;
+
+import android.content.Intent;
+import android.graphics.Color;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewPager;
+import android.text.TextUtils;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import com.baichang.android.circle.InteractionContentFragment;
+import com.baichang.android.circle.InteractionInfoActivity;
+import com.baichang.android.circle.InteractionPublishActivity;
+import com.baichang.android.circle.R;
+import com.baichang.android.circle.common.InteractionFlag;
+import com.baichang.android.circle.common.InteractionConfig;
+import com.baichang.android.circle.present.InteractionPresent;
+import com.baichang.android.circle.utils.AnimatorUtil;
+import com.baichang.android.circle.utils.ColorUtil;
+import com.baichang.android.circle.view.InteractionView;
+
+/**
+ * Created by iCong on 2017/3/20.
+ */
+
+public class InteractionPresentImpl implements InteractionPresent, OnClickListener {
+
+  private InteractionView mView;
+  private static String[] TITLES = new String[]{"热门互动", "经典老车", "海外购车", "现身说法"};
+  private FragmentPagerAdapter mAdapter;
+  private TabLayout mTabLayout;
+  private TextView tvMe;
+  private FloatingActionButton mFloating;
+
+  public InteractionPresentImpl(InteractionView view) {
+    mView = view;
+    mAdapter = new InteractionAdapter(mView.getFragmentManager());
+  }
+
+  @Override
+  public void onDestroy() {
+    mView = null;
+  }
+
+  @Override
+  public void onStart() {
+    //TODO 获取TYPE
+  }
+
+  @Override
+  public void attachView(View contentView) {
+    ViewPager mViewPager = (ViewPager) contentView.findViewById(R.id.interaction_view_pager);
+    mTabLayout = (TabLayout) contentView.findViewById(R.id.interaction_tab_layout);
+    tvMe = (TextView) contentView.findViewById(R.id.interaction_tv_me);
+    mFloating = (FloatingActionButton) contentView.findViewById(R.id.interaction_floating_btn_publish);
+
+    tvMe.setOnClickListener(this);
+    mFloating.setOnClickListener(this);
+
+    initColor(contentView);
+
+    mViewPager.setAdapter(mAdapter);
+    mTabLayout.setupWithViewPager(mViewPager);
+  }
+
+  @Override
+  public void onClick(View v) {
+    int i = v.getId();
+    if (i == mFloating.getId()) {
+      Intent publishIntent = new Intent(v.getContext(),
+          InteractionPublishActivity.class);
+      v.getContext().startActivity(publishIntent);
+    } else if (i == tvMe.getId()) {
+      AnimatorUtil.scale(v);
+      Intent infoIntent = new Intent(v.getContext(),
+          InteractionInfoActivity.class);
+      infoIntent.putExtra(InteractionFlag.
+          ACTION_INTERACTION_IS_ONESELF, true);
+      v.getContext().startActivity(infoIntent);
+    }
+  }
+
+  private class InteractionAdapter extends FragmentPagerAdapter {
+
+    InteractionAdapter(FragmentManager fm) {
+      super(fm);
+    }
+
+    @Override
+    public Fragment getItem(int position) {
+      return InteractionContentFragment.newInstance(InteractionInfoPresentImpl.NORMAL);
+    }
+
+    @Override
+    public int getCount() {
+      return TITLES.length;
+    }
+
+    @Override
+    public CharSequence getPageTitle(int position) {
+      return TITLES[position];
+    }
+  }
+
+  private void initColor(View contentView) {
+
+    int textColor = InteractionConfig.getInstance().getTextFontColor();
+    if (textColor != -1) {
+      tvMe.setTextColor(textColor);
+      mFloating.setBackgroundTintList(ColorUtil.createdPressColorList(
+          contentView.getContext(), textColor, textColor));
+      mTabLayout.setSelectedTabIndicatorColor(ContextCompat.getColor(
+          contentView.getContext(), textColor));
+      mTabLayout.setTabTextColors(ColorUtil.createdSelectColorList(
+          contentView.getContext(), textColor, R.color.cm_tv_black1));
+    }
+
+    int topColor = InteractionConfig.getInstance().getTopBarColor();
+    if (topColor != -1) {
+      RelativeLayout title = (RelativeLayout) contentView.findViewById(R.id.title);
+      title.setBackgroundResource(topColor);
+      TextView tvTitle = (TextView) contentView.findViewById(R.id.interaction_tv_title);
+      tvTitle.setTextColor(Color.WHITE);
+
+      String titleText = InteractionConfig.getInstance().getTitleText();
+      if (!TextUtils.isEmpty(titleText)) {
+        tvTitle.setText(titleText);
+      }
+    }
+  }
+}
