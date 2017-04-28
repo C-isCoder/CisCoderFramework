@@ -25,7 +25,7 @@ import com.baichang.android.circle.R;
 import com.baichang.android.circle.adapter.InteractionContentAdapter.ViewHolder;
 import com.baichang.android.circle.common.InteractionConfig;
 import com.baichang.android.circle.entity.InteractionListData;
-import com.baichang.android.circle.present.Impl.InteractionInfoPresentImpl;
+import com.baichang.android.circle.present.InteractionInfoPresent;
 import com.baichang.android.circle.utils.AnimatorUtil;
 import com.baichang.android.circle.utils.ColorUtil;
 import com.baichang.android.circle.widget.ForceClickImageView;
@@ -63,7 +63,6 @@ public class InteractionContentAdapter extends Adapter<ViewHolder> {
   @Override
   public void onBindViewHolder(ViewHolder holder, int position) {
     InteractionListData data = mList.get(position);
-    //TODO 默认图
     ImageLoader.loadImageError(holder.itemView.getContext(),
         data.avatar, R.mipmap.interaction_icon_default, holder.ivAvatar);
     holder.tvName.setText(data.name);
@@ -79,20 +78,20 @@ public class InteractionContentAdapter extends Adapter<ViewHolder> {
           holder.tvButton.getContext(), R.color.cm_tv_black2, textColor);
       holder.tvButton.setTextColor(stateList);
     }
-    if (mType == InteractionInfoPresentImpl.COLLECT) {
+    if (mType == InteractionInfoPresent.COLLECT) {
       holder.tvButton.setText("取消收藏");
       holder.tvButton.setVisibility(View.VISIBLE);
-    } else if (mType == InteractionInfoPresentImpl.DYNAMIC) {
+    } else if (mType == InteractionInfoPresent.DYNAMIC) {
       holder.tvButton.setText("删除");
       holder.tvButton.setVisibility(View.VISIBLE);
     } else {
       holder.tvButton.setVisibility(View.GONE);
     }
-    if (mAdapter == null) {
-      mAdapter = new InteractionPhotoAdapter(data.images);
-    } else {
-      mAdapter.updateData(data.images);
+    holder.tvPraise.setSelected(data.isPraise == 1);
+    if (data.images == null || data.images.isEmpty()) {
+      return;
     }
+    mAdapter = new InteractionPhotoAdapter(data.images);
     holder.mPhotos.setAdapter(mAdapter);
   }
 
@@ -108,6 +107,15 @@ public class InteractionContentAdapter extends Adapter<ViewHolder> {
       mList.addAll(list);
       notifyDataSetChanged();
     }
+  }
+
+  private int getIndex(InteractionListData data) {
+    return mList.indexOf(data);
+  }
+
+  public void remove(InteractionListData data) {
+    mList.remove(data);
+    notifyItemRemoved(getIndex(data));
   }
 
   private InteractionClickListener interactionClickListener;
@@ -180,6 +188,13 @@ public class InteractionContentAdapter extends Adapter<ViewHolder> {
         commentDrawable.setBounds(0, 0, commentDrawable.getMinimumWidth(), commentDrawable.getMinimumHeight());
         tvComment.setCompoundDrawables(commentDrawable, null, null, null);
       }
+      int deleteDrawableRes = InteractionConfig.getInstance().getButtonDrawableRes();
+      if (deleteDrawableRes != -1) {
+        ColorStateList stateList = new ColorStateList(
+            new int[][]{new int[]{android.R.attr.state_pressed}, new int[]{0}},
+            new int[]{deleteDrawableRes, R.color.cm_tv_black1});
+        tvButton.setTextColor(stateList);
+      }
     }
 
     @Override
@@ -226,9 +241,9 @@ public class InteractionContentAdapter extends Adapter<ViewHolder> {
           interactionClickListener.avatar(mList.get(getAdapterPosition()));
         }
       } else if (i == tvButton.getId()) {
-        if (mType == InteractionInfoPresentImpl.COLLECT) {
+        if (mType == InteractionInfoPresent.COLLECT) {
           interactionClickListener.cancel(mList.get(getAdapterPosition()));
-        } else if (mType == InteractionInfoPresentImpl.DYNAMIC) {
+        } else if (mType == InteractionInfoPresent.DYNAMIC) {
           interactionClickListener.delete(mList.get(getAdapterPosition()));
         }
       }
@@ -270,9 +285,8 @@ public class InteractionContentAdapter extends Adapter<ViewHolder> {
 
     @Override
     public void onBindData(int position, @NonNull ImageView convertView) {
-      //TODO 默认图
       ImageLoader.loadImageError(convertView.getContext(),
-          mImageList.get(position), R.mipmap.interaction_icon_default, convertView);
+          mImageList.get(position), R.mipmap.interaction_place_image, convertView);
     }
 
     @Override
@@ -280,6 +294,7 @@ public class InteractionContentAdapter extends Adapter<ViewHolder> {
       return mImageList.size();
     }
 
+    // FIXME 列表中更新数据 乱序
     void updateData(List<String> list) {
       this.mImageList.clear();
       this.mImageList.addAll(list);

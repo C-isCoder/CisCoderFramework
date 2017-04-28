@@ -2,14 +2,13 @@ package com.baichang.android.circle.entity;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import java.io.Serializable;
 import java.util.List;
 
 /**
- * Created by iCong on 2017/3/20.
+ * Created by iCong on 2017/4/17.
  */
 
-public class InteractionListData implements Serializable {
+public class InteractionDetailData {
 
   @Expose
   @SerializedName("trendsTitle")
@@ -50,8 +49,10 @@ public class InteractionListData implements Serializable {
   @Expose
   public int isPraise;
   @Expose
-  public int isCollect;
+  public int isCollection;
 
   @Expose
   public String hostUserId;
+  @Expose
+  public List<InteractionCommentList> commentList;
 }

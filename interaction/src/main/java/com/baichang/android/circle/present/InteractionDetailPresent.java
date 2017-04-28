@@ -13,8 +13,6 @@ public interface InteractionDetailPresent extends IBasePresent {
 
   void attachView(RecyclerView recyclerView, View header);
 
-  void bindData(InteractionListData data);
-
   void refresh();
 
   void send(String content);

@@ -13,5 +13,4 @@ public interface InteractionInfoReportPresent extends IBasePresent {
 
   void refresh();
 
-  void setIsOneSelf(boolean isOneSelf);
 }

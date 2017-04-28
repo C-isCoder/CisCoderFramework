@@ -18,29 +18,40 @@ import com.baichang.android.circle.InteractionContentFragment;
 import com.baichang.android.circle.InteractionInfoActivity;
 import com.baichang.android.circle.InteractionPublishActivity;
 import com.baichang.android.circle.R;
-import com.baichang.android.circle.common.InteractionFlag;
 import com.baichang.android.circle.common.InteractionConfig;
+import com.baichang.android.circle.common.InteractionFlag;
+import com.baichang.android.circle.entity.InteractionTypeData;
+import com.baichang.android.circle.model.Impl.InteractInteractionImpl;
+import com.baichang.android.circle.model.InteractInteraction;
+import com.baichang.android.circle.present.InteractionInfoPresent;
 import com.baichang.android.circle.present.InteractionPresent;
 import com.baichang.android.circle.utils.AnimatorUtil;
 import com.baichang.android.circle.utils.ColorUtil;
 import com.baichang.android.circle.view.InteractionView;
+import com.baichang.android.common.IBaseInteraction.BaseListener;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by iCong on 2017/3/20.
  */
 
-public class InteractionPresentImpl implements InteractionPresent, OnClickListener {
+public class InteractionPresentImpl implements InteractionPresent,
+    OnClickListener, BaseListener<List<InteractionTypeData>> {
 
   private InteractionView mView;
-  private static String[] TITLES = new String[]{"热门互动", "经典老车", "海外购车", "现身说法"};
   private FragmentPagerAdapter mAdapter;
   private TabLayout mTabLayout;
   private TextView tvMe;
   private FloatingActionButton mFloating;
+  private InteractInteraction mInteraction;
+  private List<InteractionTypeData> mTypeList;
 
   public InteractionPresentImpl(InteractionView view) {
     mView = view;
     mAdapter = new InteractionAdapter(mView.getFragmentManager());
+    mTypeList = new ArrayList<>();
+    mInteraction = new InteractInteractionImpl();
   }
 
   @Override
@@ -50,7 +61,10 @@ public class InteractionPresentImpl implements InteractionPresent, OnClickListen
 
   @Override
   public void onStart() {
-    //TODO 获取TYPE
+    if (mTypeList.isEmpty()) {
+      mView.showProgressBar();
+      mInteraction.getInteractionTypeList(this);
+    }
   }
 
   @Override
@@ -59,7 +73,6 @@ public class InteractionPresentImpl implements InteractionPresent, OnClickListen
     mTabLayout = (TabLayout) contentView.findViewById(R.id.interaction_tab_layout);
     tvMe = (TextView) contentView.findViewById(R.id.interaction_tv_me);
     mFloating = (FloatingActionButton) contentView.findViewById(R.id.interaction_floating_btn_publish);
-
     tvMe.setOnClickListener(this);
     mFloating.setOnClickListener(this);
 
@@ -80,10 +93,29 @@ public class InteractionPresentImpl implements InteractionPresent, OnClickListen
       AnimatorUtil.scale(v);
       Intent infoIntent = new Intent(v.getContext(),
           InteractionInfoActivity.class);
-      infoIntent.putExtra(InteractionFlag.
-          ACTION_INTERACTION_IS_ONESELF, true);
+      infoIntent.putExtra(InteractionFlag.ACTION_INTERACTION_USER_ID,
+          InteractionConfig.getInstance().getUser().id);
+      infoIntent.putExtra(InteractionFlag.ACTION_INTERACTION_IS_ONESELF, true);
       v.getContext().startActivity(infoIntent);
     }
+  }
+
+  @Override
+  public void success(List<InteractionTypeData> list) {
+    mView.hideProgressBar();
+    mTypeList.addAll(list);
+    if (mTypeList.size() > 4) {
+      mTabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
+    } else {
+      mTabLayout.setTabMode(TabLayout.MODE_FIXED);
+    }
+    mAdapter.notifyDataSetChanged();
+  }
+
+  @Override
+  public void error(String error) {
+    mView.hideProgressBar();
+    mView.showMsg(error);
   }
 
   private class InteractionAdapter extends FragmentPagerAdapter {
@@ -94,17 +126,19 @@ public class InteractionPresentImpl implements InteractionPresent, OnClickListen
 
     @Override
     public Fragment getItem(int position) {
-      return InteractionContentFragment.newInstance(InteractionInfoPresentImpl.NORMAL);
+      return InteractionContentFragment.newInstance(
+          mTypeList.get(position).id,
+          InteractionInfoPresent.NORMAL);
     }
 
     @Override
     public int getCount() {
-      return TITLES.length;
+      return mTypeList.size();
     }
 
     @Override
     public CharSequence getPageTitle(int position) {
-      return TITLES[position];
+      return mTypeList.get(position).name;
     }
   }
 

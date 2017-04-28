@@ -4,11 +4,11 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -20,7 +20,6 @@ import android.widget.TextView;
 import com.baichang.android.circle.common.InteractionCommonActivity;
 import com.baichang.android.circle.common.InteractionConfig;
 import com.baichang.android.circle.common.InteractionFlag;
-import com.baichang.android.circle.entity.InteractionListData;
 import com.baichang.android.circle.present.Impl.InteractionDetailPresentImpl;
 import com.baichang.android.circle.present.InteractionDetailPresent;
 import com.baichang.android.circle.utils.AnimatorUtil;
@@ -53,6 +52,7 @@ public class InteractionDetailActivity extends InteractionCommonActivity
     btnShare = (ImageButton) findViewById(R.id.interaction_detail_btn_share);
     btnCollect = (ImageButton) findViewById(R.id.interaction_detail_btn_collect);
     btnPraise = (ImageButton) findViewById(R.id.interaction_detail_iv_praise);
+    mBack = (ImageButton) findViewById(R.id.back);
 
     btnShare.setOnClickListener(this);
     btnCollect.setOnClickListener(this);
@@ -60,17 +60,10 @@ public class InteractionDetailActivity extends InteractionCommonActivity
     init();
   }
 
-  @Override
-  public void back(View view) {
-    onBackPressed();
-  }
-
   private void init() {
     View mHeaderView = getLayoutInflater().inflate(
         R.layout.interaction_activity_detail_header_layout, null);
-    InteractionListData data = (InteractionListData) getIntent()
-        .getSerializableExtra(InteractionFlag.ACTION_INTERACTION_DATA);
-
+    int id = getIntent().getIntExtra(InteractionFlag.ACTION_INTERACTION_ID, -1);
     int textColor = InteractionConfig.getInstance().getTextFontColor();
     if (textColor != -1) {
       mRefresh.setColorSchemeResources(textColor);
@@ -82,9 +75,8 @@ public class InteractionDetailActivity extends InteractionCommonActivity
     rvList.setOnTouchListener(this);
 
     setConfig();
-    mPresent = new InteractionDetailPresentImpl(this);
+    mPresent = new InteractionDetailPresentImpl(id, this);
     mPresent.attachView(rvList, mHeaderView);
-    mPresent.bindData(data);
   }
 
   private void setConfig() {
@@ -169,6 +161,11 @@ public class InteractionDetailActivity extends InteractionCommonActivity
   }
 
   @Override
+  public void setCollectState(boolean isCollect) {
+    btnCollect.setSelected(isCollect);
+  }
+
+  @Override
   public void onRefresh() {
     mPresent.refresh();
   }
@@ -206,5 +203,10 @@ public class InteractionDetailActivity extends InteractionCommonActivity
         break;
     }
     return false;
+  }
+
+  @Override
+  public void back(View view) {
+    onBackPressed();
   }
 }

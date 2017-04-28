@@ -13,7 +13,7 @@ public interface InteractionPublishPresent extends IBasePresent {
 
   void attachView(RecyclerView recyclerView);
 
-  void publish(String title, String content, String modelId);
+  void publish(String title, String content);
 
   void onBindImages(ArrayList<BaseMedia> list);
 

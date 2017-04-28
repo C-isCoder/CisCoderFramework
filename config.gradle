@@ -36,6 +36,7 @@ ext {
             boxing               : 'com.bilibili:boxing-impl:0.4.0',
             picasso              : 'com.squareup.picasso:picasso:2.5.2',
             swipedelmenulayout   : 'com.github.mcxtzhang:SwipeDelMenuLayout:V1.2.5',
+            imageCompressed      : 'com.zxy.android:tiny:0.0.1',
     ]
 
     maven = [

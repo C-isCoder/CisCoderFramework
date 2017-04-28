@@ -1,19 +1,30 @@
 package com.baichang.android.circle.present.Impl;
 
+import android.content.DialogInterface;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.OnScrollListener;
+import android.text.TextUtils;
+import com.baichang.android.circle.R;
+import com.baichang.android.circle.common.InteractionConfig;
+import com.baichang.android.circle.common.InteractionFlag;
+import com.baichang.android.circle.common.InteractionFlag.Event;
+import com.baichang.android.circle.entity.InteractionUserData;
 import com.baichang.android.circle.model.Impl.InteractInteractionImpl;
+import com.baichang.android.circle.model.InteractInteraction;
+import com.baichang.android.circle.present.InteractionInfoPresent;
+import com.baichang.android.common.BaseEventData;
 import com.baichang.android.common.IBaseInteraction.BaseListener;
 import com.baichang.android.circle.common.InteractionAPIConstants;
 import com.baichang.android.circle.adapter.InteractionContentAdapter;
 import com.baichang.android.circle.adapter.InteractionContentAdapter.InteractionClickListener;
 import com.baichang.android.circle.adapter.InteractionContentAdapter.ItemOnClickListener;
 import com.baichang.android.circle.entity.InteractionListData;
-import com.baichang.android.circle.InteractInteraction;
 import com.baichang.android.circle.present.InteractionContentPresent;
 import com.baichang.android.circle.view.InteractionContentView;
+import com.baichang.android.utils.BCDialogUtil;
 import com.baichang.android.widget.recycleView.RecyclerViewUtils;
 import java.util.List;
+import org.greenrobot.eventbus.EventBus;
 
 /**
  * Created by iCong on 2017/3/20.
@@ -27,10 +38,17 @@ public class InteractionContentPresentImpl implements InteractionContentPresent,
   private InteractionContentAdapter mAdapter;
   private int nowPage = 1;
   private boolean isRefresh = true;
+  private int typeId;
+  private int modelType;
 
-  public InteractionContentPresentImpl(InteractionContentView view) {
+  public InteractionContentPresentImpl(InteractionContentView view, int mModelType) {
     mView = view;
     mInteraction = new InteractInteractionImpl();
+    typeId = view.getTypeId();
+    mAdapter = new InteractionContentAdapter(mModelType);
+    mAdapter.setItemOnClickListener(this);
+    mAdapter.setInteractionClickListener(this);
+    modelType = mModelType;
   }
 
   @Override
@@ -41,7 +59,18 @@ public class InteractionContentPresentImpl implements InteractionContentPresent,
   @Override
   public void onStart() {
     mView.showProgressBar();
-    mInteraction.getInteractionList(1, this);
+    if (typeId != -1) {
+      mInteraction.getInteractionList(typeId, 1, this);
+    } else {
+      switch (modelType) {
+        case InteractionInfoPresent.DYNAMIC: // 动态
+          mInteraction.getDynamics(mView.getUserId(), 1, this);
+          break;
+        case InteractionInfoPresent.COLLECT: // 收藏的动态
+          mInteraction.getCollect(1, this);
+          break;
+      }
+    }
   }
 
   @Override
@@ -49,7 +78,18 @@ public class InteractionContentPresentImpl implements InteractionContentPresent,
     mView.showProgressBar();
     isRefresh = true;
     nowPage = 1;
-    mInteraction.getInteractionList(1, this);
+    if (typeId != -1) {
+      mInteraction.getInteractionList(typeId, nowPage, this);
+    } else {
+      switch (modelType) {
+        case InteractionInfoPresent.DYNAMIC: // 动态
+          mInteraction.getDynamics(mView.getUserId(), nowPage, this);
+          break;
+        case InteractionInfoPresent.COLLECT: // 收藏的动态
+          mInteraction.getCollect(nowPage, this);
+          break;
+      }
+    }
   }
 
   @Override
@@ -62,17 +102,21 @@ public class InteractionContentPresentImpl implements InteractionContentPresent,
             mAdapter.getItemCount() % InteractionAPIConstants.PAGE_SIZE == 0) {
           isRefresh = false;
           nowPage++;
-          mInteraction.getInteractionList(nowPage, InteractionContentPresentImpl.this);
+          if (typeId != -1) {
+            mInteraction.getInteractionList(typeId, nowPage, InteractionContentPresentImpl.this);
+          } else {
+            switch (modelType) {
+              case InteractionInfoPresent.DYNAMIC: // 动态
+                mInteraction.getDynamics(mView.getUserId(), nowPage, InteractionContentPresentImpl.this);
+                break;
+              case InteractionInfoPresent.COLLECT: // 收藏的动态
+                mInteraction.getCollect(nowPage, InteractionContentPresentImpl.this);
+                break;
+            }
+          }
         }
       }
     });
-  }
-
-  @Override
-  public void setType(int type) {
-    mAdapter = new InteractionContentAdapter(type);
-    mAdapter.setItemOnClickListener(this);
-    mAdapter.setInteractionClickListener(this);
   }
 
   @Override
@@ -93,27 +137,73 @@ public class InteractionContentPresentImpl implements InteractionContentPresent,
 
   @Override
   public void onItemClick(InteractionListData data) {
-    mView.showMsg(String.valueOf(data.id));
     mView.gotoDetail(data);
   }
 
   @Override
   public void praise(InteractionListData data) {
-    mView.showMsg(String.valueOf(data.id));
+    // 点赞
   }
 
   @Override
   public void avatar(InteractionListData data) {
-    mView.gotoInfo(data.id == 1);
+    InteractionUserData userData = InteractionConfig.getInstance().getUser();
+    if (userData == null) {
+      return;
+    }
+    mView.gotoInfo(TextUtils.equals(data.hostUserId, userData.id), data.hostUserId);
   }
 
   @Override
-  public void delete(InteractionListData data) {
-    mView.showMsg("删除动态");
+  public void delete(final InteractionListData data) {
+    int colorRes = InteractionConfig.getInstance().getTextFontColor();
+    BCDialogUtil.showDialog(mView.getContext(), colorRes == -1 ? R.color.interaction_text_font : colorRes,
+        "删除", "确定删除吗？",
+        new DialogInterface.OnClickListener() {
+          @Override
+          public void onClick(DialogInterface dialog, int which) {
+            mAdapter.remove(data);
+            mInteraction.delete(data.id, deleteListener);
+            EventBus.getDefault().post(new BaseEventData(Event.INTERACTION_LIST_DELETE.ordinal()));
+          }
+        }, null);
   }
 
   @Override
-  public void cancel(InteractionListData data) {
-    mView.showMsg("取消收藏");
+  public void cancel(final InteractionListData data) {
+    int colorRes = InteractionConfig.getInstance().getTextFontColor();
+    BCDialogUtil.showDialog(mView.getContext(), colorRes == -1 ? R.color.interaction_text_font : colorRes,
+        "取消收藏", "确定取消收藏吗？",
+        new DialogInterface.OnClickListener() {
+          @Override
+          public void onClick(DialogInterface dialog, int which) {
+            mAdapter.remove(data);
+            mInteraction.collect(data.id, cancelCollectListener);
+            EventBus.getDefault().post(new BaseEventData(Event.INTERACTION_LIST_CANCEL_COLLECT.ordinal()));
+          }
+        }, null);
   }
+
+  private BaseListener<Boolean> deleteListener = new BaseListener<Boolean>() {
+    @Override
+    public void success(Boolean aBoolean) {
+      mView.showMsg("删除成功");
+    }
+
+    @Override
+    public void error(String error) {
+      mView.showMsg(error);
+    }
+  };
+  private BaseListener<Boolean> cancelCollectListener = new BaseListener<Boolean>() {
+    @Override
+    public void success(Boolean aBoolean) {
+      mView.showMsg("取消成功");
+    }
+
+    @Override
+    public void error(String error) {
+      mView.showMsg(error);
+    }
+  };
 }

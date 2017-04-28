@@ -12,10 +12,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import com.baichang.android.circle.common.InteractionCommonFragment;
-import com.baichang.android.circle.common.InteractionFlag;
 import com.baichang.android.circle.adapter.VerticalDividerDecoration;
+import com.baichang.android.circle.common.InteractionCommonFragment;
 import com.baichang.android.circle.common.InteractionConfig;
+import com.baichang.android.circle.common.InteractionFlag;
 import com.baichang.android.circle.entity.InteractionListData;
 import com.baichang.android.circle.present.Impl.InteractionContentPresentImpl;
 import com.baichang.android.circle.present.InteractionContentPresent;
@@ -32,19 +32,33 @@ public class InteractionContentFragment extends InteractionCommonFragment
   SwipeRefreshLayout mRefreshLayout;
   RecyclerView rvList;
 
-  private static final String ARG_PARAM = "param";
+  private static final String ARG_PARAM_MODEL = "arg_param_model";
+  private static final String ARG_PARAM_TYPE = "arg_param_type";
+  private static final String ARG_PARAM_USER_ID = "arg_param_user_id";
 
-  private int mType;
+  private int mModelType;
+  private int mTypeId = -1;
   private InteractionContentPresent mPresent;
+  private String mUserId;
 
   public InteractionContentFragment() {
     // Required empty public constructor
   }
 
-  public static InteractionContentFragment newInstance(int param) {
+  public static InteractionContentFragment newInstance(String userId, int modeType) {
     InteractionContentFragment fragment = new InteractionContentFragment();
     Bundle args = new Bundle();
-    args.putInt(ARG_PARAM, param);
+    args.putInt(ARG_PARAM_MODEL, modeType);
+    args.putString(ARG_PARAM_USER_ID, userId);
+    fragment.setArguments(args);
+    return fragment;
+  }
+
+  public static InteractionContentFragment newInstance(int typeId, int modeType) {
+    InteractionContentFragment fragment = new InteractionContentFragment();
+    Bundle args = new Bundle();
+    args.putInt(ARG_PARAM_TYPE, typeId);
+    args.putInt(ARG_PARAM_MODEL, modeType);
     fragment.setArguments(args);
     return fragment;
   }
@@ -53,7 +67,9 @@ public class InteractionContentFragment extends InteractionCommonFragment
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     if (getArguments() != null) {
-      mType = getArguments().getInt(ARG_PARAM);
+      mModelType = getArguments().getInt(ARG_PARAM_MODEL);
+      mTypeId = getArguments().getInt(ARG_PARAM_TYPE, -1);
+      mUserId = getArguments().getString(ARG_PARAM_USER_ID);
     }
   }
 
@@ -80,8 +96,7 @@ public class InteractionContentFragment extends InteractionCommonFragment
     rvList.addItemDecoration(
         new VerticalDividerDecoration(ContextCompat.getColor(getContext(),
             R.color.interaction_layout_background)));
-    mPresent = new InteractionContentPresentImpl(this);
-    mPresent.setType(mType);
+    mPresent = new InteractionContentPresentImpl(this, mModelType);
     mPresent.attachRecyclerView(rvList);
   }
 
@@ -120,14 +135,26 @@ public class InteractionContentFragment extends InteractionCommonFragment
   @Override
   public void gotoDetail(InteractionListData data) {
     Intent intent = new Intent(getActivity(), InteractionDetailActivity.class);
-    intent.putExtra(InteractionFlag.ACTION_INTERACTION_DATA, data);
+    intent.putExtra(InteractionFlag.ACTION_INTERACTION_ID, data.id);
     startActivity(intent);
   }
 
   @Override
-  public void gotoInfo(boolean isOneself) {
+  public void gotoInfo(boolean isOneself, String userId) {
     Intent intent = new Intent(getActivity(), InteractionInfoActivity.class);
     intent.putExtra(InteractionFlag.ACTION_INTERACTION_IS_ONESELF, isOneself);
+    intent.putExtra(InteractionFlag.ACTION_INTERACTION_USER_ID, userId);
     startActivity(intent);
   }
+
+  @Override
+  public int getTypeId() {
+    return mTypeId;
+  }
+
+  @Override
+  public String getUserId() {
+    return mUserId;
+  }
+
 }

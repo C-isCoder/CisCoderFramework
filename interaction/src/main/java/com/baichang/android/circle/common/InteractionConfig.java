@@ -1,5 +1,7 @@
 package com.baichang.android.circle.common;
 
+import com.baichang.android.circle.entity.InteractionUserData;
+
 /**
  * Created by iCong on 2017/4/1.
  */
@@ -20,7 +22,7 @@ public class InteractionConfig implements InteractionConfigContract {
   private static int mBackDrawableResRes = -1;
   private static boolean isNeedBusinessStore = false;
   private static String mTitleText = null;
-
+  private static InteractionUserData mUserData;
   private static InteractionListener listener = null;
 
   private InteractionConfig() {
@@ -105,10 +107,24 @@ public class InteractionConfig implements InteractionConfigContract {
   }
 
   @Override
-  public void businessStore() {
+  public void businessStore(String id) {
     if (listener != null) {
-      listener.businessClick();
+      listener.businessClick(id);
     }
+  }
+
+  @Override
+  public InteractionUserData getUser() {
+    if (mUserData == null) {
+      mUserData = InteractionDiskCache.getUser();
+    }
+    return mUserData;
+  }
+
+  @Override
+  public void setUser(InteractionUserData user) {
+    mUserData = user;
+    InteractionDiskCache.setUser(user);
   }
 
   public InteractionConfig setTextFontColor(int mTextFontColor) {
@@ -180,6 +196,6 @@ public class InteractionConfig implements InteractionConfigContract {
 
     void share(String title, String summary, String url);
 
-    void businessClick();
+    void businessClick(String id);
   }
 }

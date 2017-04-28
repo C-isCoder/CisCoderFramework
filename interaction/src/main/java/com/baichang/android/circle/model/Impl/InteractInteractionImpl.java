@@ -1,13 +1,33 @@
 package com.baichang.android.circle.model.Impl;
 
-import com.baichang.android.circle.entity.InteractionCommentData;
-import com.baichang.android.circle.entity.InteractionCommentListData;
+import android.app.Application;
+import com.baichang.android.circle.common.InteractionAPI;
+import com.baichang.android.circle.common.InteractionAPIWrapper;
+import com.baichang.android.circle.common.InteractionConfig;
+import com.baichang.android.circle.entity.InteractionCommentList;
+import com.baichang.android.circle.entity.InteractionCommentReplyList;
+import com.baichang.android.circle.entity.InteractionDetailData;
 import com.baichang.android.circle.entity.InteractionListData;
-import com.baichang.android.circle.entity.InteractionOtherReportData;
-import com.baichang.android.circle.InteractInteraction;
-import java.util.ArrayList;
-import java.util.Collections;
+import com.baichang.android.circle.entity.InteractionNumberData;
+import com.baichang.android.circle.entity.InteractionReplyData;
+import com.baichang.android.circle.entity.InteractionShareData;
+import com.baichang.android.circle.entity.InteractionTypeData;
+import com.baichang.android.circle.entity.InteractionUserData;
+import com.baichang.android.circle.entity.InteractionUserInfo;
+import com.baichang.android.circle.model.InteractInteraction;
+import com.baichang.android.request.HttpErrorListener;
+import com.baichang.android.request.HttpSubscriber;
+import com.baichang.android.request.HttpSuccessListener;
+import com.baichang.android.request.UploadUtils;
+import com.google.gson.Gson;
+import com.zxy.tiny.Tiny;
+import com.zxy.tiny.callback.FileBatchCallback;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import rx.Observable;
+import rx.functions.Func1;
 
 /**
  * Created by iCong on 2017/3/20.
@@ -20,188 +40,434 @@ public class InteractInteractionImpl implements InteractInteraction {
 
   }
 
-
+  // 互动列表
   @Override
-  public void getInteractionList(int nowPage, BaseListener<List<InteractionListData>> listener) {
-    List<InteractionListData> list = new ArrayList<>();
-    List<String> imageList = new ArrayList<>();
-    imageList.add("");
-    imageList.add("");
-    imageList.add("");
-    imageList.add("");
-    imageList.add("");
-    imageList.add("");
-    imageList.add("");
-    imageList.add("");
-    imageList.add("");
-    InteractionListData data = new InteractionListData();
-    data.id = 1;
-    data.name = "你的名字";
-    data.avatar = "";
-    data.commentCount = 1000;
-    data.praiseCount = 10101;
-    data.content = "据说这个是一个测试的内容，然后就没有然后了。随便写点什么东西凑一下字数。看看这个间距是不是合适。嗯，就是这样，没啥了。";
-    data.time = "2017-03-23";
-    data.title = "标题不知道会不会超过一行，超过一行咋办，结尾用....吧。";
-    data.images = imageList;
-    InteractionListData data1 = new InteractionListData();
-    data1.id = 2;
-    data1.name = "徐老二";
-    data1.avatar = "";
-    data1.commentCount = 1000;
-    data1.praiseCount = 10101;
-    data1.content = "据说这个是一个测试的内容，然后就没有然后了。随便写点什么东西凑一下字数。看看这个间距是不是合适。嗯，就是这样，没啥了。";
-    data1.time = "2017-03-23";
-    data1.title = "标题不知道会不会超过一行，超过一行咋办，结尾用....吧。";
-    data1.images = imageList;
-    InteractionListData data2 = new InteractionListData();
-    data2.id = 3;
-    data2.name = "who am i";
-    data2.avatar = "";
-    data2.commentCount = 1000;
-    data2.praiseCount = 10101;
-    data2.content = "据说这个是一个测试的内容，然后就没有然后了。随便写点什么东西凑一下字数。看看这个间距是不是合适。嗯，就是这样，没啥了。";
-    data2.time = "2017-03-23";
-    data2.title = "标题不知道会不会超过一行，超过一行咋办，结尾用....吧。";
-    data2.images = imageList;
-    InteractionListData data3 = new InteractionListData();
-    data3.id = 4;
-    data3.name = "where are you";
-    data3.avatar = "";
-    data3.commentCount = 1000;
-    data3.praiseCount = 10101;
-    data3.content = "据说这个是一个测试的内容，然后就没有然后了。随便写点什么东西凑一下字数。看看这个间距是不是合适。嗯，就是这样，没啥了。";
-    data3.time = "2017-03-23";
-    data3.title = "标题不知道会不会超过一行，超过一行咋办，结尾用....吧。";
-    data3.images = imageList;
-    InteractionListData data4 = new InteractionListData();
-    data4.id = 5;
-    data4.name = "coding";
-    data4.avatar = "";
-    data4.commentCount = 1000;
-    data4.praiseCount = 10101;
-    data4.content = "据说这个是一个测试的内容，然后就没有然后了。随便写点什么东西凑一下字数。看看这个间距是不是合适。嗯，就是这样，没啥了。";
-    data4.time = "2017-03-23";
-    data4.title = "标题不知道会不会超过一行，超过一行咋办，结尾用....吧。";
-    data4.images = imageList;
-    list.add(data);
-    list.add(data1);
-    list.add(data2);
-    list.add(data3);
-    list.add(data4);
-    listener.success(list);
+  public void getInteractionList(int typeId, int nowPage, final BaseListener<List<InteractionListData>> listener) {
+    Map<String, String> map = new HashMap<>();
+    map.put("typeId", String.valueOf(typeId));
+    map.put("nowPage", String.valueOf(nowPage));
+    InteractionAPIWrapper.getInstance().getTrendsList(map)
+        .compose(HttpSubscriber.<List<InteractionListData>>applySchedulers())
+        .subscribe(new HttpSubscriber<>(new HttpSuccessListener<List<InteractionListData>>() {
+          @Override
+          public void success(List<InteractionListData> interactionListData) {
+            listener.success(interactionListData);
+          }
+        }, new HttpErrorListener() {
+          @Override
+          public void error(Throwable t) {
+            listener.error(t.getMessage());
+          }
+        }));
+  }
+
+  // 互动详情
+  @Override
+  public void getInteractionDetail(int id, final BaseListener<InteractionDetailData> listener) {
+    InteractionUserData user = InteractionConfig.getInstance().getUser();
+    if (user == null) {
+      return;
+    }
+    Map<String, String> map = new HashMap<>();
+    map.put("id", String.valueOf(id));
+    map.put("userId", user.id);
+    InteractionAPIWrapper.getInstance()
+        .getTrendsDetail(map)
+        .compose(HttpSubscriber.<InteractionDetailData>applySchedulers())
+        .subscribe(new HttpSubscriber<>(
+            new HttpSuccessListener<InteractionDetailData>() {
+              @Override
+              public void success(InteractionDetailData data) {
+                listener.success(data);
+              }
+            }, new HttpErrorListener() {
+          @Override
+          public void error(Throwable t) {
+            listener.error(t.getMessage());
+          }
+        }));
+  }
+
+  // 发表互动
+  @Override
+  public void publishImage(Application application, final String title, final String content,
+      final String modelId, final List<String> paths, final BaseListener<Boolean> listener) {
+    final InteractionUserData user = InteractionConfig.getInstance().getUser();
+    if (user == null) {
+      return;
+    }
+    String[] imageArray = new String[paths.size()];
+    Tiny.getInstance().init(application);
+    Tiny.FileCompressOptions options = new Tiny.FileCompressOptions();
+    Tiny.getInstance().source(paths.toArray(imageArray)).batchAsFile().withOptions(options).batchCompress(
+        new FileBatchCallback() {
+          @Override
+          public void callback(boolean isSuccess, String[] outfile) {
+            final Map<String, String> map = new HashMap<>();
+            map.put("title", title);
+            map.put("content", content);
+            map.put("typeId", modelId);
+            map.put("hostName", user.name);
+            map.put("hostIcon", user.avatar);
+            map.put("address", user.address);
+            map.put("userId", user.id);
+            InteractionAPI api = new InteractionAPIWrapper();
+            api.uploads(UploadUtils.getMultipartBodysForPath(Arrays.asList(outfile)))
+                .compose(HttpSubscriber.<List<String>>applySchedulers())
+                .flatMap(new Func1<List<String>, Observable<Boolean>>() {
+                  @Override
+                  public Observable<Boolean> call(List<String> list) {
+                    map.put("images", new Gson().toJson(list));
+                    return InteractionAPIWrapper.getInstance().publish(map)
+                        .compose(HttpSubscriber.<Boolean>applySchedulers());
+                  }
+                })
+                .subscribe(new HttpSubscriber<>(new HttpSuccessListener<Boolean>() {
+                  @Override
+                  public void success(Boolean aBoolean) {
+                    listener.success(aBoolean);
+                  }
+                }, new HttpErrorListener() {
+                  @Override
+                  public void error(Throwable t) {
+                    listener.error(t.getMessage());
+                  }
+                }));
+          }
+        });
+  }
+
+  // 发表互动 不带图片
+  @Override
+  public void publishNoImage(String title, String content, String modelId, final BaseListener<Boolean> listener) {
+    InteractionUserData user = InteractionConfig.getInstance().getUser();
+    if (user == null) {
+      return;
+    }
+    final Map<String, String> map = new HashMap<>();
+    map.put("title", title);
+    map.put("content", content);
+    map.put("typeId", modelId);
+    map.put("hostName", user.name);
+    map.put("hostIcon", user.avatar);
+    map.put("address", user.address);
+    map.put("id", user.id);
+    InteractionAPIWrapper.getInstance()
+        .publish(map)
+        .compose(HttpSubscriber.<Boolean>applySchedulers())
+        .subscribe(new HttpSubscriber<>(new HttpSuccessListener<Boolean>() {
+          @Override
+          public void success(Boolean aBoolean) {
+            listener.success(aBoolean);
+          }
+        }, new HttpErrorListener() {
+          @Override
+          public void error(Throwable t) {
+            listener.error(t.getMessage());
+          }
+        }));
+  }
+
+  // 回复的互动
+  @Override
+  public void getReplay(int nowPage, String userId, final BaseListener<List<InteractionReplyData>> listener) {
+    Map<String, String> map = new HashMap<>();
+    map.put("userId", userId);
+    map.put("nowPage", String.valueOf(nowPage));
+    InteractionAPIWrapper.getInstance()
+        .getReply(map)
+        .compose(HttpSubscriber.<List<InteractionReplyData>>applySchedulers())
+        .subscribe(new HttpSubscriber<>(new HttpSuccessListener<List<InteractionReplyData>>() {
+          @Override
+          public void success(List<InteractionReplyData> list) {
+            listener.success(list);
+          }
+        }, new HttpErrorListener() {
+          @Override
+          public void error(Throwable t) {
+            listener.error(t.getMessage());
+          }
+        }));
+  }
+
+  // 互动类别
+  @Override
+  public void getInteractionTypeList(final BaseListener<List<InteractionTypeData>> listener) {
+    InteractionAPIWrapper.getInstance()
+        .getTrendsType()
+        .compose(HttpSubscriber.<List<InteractionTypeData>>applySchedulers())
+        .subscribe(new HttpSubscriber<>(new HttpSuccessListener<List<InteractionTypeData>>() {
+          @Override
+          public void success(List<InteractionTypeData> list) {
+            listener.success(list);
+          }
+        }, new HttpErrorListener() {
+          @Override
+          public void error(Throwable t) {
+            listener.error(t.getMessage());
+          }
+        }));
+  }
+
+  // 赞/取消赞
+  @Override
+  public void praise(int id, final BaseListener<Boolean> listener) {
+    InteractionUserData user = InteractionConfig.getInstance().getUser();
+    if (user == null) {
+      return;
+    }
+    Map<String, String> map = new HashMap<>();
+    map.put("trendsId", String.valueOf(id));
+    map.put("userId", user.id);
+    InteractionAPIWrapper.getInstance()
+        .praise(map)
+        .compose(HttpSubscriber.<Boolean>applySchedulers())
+        .subscribe(new HttpSubscriber<>(new HttpSuccessListener<Boolean>() {
+          @Override
+          public void success(Boolean aBoolean) {
+            listener.success(aBoolean);
+          }
+        }, new HttpErrorListener() {
+          @Override
+          public void error(Throwable t) {
+            listener.error(t.getMessage());
+          }
+        }));
+  }
+
+  // 收藏/取消收藏
+  @Override
+  public void collect(int id, final BaseListener<Boolean> listener) {
+    InteractionUserData user = InteractionConfig.getInstance().getUser();
+    if (user == null) {
+      return;
+    }
+    Map<String, String> map = new HashMap<>();
+    map.put("trendsId", String.valueOf(id));
+    map.put("userId", user.id);
+    InteractionAPIWrapper.getInstance()
+        .collect(map)
+        .compose(HttpSubscriber.<Boolean>applySchedulers())
+        .subscribe(new HttpSubscriber<>(new HttpSuccessListener<Boolean>() {
+          @Override
+          public void success(Boolean aBoolean) {
+            listener.success(aBoolean);
+          }
+        }, new HttpErrorListener() {
+          @Override
+          public void error(Throwable t) {
+            listener.error(t.getMessage());
+          }
+        }));
+  }
+
+  // 获取动态
+  @Override
+  public void getDynamics(String userId, int nowPage, final BaseListener<List<InteractionListData>> listener) {
+    Map<String, String> map = new HashMap<>();
+    map.put("userId", userId);
+    map.put("nowPage", String.valueOf(nowPage));
+    InteractionAPIWrapper.getInstance()
+        .getDynamics(map)
+        .compose(HttpSubscriber.<List<InteractionListData>>applySchedulers())
+        .subscribe(new HttpSubscriber<>(new HttpSuccessListener<List<InteractionListData>>() {
+          @Override
+          public void success(List<InteractionListData> list) {
+            listener.success(list);
+          }
+        }, new HttpErrorListener() {
+          @Override
+          public void error(Throwable t) {
+            listener.error(t.getMessage());
+          }
+        }));
   }
 
   @Override
-  public void getInteractionDetail(int id, BaseListener<List<InteractionCommentData>> listener) {
-    List<InteractionCommentData> list = new ArrayList<>();
-    InteractionCommentListData data1 = new InteractionCommentListData();
-    InteractionCommentListData data2 = new InteractionCommentListData();
-    InteractionCommentListData data3 = new InteractionCommentListData();
-    InteractionCommentListData data4 = new InteractionCommentListData();
-    data1.id = 1;
-    data1.content = "楼主你好";
-    data1.reportName = "路人甲";
-    data1.owner = "你的名字";
-
-    data2.id = 2;
-    data2.owner = "你的名字";
-    data2.content = "楼主发话了";
-    data2.reportName = "";
-
-    data3.id = 3;
-    data3.owner = "你的名字";
-    data3.reportName = "路人乙";
-    data3.content = "楼主你多大了";
-
-    data4.id = 4;
-    data4.owner = "你的名字";
-    data4.reportName = "";
-    data4.content = "楼主又说话了";
-
-    InteractionCommentData commentData = new InteractionCommentData();
-    commentData.avatar = "";
-    commentData.comments = new ArrayList<>();
-    Collections.addAll(commentData.comments, data1, data2, data3, data4);
-    commentData.time = "2017-03-24 09:28:32";
-    commentData.content = "互动的内容";
-    commentData.id = 1;
-    commentData.name = "你的名字";
-    list.add(commentData);
-
-    InteractionCommentListData data5 = new InteractionCommentListData();
-    InteractionCommentListData data6 = new InteractionCommentListData();
-    InteractionCommentListData data7 = new InteractionCommentListData();
-    InteractionCommentListData data8 = new InteractionCommentListData();
-    data5.id = 1;
-    data5.content = "楼主你好，你吃饭了么";
-    data5.reportName = "路人丙";
-    data5.owner = "她的名字";
-
-    data6.id = 2;
-    data6.owner = "她的名字";
-    data6.content = "楼主你是谁？";
-    data6.reportName = "";
-
-    data7.id = 3;
-    data7.owner = "她的名字";
-    data7.reportName = "路人11";
-    data7.content = "楼主是个SB";
-
-    data8.id = 4;
-    data8.owner = "她的名字";
-    data8.reportName = "";
-    data8.content = "楼主又说话了";
-
-    InteractionCommentData commentData1 = new InteractionCommentData();
-    commentData1.avatar = "";
-    commentData1.comments = new ArrayList<>();
-    Collections.addAll(commentData1.comments, data5, data6, data7, data8);
-    commentData1.time = "2017-03-24 09:28:32";
-    commentData1.content = "这是第二条内容加个电话试试17686616852";
-    commentData1.id = 1;
-    commentData1.name = "她的名字";
-    list.add(commentData1);
-
-    InteractionCommentListData data9 = new InteractionCommentListData();
-    InteractionCommentListData data0 = new InteractionCommentListData();
-    data9.id = 1;
-    data9.content = "楼主你好，这个狗狗多打了。";
-    data9.reportName = "路人丙";
-    data9.owner = "她的名字";
-
-    data0.id = 2;
-    data0.owner = "狗的名字";
-    data0.content = "哈士奇二哈吼吼吼吼吼吼吼吼吼哈哈哈哈哈。弄个电话试试";
-    data0.reportName = "";
-
-    InteractionCommentData commentData2 = new InteractionCommentData();
-    commentData2.avatar = "";
-    commentData2.comments = new ArrayList<>();
-    Collections.addAll(commentData2.comments, data0, data9);
-    commentData2.time = "2017-03-24 09:28:32";
-    commentData2.content = "这个该是第三条了肌肤姐夫姐姐发几个卡换地方回家那绝对是个";
-    commentData2.id = 1;
-    commentData2.name = "狗的名字";
-    list.add(commentData2);
-
-    listener.success(list);
+  public void getCollect(int nowPage, final BaseListener<List<InteractionListData>> listener) {
+    InteractionUserData user = InteractionConfig.getInstance().getUser();
+    if (user == null) {
+      return;
+    }
+    Map<String, String> map = new HashMap<>();
+    map.put("userId", user.id);
+    map.put("nowPage", String.valueOf(nowPage));
+    InteractionAPIWrapper.getInstance()
+        .getCollect(map)
+        .compose(HttpSubscriber.<List<InteractionListData>>applySchedulers())
+        .subscribe(new HttpSubscriber<>(new HttpSuccessListener<List<InteractionListData>>() {
+          @Override
+          public void success(List<InteractionListData> list) {
+            listener.success(list);
+          }
+        }, new HttpErrorListener() {
+          @Override
+          public void error(Throwable t) {
+            listener.error(t.getMessage());
+          }
+        }));
   }
 
+  // 删除互动
   @Override
-  public void publish(String title, String content, String modelId, List<String> paths,
-      BaseListener<Boolean> listener) {
-    listener.success(true);
+  public void delete(int id, final BaseListener<Boolean> listener) {
+    Map<String, String> map = new HashMap<>();
+    map.put("id", String.valueOf(id));
+    InteractionAPIWrapper.getInstance()
+        .delete(map)
+        .compose(HttpSubscriber.<Boolean>applySchedulers())
+        .subscribe(new HttpSubscriber<>(new HttpSuccessListener<Boolean>() {
+          @Override
+          public void success(Boolean aBoolean) {
+            listener.success(aBoolean);
+          }
+        }, new HttpErrorListener() {
+          @Override
+          public void error(Throwable t) {
+            listener.error(t.getMessage());
+          }
+        }));
   }
 
+  // 动态、回复、收藏数量
   @Override
-  public void getMeInteraction(int nowPage, BaseListener<List<InteractionOtherReportData>> listener) {
-    InteractionOtherReportData data = new InteractionOtherReportData();
-    List<InteractionOtherReportData> list = new ArrayList<>();
-    list.add(data);
-    list.add(data);
-    list.add(data);
-    list.add(data);
-    listener.success(list);
+  public void getNumbers(String userId, final BaseListener<InteractionNumberData> listener) {
+    Map<String, String> map = new HashMap<>();
+    map.put("userId", userId);
+    InteractionAPIWrapper.getInstance()
+        .getNumbers(map)
+        .compose(HttpSubscriber.<InteractionNumberData>applySchedulers())
+        .subscribe(new HttpSubscriber<>(new HttpSuccessListener<InteractionNumberData>() {
+          @Override
+          public void success(InteractionNumberData data) {
+            listener.success(data);
+          }
+        }, new HttpErrorListener() {
+          @Override
+          public void error(Throwable t) {
+            listener.error(t.getMessage());
+          }
+        }));
+  }
+
+  // 举报
+  @Override
+  public void report(int id, final BaseListener<Boolean> listener) {
+    InteractionUserData user = InteractionConfig.getInstance().getUser();
+    if (user == null) {
+      return;
+    }
+    Map<String, String> map = new HashMap<>();
+    map.put("trendsId", String.valueOf(id));
+    map.put("userId", user.id);
+    InteractionAPIWrapper.getInstance()
+        .report(map)
+        .compose(HttpSubscriber.<Boolean>applySchedulers())
+        .subscribe(new HttpSubscriber<>(new HttpSuccessListener<Boolean>() {
+          @Override
+          public void success(Boolean aBoolean) {
+            listener.success(aBoolean);
+          }
+        }, new HttpErrorListener() {
+          @Override
+          public void error(Throwable t) {
+            listener.error(t.getMessage());
+          }
+        }));
+  }
+
+  // 互动评论
+  @Override
+  public void comment(int trendsId, InteractionCommentList commentData, final BaseListener<Boolean> listener) {
+    Map<String, String> map = new HashMap<>();
+    map.put("trendsId", String.valueOf(trendsId));
+    map.put("commentUserId", commentData.userId);
+    map.put("commentName", commentData.name);
+    map.put("commentIcon", commentData.avatar);
+    map.put("commentContent", commentData.content);
+    InteractionAPIWrapper.getInstance()
+        .comment(map)
+        .compose(HttpSubscriber.<Boolean>applySchedulers())
+        .subscribe(new HttpSubscriber<>(new HttpSuccessListener<Boolean>() {
+          @Override
+          public void success(Boolean aBoolean) {
+            listener.success(aBoolean);
+          }
+        }, new HttpErrorListener() {
+          @Override
+          public void error(Throwable t) {
+            listener.error(t.getMessage());
+          }
+        }));
+  }
+
+  // 互动回复
+  @Override
+  public void reply(InteractionCommentReplyList replyData, final BaseListener<Boolean> listener) {
+    Map<String, String> map = new HashMap<>();
+    map.put("trendsId", String.valueOf(replyData.trendsId));
+    map.put("commentId", String.valueOf(replyData.commentId));
+    map.put("commentUserId", replyData.commentUserId);
+    map.put("commentName", replyData.commentName);
+    map.put("replayContent", replyData.replayContent);
+    map.put("replayName", replyData.replayName);
+    map.put("replayUserId", replyData.replayUserId);
+    map.put("replayId", replyData.id);
+    InteractionAPIWrapper.getInstance()
+        .reply(map)
+        .compose(HttpSubscriber.<Boolean>applySchedulers())
+        .subscribe(new HttpSubscriber<>(new HttpSuccessListener<Boolean>() {
+          @Override
+          public void success(Boolean aBoolean) {
+            listener.success(aBoolean);
+          }
+        }, new HttpErrorListener() {
+          @Override
+          public void error(Throwable t) {
+            listener.error(t.getMessage());
+          }
+        }));
+  }
+
+  // 获取用户信息
+  @Override
+  public void getUserInfo(String userId, final BaseListener<InteractionUserInfo> listener) {
+    Map<String, String> map = new HashMap<>();
+    map.put("userId", userId);
+    InteractionAPIWrapper.getInstance()
+        .getUserInfo(map)
+        .compose(HttpSubscriber.<InteractionUserInfo>applySchedulers())
+        .subscribe(new HttpSubscriber<>(new HttpSuccessListener<InteractionUserInfo>() {
+          @Override
+          public void success(InteractionUserInfo info) {
+            listener.success(info);
+          }
+        }, new HttpErrorListener() {
+          @Override
+          public void error(Throwable t) {
+            listener.error(t.getMessage());
+          }
+        }));
+  }
+
+  // 获取分享连接
+  @Override
+  public void getShareLink(String id, final BaseListener<String> listener) {
+    Map<String, String> map = new HashMap<>();
+    map.put("trendsId", id);
+    InteractionAPIWrapper.getInstance()
+        .getShareLink(map)
+        .compose(HttpSubscriber.<InteractionShareData>applySchedulers())
+        .subscribe(new HttpSubscriber<>(new HttpSuccessListener<InteractionShareData>() {
+          @Override
+          public void success(InteractionShareData interactionShareData) {
+            listener.success(interactionShareData.link);
+          }
+        }, new HttpErrorListener() {
+          @Override
+          public void error(Throwable t) {
+            listener.error(t.getMessage());
+          }
+        }));
   }
 }

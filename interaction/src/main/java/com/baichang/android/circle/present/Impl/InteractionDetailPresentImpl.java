@@ -1,9 +1,8 @@
 package com.baichang.android.circle.present.Impl;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
+import android.content.DialogInterface;
 import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
@@ -12,15 +11,18 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.TextView;
-import com.baichang.android.circle.InteractInteraction;
 import com.baichang.android.circle.R;
 import com.baichang.android.circle.adapter.InteractionDetailAdapter;
+import com.baichang.android.circle.adapter.InteractionDetailAdapter.ParentContentOnClickListener;
 import com.baichang.android.circle.common.InteractionConfig;
 import com.baichang.android.circle.common.InteractionConfig.InteractionListener;
-import com.baichang.android.circle.entity.InteractionCommentData;
-import com.baichang.android.circle.entity.InteractionCommentListData;
-import com.baichang.android.circle.entity.InteractionListData;
+import com.baichang.android.circle.common.InteractionFlag.Event;
+import com.baichang.android.circle.entity.InteractionCommentList;
+import com.baichang.android.circle.entity.InteractionCommentReplyList;
+import com.baichang.android.circle.entity.InteractionDetailData;
+import com.baichang.android.circle.entity.InteractionUserData;
 import com.baichang.android.circle.model.Impl.InteractInteractionImpl;
+import com.baichang.android.circle.model.InteractInteraction;
 import com.baichang.android.circle.present.InteractionDetailPresent;
 import com.baichang.android.circle.utils.AnimatorUtil;
 import com.baichang.android.circle.view.InteractionDetailView;
@@ -28,21 +30,29 @@ import com.baichang.android.circle.widget.CommentTextView.CommentOnClickListener
 import com.baichang.android.circle.widget.ForceClickImageView;
 import com.baichang.android.circle.widget.photocontents.PhotoContents;
 import com.baichang.android.circle.widget.photocontents.adapter.PhotoContentsBaseAdapter;
+import com.baichang.android.common.BaseEventData;
 import com.baichang.android.common.IBaseInteraction.BaseListener;
 import com.baichang.android.imageloader.ImageLoader;
+import com.baichang.android.utils.BCDialogUtil;
+import com.baichang.android.utils.BCToolsUtil;
 import com.baichang.android.widget.circleImageView.CircleImageView;
 import java.util.ArrayList;
 import java.util.List;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 /**
  * Created by iCong on 2017/3/21.
  */
 
-public class InteractionDetailPresentImpl implements InteractionDetailPresent,
-    BaseListener<List<InteractionCommentData>>, OnClickListener, CommentOnClickListener {
+public class InteractionDetailPresentImpl implements
+    InteractionDetailPresent, OnClickListener, CommentOnClickListener,
+    ParentContentOnClickListener {
 
-  private static final int REPORT_TYPE = 132;
-  private static final int OWNER_TYPE = 641;
+  private static final int REPLY_TYPE = 132;
+  private static final int CHILD_COMMENT_TYPE = 641;
+  private static final int PARENT_COMMENT_TYPE = 642;
   private static final int THEM_TYPE = 643;
   private InteractionDetailView mView;
   private InteractInteraction mInteraction;
@@ -54,28 +64,33 @@ public class InteractionDetailPresentImpl implements InteractionDetailPresent,
   private ImageView ivComment;
   private TextView tvCount;
   private CircleImageView ivAvatar;
-  private PhotoContentsBaseAdapter mPhotoAdapter;
-  private List<String> mPhotoList = new ArrayList<>();
+  private PhotoContentsAdapter mPhotoAdapter;
   private InteractionDetailAdapter mAdapter;
-  private InteractionCommentListData mCommentListData;
+  private InteractionCommentReplyList mCommentListData;
   private int currentType = THEM_TYPE;
+  private int trendsId;
+  private int mCommentCount;
+  private String commentId;
 
-  public InteractionDetailPresentImpl(InteractionDetailView view) {
+  public InteractionDetailPresentImpl(int id, InteractionDetailView view) {
+    this.trendsId = id;
     mView = view;
     mInteraction = new InteractInteractionImpl();
     mPhotoAdapter = new PhotoContentsAdapter(mView.getContext());
-    mAdapter = new InteractionDetailAdapter(this);
+    mAdapter = new InteractionDetailAdapter(this, this);
+    EventBus.getDefault().register(this);
   }
 
   @Override
   public void onDestroy() {
     mView = null;
+    EventBus.getDefault().unregister(this);
   }
 
   @Override
   public void onStart() {
     mView.showProgressBar();
-    mInteraction.getInteractionDetail(1, this);
+    mInteraction.getInteractionDetail(trendsId, detailListener);
   }
 
   @Override
@@ -105,24 +120,9 @@ public class InteractionDetailPresentImpl implements InteractionDetailPresent,
   }
 
   @Override
-  public void bindData(InteractionListData data) {
-    if (data == null) {
-      return;
-    }
-    mPhotoList.addAll(data.images);
-    mPhotoAdapter.notifyDataChanged();
-    tvName.setText(data.name);
-    tvTime.setText(data.time);
-    tvTitle.setText(data.title);
-    tvContent.setText(data.content);
-    //TODO 默认图片
-    ImageLoader.loadImageError(mView.getContext(), data.avatar, R.mipmap.interaction_icon_default, ivAvatar);
-  }
-
-  @Override
   public void refresh() {
     mView.showProgressBar();
-    mInteraction.getInteractionDetail(1, this);
+    mInteraction.getInteractionDetail(trendsId, detailListener);
   }
 
   @Override
@@ -131,129 +131,259 @@ public class InteractionDetailPresentImpl implements InteractionDetailPresent,
       mView.showMsg("请输入回复内容");
       return;
     }
-    if (mCommentListData != null) {
-      switch (currentType) {
-        case REPORT_TYPE:
-          InteractionCommentListData reportData = new InteractionCommentListData();
-          reportData.owner = mCommentListData.reportName;
-          reportData.reportName = "user_name";
-          reportData.content = content;
-          addCommentChild(reportData);
-          break;
-        case OWNER_TYPE:
-          InteractionCommentListData ownerData = new InteractionCommentListData();
-          ownerData.owner = mCommentListData.owner;
-          ownerData.reportName = "user_name";
-          ownerData.content = content;
-          addCommentChild(ownerData);
-          break;
-      }
-    } else {
-      InteractionCommentData data = new InteractionCommentData();
-      data.content = content;
-      data.avatar = "user_avatar";
-      data.name = "user_name";
-      data.time = "2017-03-23";
-      addComment(data);
+    InteractionUserData user = InteractionConfig.getInstance().getUser();
+    if (user == null) {
+      return;
     }
+    switch (currentType) {
+      case REPLY_TYPE:
+        if (mCommentListData == null) {
+          break;
+        }
+        InteractionCommentReplyList replyData = new InteractionCommentReplyList();
+        replyData.replayName = user.name;
+        replyData.replayContent = content;
+        replyData.replayUserId = user.id;
+        replyData.trendsId = String.valueOf(trendsId);
+        replyData.commentId = mCommentListData.commentId;
+        replyData.commentUserId = mCommentListData.commentUserId;
+        replyData.commentName = mCommentListData.commentName;
+        addCommentChild(replyData);
+        break;
+      case CHILD_COMMENT_TYPE:
+        InteractionCommentReplyList ownerData = new InteractionCommentReplyList();
+        ownerData.replayContent = content;
+        ownerData.commentName = user.name;
+        ownerData.commentUserId = user.id;
+        ownerData.trendsId = String.valueOf(trendsId);
+        ownerData.commentId = commentId;
+        addCommentChild(ownerData);
+        break;
+      case PARENT_COMMENT_TYPE:
+        InteractionCommentReplyList parentComment = new InteractionCommentReplyList();
+        parentComment.replayContent = content;
+        parentComment.commentName = user.name;
+        parentComment.commentUserId = user.id;
+        parentComment.trendsId = String.valueOf(trendsId);
+        parentComment.commentId = commentId;
+        addCommentChild(parentComment);
+        break;
+      case THEM_TYPE:
+        InteractionCommentList data = new InteractionCommentList();
+        data.content = content;
+        data.avatar = user.avatar;
+        data.name = user.name;
+        data.time = BCToolsUtil.getCurrentTime();
+        data.userId = user.id;
+        data.trendsId = trendsId;
+        addComment(data);
+        break;
+    }
+
   }
 
   @Override
   public void share() {
-    //TODO share
-    InteractionListener listener = InteractionConfig.getInstance().getListener();
+    final InteractionListener listener = InteractionConfig.getInstance().getListener();
     if (listener != null) {
-      listener.share("123", "jf", "ifjj");
+      mInteraction.getShareLink(String.valueOf(trendsId), new BaseListener<String>() {
+        @Override
+        public void success(String url) {
+          listener.share(tvTitle.getText().toString(),
+              tvContent.getText().toString(), url);
+        }
+
+        @Override
+        public void error(String error) {
+          mView.showMsg(error);
+        }
+      });
     }
   }
 
   @Override
   public void collect() {
-    //TODO collect
+    mInteraction.collect(trendsId, collectListener);
   }
 
   @Override
   public void praise() {
-    //TODO praise
-    mView.showMsg("赞一个");
+    mInteraction.praise(trendsId, praiseListener);
   }
 
   // 回复某人的评论
-  private void addCommentChild(InteractionCommentListData data) {
+  private void addCommentChild(InteractionCommentReplyList data) {
     int index = mAdapter.addChildComment(data);
     mView.scrollToPosition(index);
     mView.hideInputKeyBord();
-    mView.showMsg("回复成功");
     mView.setReportHint("回复");
     mCommentListData = null;
+    mInteraction.reply(data, replyListener);
   }
+
+  private BaseListener<Boolean> replyListener = new BaseListener<Boolean>() {
+    @Override
+    public void success(Boolean aBoolean) {
+      mView.showMsg("回复成功");
+    }
+
+    @Override
+    public void error(String error) {
+      mView.showMsg(error);
+    }
+  };
 
   // 评论该帖子
-  private void addComment(InteractionCommentData data) {
+  private void addComment(InteractionCommentList data) {
     mAdapter.addComment(data);
     mView.hideInputKeyBord();
-    mView.showMsg("回复成功");
     mView.setReportHint("回复");
     mView.scrollToPosition(1);// 滚动到顶部
+    mInteraction.comment(trendsId, data, commentListener);
+    // 评论数量 +1
+    EventBus.getDefault().post(new BaseEventData(Event.INTERACTION_COMMENT_COUNT_ADD.ordinal()));
   }
 
-  @Override
-  public void success(List<InteractionCommentData> list) {
-    mView.hideProgressBar();
-    mAdapter.setData(list);
-    tvCount.setText("评论（" + list.size() + "）");
-  }
+  private BaseListener<Boolean> commentListener = new BaseListener<Boolean>() {
+    @Override
+    public void success(Boolean aBoolean) {
+      mView.showMsg("评论成功");
+    }
 
-  @Override
-  public void error(String error) {
-    mView.hideProgressBar();
-    mView.showMsg(error);
-  }
+    @Override
+    public void error(String error) {
+      mView.showMsg(error);
+    }
+  };
 
   @Override
   public void onClick(View v) {
     int id = v.getId();
     if (id == R.id.interaction_detail_tv_report) {
-      mView.showMsg("举报");
+      int colorRes = InteractionConfig.getInstance().getTextFontColor();
+      BCDialogUtil.showDialog(v.getContext(), colorRes == -1 ? R.color.interaction_text_font : colorRes,
+          "举报", "确定举报该条内容吗？",
+          new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+              mInteraction.report(InteractionDetailPresentImpl.this.trendsId, reportListener);
+            }
+          }, null);
     } else if (id == ivComment.getId()) {
       AnimatorUtil.scale(v);
-      mView.setReportHint(" 回复 ");
+      mView.setReportHint(" 评论 ");
       mView.showInputKeyBord();
       currentType = THEM_TYPE;
     }
   }
 
   @Override
-  public void ownerOnClick(InteractionCommentListData data) {
-    mView.setReportHint(" 回复 " + data.owner);
+  public void commentOnClick(String commentId) {
+    this.commentId = commentId;
+    mView.setReportHint(" 评论 ");
     mView.showInputKeyBord();
-    mCommentListData = data;
-    currentType = OWNER_TYPE;
+    currentType = CHILD_COMMENT_TYPE;
   }
 
   @Override
-  public void reportOnClick(InteractionCommentListData data) {
-    mView.setReportHint(" 回复 " + data.reportName);
+  public void replyOnClick(InteractionCommentReplyList data) {
+    mView.setReportHint(" 回复 " + data.replayName);
     mView.showInputKeyBord();
     mCommentListData = data;
-    currentType = REPORT_TYPE;
+    currentType = REPLY_TYPE;
   }
 
+  // 父内容 点击
   @Override
-  public void contentOnClick(InteractionCommentListData data) {
-    mView.setReportHint(" 回复 " + data.owner);
+  public void parentContentOnClick(String commentId) {
+    this.commentId = commentId;
+    mView.setReportHint(" 评论 ");
     mView.showInputKeyBord();
-    mCommentListData = data;
-    currentType = OWNER_TYPE;
+    currentType = PARENT_COMMENT_TYPE;
   }
 
+  // 子内容点击
+  @Override
+  public void childContentOnClick(InteractionCommentReplyList data) {
+    if (TextUtils.isEmpty(data.replayName)) {
+      mView.setReportHint(" 回复 " + data.commentName);
+    } else {
+      mView.setReportHint(" 回复 " + data.replayName);
+    }
+    mView.showInputKeyBord();
+    mCommentListData = data;
+    currentType = REPLY_TYPE;
+  }
+
+  private BaseListener<InteractionDetailData> detailListener = new BaseListener<InteractionDetailData>() {
+
+    @Override
+    public void success(InteractionDetailData detail) {
+      mView.hideProgressBar();
+      if (detail.images != null && !detail.images.isEmpty()) {
+        mPhotoAdapter.setData(detail.images);
+      }
+      tvName.setText(detail.name);
+      tvTime.setText(detail.time);
+      tvTitle.setText(detail.title);
+      tvContent.setText(detail.content);
+      ImageLoader.loadImageError(mView.getContext(), detail.avatar, R.mipmap.interaction_icon_default, ivAvatar);
+      mAdapter.setData(detail.commentList);
+      mCommentCount = detail.commentList.size();
+      tvCount.setText("评论（" + mCommentCount + "）");
+      mView.setCollectState(detail.isCollection == 1);
+    }
+
+    @Override
+    public void error(String error) {
+      mView.hideProgressBar();
+      mView.showMsg(error);
+    }
+  };
+
+  private BaseListener<Boolean> reportListener = new BaseListener<Boolean>() {
+    @Override
+    public void success(Boolean aBoolean) {
+      mView.showMsg("举报成功");
+    }
+
+    @Override
+    public void error(String error) {
+      mView.showMsg(error);
+    }
+  };
+  private BaseListener<Boolean> praiseListener = new BaseListener<Boolean>() {
+    @Override
+    public void success(Boolean aBoolean) {
+      mView.showMsg("操作成功");
+    }
+
+    @Override
+    public void error(String error) {
+      mView.showMsg(error);
+    }
+  };
+
+  private BaseListener<Boolean> collectListener = new BaseListener<Boolean>() {
+    @Override
+    public void success(Boolean aBoolean) {
+      mView.showMsg("操作成功");
+    }
+
+    @Override
+    public void error(String error) {
+      mView.showMsg(error);
+    }
+  };
 
   private class PhotoContentsAdapter extends PhotoContentsBaseAdapter {
 
     private Context mContext;
+    private List<String> mList;
 
     PhotoContentsAdapter(Context context) {
       mContext = context;
+      mList = new ArrayList<>();
     }
 
     @Override
@@ -267,12 +397,25 @@ public class InteractionDetailPresentImpl implements InteractionDetailPresent,
 
     @Override
     public void onBindData(int i, @NonNull ImageView imageView) {
-      ImageLoader.loadImageError(mContext, mPhotoList.get(i), R.mipmap.interaction_icon_default, imageView);
+      ImageLoader.loadImageError(mContext, mList.get(i), R.mipmap.interaction_icon_default, imageView);
     }
 
     @Override
     public int getCount() {
-      return mPhotoList.size();
+      return mList.size();
+    }
+
+    public void setData(List<String> list) {
+      mList = list;
+      notifyDataChanged();
+    }
+  }
+
+  @Subscribe(threadMode = ThreadMode.MAIN)
+  public void event(BaseEventData data) {
+    if (data.type == Event.INTERACTION_COMMENT_COUNT_ADD.ordinal()) {
+      mCommentCount++;
+      tvCount.setText("评论（" + mCommentCount + "）");
     }
   }
 }

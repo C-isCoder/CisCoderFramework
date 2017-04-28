@@ -7,11 +7,10 @@ import com.baichang.android.common.IBasePresent;
  * Created by iCong on 2017/3/20.
  */
 
-public interface InteractionContentPresent<View> extends IBasePresent {
+public interface InteractionContentPresent extends IBasePresent {
 
   void refresh();
 
   void attachRecyclerView(RecyclerView recyclerView);
 
-  void setType(int type);
 }

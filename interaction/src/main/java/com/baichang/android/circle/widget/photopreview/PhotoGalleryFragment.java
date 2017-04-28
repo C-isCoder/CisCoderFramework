@@ -33,7 +33,7 @@ public class PhotoGalleryFragment extends Fragment
     implements OnViewTapListener, OnLongClickListener {
 
   private static final String ARG_PARAM = "param";
-  private static int ERROR_IMAGE = R.mipmap.interaction_icon_default;
+  private static int ERROR_IMAGE = R.mipmap.interaction_place_image;
   private String imageUrl;
 
   private PhotoView mPhoto;
@@ -69,7 +69,7 @@ public class PhotoGalleryFragment extends Fragment
     mPhoto.setOnViewTapListener(this);
     mPhoto.setOnLongClickListener(this);
     ImageLoader.loadImageError(getActivity().getApplicationContext(), imageUrl, ERROR_IMAGE, mPhoto);
-    mPhoto.setImageResource(R.mipmap.interaction_icon_default);
+    mPhoto.setImageResource(R.mipmap.interaction_place_image);
     return view;
   }
 

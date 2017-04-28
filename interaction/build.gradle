@@ -10,6 +10,9 @@ android {
         minSdkVersion rootProject.ext.android.minSdkVersion
         //targetSdkVersion rootProject.ext.android.targetSdkVersion
         targetSdkVersion 22
+        ndk {
+            abiFilters 'armeabi-v7a','x86','armeabi','arm64-v8a'//or armeabi、arm64-v8a、x86
+        }
     }
     buildTypes {
         release {
@@ -45,17 +48,19 @@ dependencies {
     compile rootProject.ext.depend.glide_gpuimage
     compile rootProject.ext.depend.boxing
     compile rootProject.ext.depend.picasso
+    compile rootProject.ext.depend.eventbus
+    compile rootProject.ext.depend.imageCompressed
 }
 //uploadArchives {
 //    configuration = configurations.archives
 //    repositories {
 //        mavenDeployer {
 //            snapshotRepository(url: rootProject.ext.maven.snapshot) {
-//                authentication(userName: rootProject.ext.maven.name,
+//                authentication(name: rootProject.ext.maven.name,
 //                        password: rootProject.ext.maven.password)
 //            }
 //            repository(url: rootProject.ext.maven.repository) {
-//                authentication(userName: rootProject.ext.maven.name,
+//                authentication(name: rootProject.ext.maven.name,
 //                        password: rootProject.ext.maven.password)
 //            }
 //            pom.project {

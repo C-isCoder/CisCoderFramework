@@ -18,4 +18,6 @@ public interface InteractionDetailView extends IBaseView {
   void hideInputKeyBord();
 
   void scrollToPosition(int position);
+
+  void setCollectState(boolean isCollect);
 }

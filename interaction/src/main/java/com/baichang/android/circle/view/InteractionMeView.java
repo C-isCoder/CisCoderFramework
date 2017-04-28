@@ -16,4 +16,6 @@ public interface InteractionMeView extends IBaseView {
   void setBackground(BitmapDrawable drawable);
 
   Context getContext();
+
+  void setUserName(String name);
 }

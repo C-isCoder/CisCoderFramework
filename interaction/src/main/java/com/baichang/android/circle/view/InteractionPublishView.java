@@ -10,11 +10,17 @@ import com.baichang.android.common.IBaseView;
 
 public interface InteractionPublishView extends IBaseView {
 
+   int REQUEST_CODE_BOXING = 1024;
+   int REQUEST_CODE_TAKE = 101;
+   int REQUEST_CODE_CROP = 102;
+
   void close();
 
   FragmentManager getManager();
 
   void selectImages(int max);
+
+  void setTypeName(String name);
 
   Activity getActivity();
 }

@@ -1,6 +1,7 @@
 package com.baichang.android.circle.common;
 
 import com.baichang.android.circle.common.InteractionConfig.InteractionListener;
+import com.baichang.android.circle.entity.InteractionUserData;
 
 /**
  * Created by iCong on 2017/4/1.
@@ -34,6 +35,10 @@ public interface InteractionConfigContract {
 
   void share(String title, String summary, String url);
 
-  void businessStore();
+  void businessStore(String id);
+
+  InteractionUserData getUser();
+
+  void setUser(InteractionUserData user);
 
 }

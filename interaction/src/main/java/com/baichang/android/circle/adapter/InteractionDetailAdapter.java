@@ -8,12 +8,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.baichang.android.circle.R;
 import com.baichang.android.circle.adapter.InteractionDetailAdapter.Holder;
-import com.baichang.android.circle.entity.InteractionCommentData;
-import com.baichang.android.circle.entity.InteractionCommentListData;
+import com.baichang.android.circle.entity.InteractionCommentList;
+import com.baichang.android.circle.entity.InteractionCommentReplyList;
 import com.baichang.android.circle.utils.SimpleObjectPool;
 import com.baichang.android.circle.widget.CommentTextView;
 import com.baichang.android.circle.widget.CommentTextView.CommentOnClickListener;
@@ -32,12 +33,14 @@ public class InteractionDetailAdapter extends Adapter<Holder> {
   private static final String OPEN_SEE_MORE_TEXT = "查看更多回复";
   private static final String CLOSE_SEE_MORE_TEXT = "收起更多回复";
   private static final SimpleObjectPool<CommentTextView> CommentViewPool = new SimpleObjectPool<>(50);
-  private List<InteractionCommentData> mList;
+  private List<InteractionCommentList> mList;
   private View mHeaderView;
   private int currentPosition = -1;
 
-  public InteractionDetailAdapter(CommentOnClickListener listener) {
+  public InteractionDetailAdapter(CommentOnClickListener listener,
+      ParentContentOnClickListener parentListener) {
     setCommentOnClickListener(listener);
+    setParentContentOnClick(parentListener);
   }
 
   @Override
@@ -50,18 +53,18 @@ public class InteractionDetailAdapter extends Adapter<Holder> {
     }
   }
 
-  public InteractionCommentData getItemData(int position) {
+  public InteractionCommentList getItemData(int position) {
     return mList.get(position);
   }
 
-  public void setData(List<InteractionCommentData> list) {
+  public void setData(List<InteractionCommentList> list) {
     if (list != null) {
       mList = list;
       notifyDataSetChanged();
     }
   }
 
-  public int addChildComment(InteractionCommentListData data) {
+  public int addChildComment(InteractionCommentReplyList data) {
     if (currentPosition != -1) {
       mList.get(currentPosition - 1).comments.add(0, data);
       notifyItemChanged(currentPosition);
@@ -70,12 +73,12 @@ public class InteractionDetailAdapter extends Adapter<Holder> {
     return 0;
   }
 
-  public void addComment(InteractionCommentData data) {
+  public void addComment(InteractionCommentList data) {
     mList.add(0, data);
     notifyItemInserted(1);
   }
 
-  public List<InteractionCommentData> getList() {
+  public List<InteractionCommentList> getList() {
     return mList;
   }
 
@@ -85,7 +88,7 @@ public class InteractionDetailAdapter extends Adapter<Holder> {
       return;
     }
     int finalPos = holder.getLayoutPosition() - 1;
-    InteractionCommentData data = getItemData(finalPos);
+    InteractionCommentList data = getItemData(finalPos);
     holder.onBindData(data);
     holder.onBindCommentData(data, false);
   }
@@ -126,6 +129,7 @@ public class InteractionDetailAdapter extends Adapter<Holder> {
     CircleImageView ivAvatar;
     LinearLayout commentLayout;
     TextView tvMore;
+    View vLine;
 
     Holder(View itemView) {
       super(itemView);
@@ -136,6 +140,9 @@ public class InteractionDetailAdapter extends Adapter<Holder> {
         ivAvatar = (CircleImageView) itemView.findViewById(R.id.item_interaction_detail_iv_avatar);
         commentLayout = (LinearLayout) itemView.findViewById(R.id.item_interaction_detail_comment_layout);
         tvMore = (TextView) itemView.findViewById(R.id.interaction_detail_tv_more);
+        vLine = itemView.findViewById(R.id.item_interaction_detail_view_line);
+      } else {
+        itemView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
       }
     }
 
@@ -143,7 +150,7 @@ public class InteractionDetailAdapter extends Adapter<Holder> {
       return itemView.getContext();
     }
 
-    void onBindData(InteractionCommentData data) {
+    void onBindData(InteractionCommentList data) {
       commentLayout.setOnHierarchyChangeListener(this);
       tvName.setText(data.name);
       tvContent.setText(data.content);
@@ -154,9 +161,10 @@ public class InteractionDetailAdapter extends Adapter<Holder> {
       tvMore.setOnClickListener(new CommentOnClick(data));
       tvContent.setOnClickListener(new CommentOnClick(data));
       tvMore.setText(OPEN_SEE_MORE_TEXT);
+      vLine.setVisibility(data.comments.isEmpty() ? View.INVISIBLE : View.VISIBLE);
     }
 
-    void onBindCommentData(InteractionCommentData data, boolean isMore) {
+    void onBindCommentData(InteractionCommentList data, boolean isMore) {
       if (data.comments == null || data.comments.isEmpty()) {
         return;
       }
@@ -187,7 +195,7 @@ public class InteractionDetailAdapter extends Adapter<Holder> {
         if (commentView == null) {
           return;
         }
-        InteractionCommentListData comment = data.comments.get(i);
+        InteractionCommentReplyList comment = data.comments.get(i);
         commentView.setText(comment);
       }
     }
@@ -205,34 +213,34 @@ public class InteractionDetailAdapter extends Adapter<Holder> {
     }
 
     @Override
-    public void ownerOnClick(InteractionCommentListData data) {
+    public void commentOnClick(String commentId) {
       if (listener != null) {
-        listener.ownerOnClick(data);
+        listener.commentOnClick(commentId);
         currentPosition = getLayoutPosition();
       }
     }
 
     @Override
-    public void reportOnClick(InteractionCommentListData data) {
+    public void replyOnClick(InteractionCommentReplyList data) {
       if (listener != null) {
-        listener.reportOnClick(data);
+        listener.replyOnClick(data);
         currentPosition = getLayoutPosition();
       }
     }
 
     @Override
-    public void contentOnClick(InteractionCommentListData data) {
+    public void childContentOnClick(InteractionCommentReplyList data) {
       if (listener != null) {
-        listener.contentOnClick(data);
+        listener.replyOnClick(data);
         currentPosition = getLayoutPosition();
       }
     }
 
     class CommentOnClick implements OnClickListener {
 
-      InteractionCommentData data;
+      InteractionCommentList data;
 
-      CommentOnClick(InteractionCommentData data) {
+      CommentOnClick(InteractionCommentList data) {
         this.data = data;
       }
 
@@ -240,10 +248,8 @@ public class InteractionDetailAdapter extends Adapter<Holder> {
       public void onClick(View v) {
         int i = v.getId();
         if (i == R.id.item_interaction_detail_tv_content) {
-          if (listener != null) {
-            InteractionCommentListData commentListData = new InteractionCommentListData();
-            commentListData.owner = data.name;
-            listener.contentOnClick(commentListData);
+          if (parentListener != null) {
+            parentListener.parentContentOnClick(data.id);
             currentPosition = getLayoutPosition();
           }
         } else {
@@ -259,6 +265,17 @@ public class InteractionDetailAdapter extends Adapter<Holder> {
         }
       }
     }
+  }
+
+  private ParentContentOnClickListener parentListener;
+
+  private void setParentContentOnClick(ParentContentOnClickListener listener) {
+    parentListener = listener;
+  }
+
+  public interface ParentContentOnClickListener {
+
+    void parentContentOnClick(String commentId);
   }
 
 }

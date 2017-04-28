@@ -11,7 +11,14 @@ import com.baichang.android.widget.magicIndicator.MagicIndicator;
 
 public interface InteractionInfoPresent extends IBasePresent {
 
+  int DYNAMIC = 0;
+  int REPORT = 1;
+  int COLLECT = 2;
+  int NORMAL = -1;
+
   void attachView(ViewPager viewPager, MagicIndicator indicator, CircleImageView imageView);
 
-  void setIsOneself(boolean isOneself);
+  void setIsOneself(boolean isOneself, String userId);
+
+  void jumpBusiness();
 }

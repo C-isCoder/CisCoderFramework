@@ -1,12 +1,14 @@
 package com.baichang.android.circle;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.res.Resources.Theme;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
+import android.os.Build.VERSION;
+import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -36,20 +38,15 @@ import java.util.ArrayList;
 public class InteractionPublishActivity extends InteractionCommonActivity
     implements InteractionPublishView, OnClickListener {
 
-  private static final int REQUEST_CODE_BOXING = 1024;
-  private static final int REQUEST_CODE_TAKE = 101;
-  private static final int REQUEST_CODE_CROP = 102;
-
   EditText etTitle;
   EditText etContent;
   RecyclerView rvList;
-  TextView tvModel;
+  TextView tvType;
   TextView tvPublish;
-  ContentLoadingProgressBar mProgress;
   ImageButton mBack;
+  ProgressDialog mProgress;
 
   private InteractionPublishPresent mPresent;
-  private String modelId;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -58,13 +55,26 @@ public class InteractionPublishActivity extends InteractionCommonActivity
     etTitle = (EditText) findViewById(R.id.interaction_publish_et_title);
     etContent = (EditText) findViewById(R.id.interaction_publish_et_content);
     rvList = (RecyclerView) findViewById(R.id.interaction_publish_rv_images);
-    tvModel = (TextView) findViewById(R.id.interaction_publish_tv_model);
-    mProgress = (ContentLoadingProgressBar) findViewById(R.id.interaction_publish_progress);
+    tvType = (TextView) findViewById(R.id.interaction_publish_tv_model);
     tvPublish = (TextView) findViewById(R.id.interaction_publish_tv_publish);
     mBack = (ImageButton) findViewById(R.id.back);
     mBack.setOnClickListener(this);
+    initDialog();
     initConfig();
     init();
+  }
+
+  private void initDialog() {
+    if (VERSION.SDK_INT >= VERSION_CODES.LOLLIPOP) {
+      mProgress = new ProgressDialog(this, android.R.style.Theme_Material_Light_Dialog_Alert);
+    } else {
+      mProgress = new ProgressDialog(this, ProgressDialog.THEME_HOLO_LIGHT);
+    }
+    mProgress.setTitle("发表互动");
+    mProgress.setCancelable(false);
+    mProgress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+    mProgress.setCanceledOnTouchOutside(false);
+    mProgress.setMessage("正在发表...");
   }
 
   private void initConfig() {
@@ -91,7 +101,7 @@ public class InteractionPublishActivity extends InteractionCommonActivity
     //Boxing
     IBoxingMediaLoader loader = new BoxingPicassoLoader();
     BoxingMediaLoader.getInstance().init(loader);
-    tvModel.setOnClickListener(this);
+    tvType.setOnClickListener(this);
     findViewById(R.id.interaction_publish_tv_publish).setOnClickListener(this);
     mPresent = new InteractionPublishImpl(this);
     mPresent.attachView(rvList);
@@ -104,7 +114,7 @@ public class InteractionPublishActivity extends InteractionCommonActivity
 
   @Override
   public void hideProgressBar() {
-    mProgress.hide();
+    mProgress.dismiss();
   }
 
   @Override
@@ -141,6 +151,11 @@ public class InteractionPublishActivity extends InteractionCommonActivity
   }
 
   @Override
+  public void setTypeName(String name) {
+    tvType.setText(name);
+  }
+
+  @Override
   public Activity getActivity() {
     return this;
   }
@@ -165,12 +180,12 @@ public class InteractionPublishActivity extends InteractionCommonActivity
   @Override
   public void onClick(View v) {
     int i = v.getId();
-    if (i == tvModel.getId()) {
+    if (i == tvType.getId()) {
       mPresent.selectModel();
     } else if (i == tvPublish.getId()) {
       AnimatorUtil.scale(v);
       mPresent.publish(etTitle.getText().toString(),
-          etContent.getText().toString(), modelId);
+          etContent.getText().toString());
     } else if (i == mBack.getId()) {
       AnimatorUtil.scale(v);
       onBackPressed();

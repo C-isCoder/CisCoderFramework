@@ -5,6 +5,7 @@ import android.content.Context;
 import android.text.TextUtils;
 import android.widget.Toast;
 import com.baichang.android.circle.common.InteractionConfig.InteractionListener;
+import com.baichang.android.circle.entity.InteractionUserData;
 import com.baichang.android.common.BCApplication;
 import com.baichang.android.config.Configuration;
 import com.baichang.android.config.ConfigurationImpl;
@@ -22,29 +23,32 @@ public class InteractionApplication extends BCApplication implements Configurati
 
   //token
   private static String TOKEN = "";
+  //user
+  private static InteractionUserData USER = null;
 
   @Override
   public void onCreate() {
     super.onCreate();
     //配置URL TOKEN
     ConfigurationImpl.init(this);
+    initLogger();
     //互动 配置
-    InteractionConfig.getInstance()
-        .setTextFontColor(R.color.cm_btn_orange_yellow)
-        .setTopBarColor(R.color.cm_btn_orange_n)
-        .setTitleText("互动")
-        .setIsNeedBusinessStore(true)
-        .setListener(new InteractionListener() {
-          @Override
-          public void share(String title, String summary, String url) {
-            Toast.makeText(getInstance(), "分享", Toast.LENGTH_SHORT).show();
-          }
-
-          @Override
-          public void businessClick() {
-            Toast.makeText(getInstance(), "商家详情", Toast.LENGTH_SHORT).show();
-          }
-        });
+//    InteractionConfig.getInstance()
+//        .setTextFontColor(R.color.cm_btn_orange_yellow)
+//        .setTopBarColor(R.color.cm_btn_orange_n)
+//        .setTitleText("互动")
+//        .setIsNeedBusinessStore(true)
+//        .setListener(new InteractionListener() {
+//          @Override
+//          public void share(String title, String summary, String url) {
+//            Toast.makeText(getInstance(), "分享", Toast.LENGTH_SHORT).show();
+//          }
+//
+//          @Override
+//          public void businessClick() {
+//            Toast.makeText(getInstance(), "商家详情", Toast.LENGTH_SHORT).show();
+//          }
+//        });
   }
 
   private void initLogger() {
@@ -58,6 +62,17 @@ public class InteractionApplication extends BCApplication implements Configurati
     TOKEN = Token;
   }
 
+  public static void setUser(InteractionUserData user) {
+    USER = user;
+  }
+
+  public InteractionUserData getUser() {
+    if (USER == null) {
+      USER = InteractionDiskCache.getUser();
+    }
+    return USER;
+  }
+
   @Override
   public String getApiDefaultHost() {
     return InteractionAPIConstants.API_DEFAULT_HOST;
@@ -65,7 +80,7 @@ public class InteractionApplication extends BCApplication implements Configurati
 
   @Override
   public String getApiWebView() {
-    return InteractionAPIConstants.API_WEB_VIEW;
+    return "";
   }
 
   @Override
@@ -90,7 +105,7 @@ public class InteractionApplication extends BCApplication implements Configurati
 
   @Override
   public String getApiDownload() {
-    return InteractionAPIConstants.API_DOWNLOAD;
+    return "";
   }
 
   @Override

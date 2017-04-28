@@ -7,12 +7,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 import com.baichang.android.circle.R;
 import com.baichang.android.circle.adapter.InteractionDialogAdapter;
 import com.baichang.android.circle.adapter.InteractionDialogAdapter.OnDialogItemClickListener;
 import com.baichang.android.circle.common.InteractionConfig;
-import com.baichang.android.circle.entity.InteractionModelData;
-import java.util.ArrayList;
+import com.baichang.android.circle.entity.InteractionTypeData;
+import com.baichang.android.circle.model.Impl.InteractInteractionImpl;
+import com.baichang.android.common.IBaseInteraction.BaseListener;
 import java.util.List;
 
 
@@ -21,10 +23,10 @@ import java.util.List;
  * interface.
  */
 public class InteractionDialogFragment extends DialogFragment
-    implements OnDialogItemClickListener {
+    implements OnDialogItemClickListener, BaseListener<List<InteractionTypeData>> {
 
-  private List<InteractionModelData> mList;
   private static OnDialogItemClickListener mListener;
+  private InteractionDialogAdapter mAdapter;
 
   /**
    * Mandatory empty constructor for the fragment manager to instantiate the
@@ -42,12 +44,6 @@ public class InteractionDialogFragment extends DialogFragment
   @Override
   public void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    //TODO 模拟数据
-    mList = new ArrayList<>();
-    mList.add(new InteractionModelData("1", "热门互动"));
-    mList.add(new InteractionModelData("2", "经典老车"));
-    mList.add(new InteractionModelData("3", "海外购车"));
-    mList.add(new InteractionModelData("4", "现身说法"));
   }
 
   @Override
@@ -62,20 +58,31 @@ public class InteractionDialogFragment extends DialogFragment
     super.onViewCreated(view, savedInstanceState);
     RecyclerView recycler = (RecyclerView) view.findViewById(
         R.id.interaction_fragment_dialog_rv_list);
-    recycler.setAdapter(new InteractionDialogAdapter(mList, this));
-
+    mAdapter = new InteractionDialogAdapter(this);
+    recycler.setAdapter(mAdapter);
     int textColor = InteractionConfig.getInstance().getTextFontColor();
     if (textColor != -1) {
       View title = view.findViewById(R.id.interaction_dialog_view);
       title.setBackgroundResource(textColor);
     }
+    new InteractInteractionImpl().getInteractionTypeList(this);
   }
 
   @Override
-  public void onItemClick(InteractionModelData data) {
+  public void onItemClick(InteractionTypeData data) {
     if (mListener != null) {
       mListener.onItemClick(data);
     }
     dismiss();
+  }
+
+  @Override
+  public void success(List<InteractionTypeData> list) {
+    mAdapter.setData(list);
+  }
+
+  @Override
+  public void error(String error) {
+    Toast.makeText(getContext(), error, Toast.LENGTH_SHORT).show();
   }
 }

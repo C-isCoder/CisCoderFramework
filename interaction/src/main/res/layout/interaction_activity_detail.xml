@@ -16,6 +16,7 @@
       <ImageButton
          android:id="@+id/back"
          style="@style/top_bar_btn_left"
+         android:onClick="back"
          android:src="@drawable/interaction_ic_back" />
 
       <TextView

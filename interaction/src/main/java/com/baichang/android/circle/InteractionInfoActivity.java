@@ -31,7 +31,6 @@ public class InteractionInfoActivity extends BaseActivity
   ViewPager mViewPager;
   ContentLoadingProgressBar mProgress;
   TextView tvBusiness;
-
   private InteractionInfoPresent mPresent;
 
   @Override
@@ -73,8 +72,9 @@ public class InteractionInfoActivity extends BaseActivity
   private void init() {
     boolean isOneself = getIntent().getBooleanExtra(
         InteractionFlag.ACTION_INTERACTION_IS_ONESELF, false);
+    String userId = getIntent().getStringExtra(InteractionFlag.ACTION_INTERACTION_USER_ID);
     mPresent = new InteractionInfoPresentImpl(this);
-    mPresent.setIsOneself(isOneself);
+    mPresent.setIsOneself(isOneself, userId);
     mPresent.attachView(mViewPager, mIndicator, ivAvatar);
   }
 
@@ -121,11 +121,12 @@ public class InteractionInfoActivity extends BaseActivity
   }
 
   @Override
+  public void setUserName(String name) {
+    tvBusiness.setText(name);
+  }
+
+  @Override
   public void onClick(View view) {
-    //TODO 跳转商城-商家详情
-    InteractionListener listener = InteractionConfig.getInstance().getListener();
-    if (listener != null) {
-      listener.businessClick();
-    }
+    mPresent.jumpBusiness();
   }
 }

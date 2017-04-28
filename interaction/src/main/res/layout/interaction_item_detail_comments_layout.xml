@@ -55,6 +55,7 @@
       tools:text="6到飞起" />
 
    <View
+      android:id="@+id/item_interaction_detail_view_line"
       style="@style/cm_line_horizontal"
       android:layout_marginTop="8dp"
       android:layout_marginLeft="45dp" />

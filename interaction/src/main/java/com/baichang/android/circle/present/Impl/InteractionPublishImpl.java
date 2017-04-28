@@ -1,34 +1,40 @@
 package com.baichang.android.circle.present.Impl;
 
-import android.graphics.Bitmap;
+import static android.R.style.Theme_Material_Light_Dialog_Alert;
+
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import com.baichang.android.circle.adapter.InteractionDialogAdapter.OnDialogItemClickListener;
-import com.baichang.android.circle.dialog.InteractionDialogFragment;
-import com.baichang.android.circle.entity.InteractionModelData;
-import com.baichang.android.circle.model.Impl.InteractInteractionImpl;
-import com.baichang.android.common.IBaseInteraction.BaseListener;
 import com.baichang.android.circle.adapter.InteractionPublishAdapter;
 import com.baichang.android.circle.adapter.InteractionPublishAdapter.SelectPhotoClickListener;
 import com.baichang.android.circle.adapter.InteractionPublishAdapter9;
 import com.baichang.android.circle.adapter.InteractionPublishAdapter9.SelectPhotoClickListener9;
-import com.baichang.android.circle.InteractInteraction;
+import com.baichang.android.circle.dialog.InteractionDialogFragment;
+import com.baichang.android.circle.entity.InteractionTypeData;
+import com.baichang.android.circle.model.Impl.InteractInteractionImpl;
+import com.baichang.android.circle.model.InteractInteraction;
 import com.baichang.android.circle.present.InteractionPublishPresent;
 import com.baichang.android.circle.view.InteractionPublishView;
+import com.baichang.android.common.IBaseInteraction.BaseListener;
 import com.baichang.android.utils.photo.BCPhotoUtil;
 import com.baichang.android.widget.photoSelectDialog.PhotoSelectDialog;
 import com.baichang.android.widget.photoSelectDialog.PhotoSelectDialog.OnResultListener;
-import com.baichang.android.widget.photoSelectDialog.PhotoSelectDialog.PhotoSelectCallback;
 import com.bilibili.boxing.model.entity.BaseMedia;
 import com.bilibili.boxing_impl.view.SpacesItemDecoration;
+import com.zxy.tiny.Tiny;
+import com.zxy.tiny.callback.FileBatchCallback;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by iCong on 2017/3/24.
  */
 
 public class InteractionPublishImpl implements InteractionPublishPresent,
-    BaseListener<Boolean>, SelectPhotoClickListener, PhotoSelectCallback,
+    BaseListener<Boolean>, SelectPhotoClickListener,
     SelectPhotoClickListener9, OnDialogItemClickListener {
 
   private static final int DEFAULT_MAX_NUMBER = 9;
@@ -36,6 +42,8 @@ public class InteractionPublishImpl implements InteractionPublishPresent,
   private InteractInteraction mInteraction;
   private InteractionPublishAdapter mAdapter;
   private InteractionPublishAdapter9 mAdapter9;
+  private String typeId;
+  private List<String> mImageList;
 
   public InteractionPublishImpl(InteractionPublishView view) {
     mView = view;
@@ -61,16 +69,22 @@ public class InteractionPublishImpl implements InteractionPublishPresent,
   }
 
   @Override
-  public void publish(String title, String content, String modelId) {
+  public void publish(String title, String content) {
     if (TextUtils.isEmpty(title)) {
       mView.showMsg("请输入标题");
     } else if (TextUtils.isEmpty(content)) {
       mView.showMsg("请说点互动内容");
-    } else if (TextUtils.isEmpty(modelId)) {
+    } else if (TextUtils.isEmpty(typeId)) {
       mView.showMsg("请选择板块");
     } else {
       mView.showProgressBar();
-      mInteraction.publish(title, content, modelId, mAdapter.getPathList(), this);
+      List<String> images = mAdapter9.getPathList();
+      if (images.isEmpty()) {
+        mInteraction.publishNoImage(title, content, typeId, this);
+      } else {
+        mInteraction.publishImage(mView.getActivity().getApplication(),
+            title, content, typeId, images, this);
+      }
     }
   }
 
@@ -109,11 +123,10 @@ public class InteractionPublishImpl implements InteractionPublishPresent,
     mView.showMsg("发布失败");
   }
 
-
-  @Override
-  public void onResult(Bitmap bitmap, String path) {
-    mAdapter.addData(bitmap, path);
-  }
+//  @Override
+//  public void onResult(Bitmap bitmap, String path) {
+//    mAdapter.addData(bitmap, path);
+//  }
 
   @Override
   public void select() {
@@ -137,7 +150,8 @@ public class InteractionPublishImpl implements InteractionPublishPresent,
   }
 
   @Override
-  public void onItemClick(InteractionModelData data) {
-    mView.showMsg(data.name);
+  public void onItemClick(InteractionTypeData data) {
+    mView.setTypeName(data.name);
+    typeId = String.valueOf(data.id);
   }
 }
