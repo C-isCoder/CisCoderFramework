@@ -20,4 +20,6 @@ public interface InteractionDetailView extends IBaseView {
   void scrollToPosition(int position);
 
   void setCollectState(boolean isCollect);
+
+  void setPraiseState(boolean isPraise);
 }

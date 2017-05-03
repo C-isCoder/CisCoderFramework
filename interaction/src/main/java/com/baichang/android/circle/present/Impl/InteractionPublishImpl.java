@@ -40,15 +40,12 @@ public class InteractionPublishImpl implements InteractionPublishPresent,
   private static final int DEFAULT_MAX_NUMBER = 9;
   private InteractionPublishView mView;
   private InteractInteraction mInteraction;
-  private InteractionPublishAdapter mAdapter;
   private InteractionPublishAdapter9 mAdapter9;
   private String typeId;
-  private List<String> mImageList;
 
   public InteractionPublishImpl(InteractionPublishView view) {
     mView = view;
     mInteraction = new InteractInteractionImpl();
-    mAdapter = new InteractionPublishAdapter(this);
     mAdapter9 = new InteractionPublishAdapter9(this);
   }
 
@@ -120,7 +117,7 @@ public class InteractionPublishImpl implements InteractionPublishPresent,
   @Override
   public void error(String error) {
     mView.hideProgressBar();
-    mView.showMsg("发布失败");
+    mView.showMsg(error);
   }
 
 //  @Override

@@ -41,9 +41,11 @@ public class InteractionInfoReplyAdapter extends RecyclerView.Adapter<Holder> {
   public void onBindViewHolder(Holder holder, int position) {
     InteractionReplyData data = mList.get(position);
     if (data.trendsImages != null && !data.trendsImages.isEmpty()) {
-      ImageLoader.loadImage(holder.ivImage.getContext(), data.trendsImages.get(0), holder.ivImage);
+      ImageLoader.loadImageError(holder.ivImage.getContext(), data.trendsImages.get(0),
+          R.mipmap.interaction_icon_default_image, holder.ivImage);
     }
-    ImageLoader.loadImage(holder.ivAvatar.getContext(), data.replyIcon, holder.ivAvatar);
+    ImageLoader.loadImageError(holder.ivAvatar.getContext(), data.replyIcon,
+        R.mipmap.interaction_icon_default, holder.ivAvatar);
     holder.tvName.setText(data.replyName);
     holder.tvContent.setText(data.replyContent);
     holder.tvTime.setText(data.replyTime);

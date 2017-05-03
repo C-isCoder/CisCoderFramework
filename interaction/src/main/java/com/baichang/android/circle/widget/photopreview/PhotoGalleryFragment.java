@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -20,10 +21,15 @@ import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Toast;
+import com.baichang.android.circle.common.InteractionAPIConstants;
 import com.baichang.android.imageloader.ImageLoader;
 import com.baichang.android.circle.R;
 import com.baichang.android.widget.photoView.PhotoView;
 import com.baichang.android.widget.photoView.PhotoViewAttacher.OnViewTapListener;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -68,7 +74,16 @@ public class PhotoGalleryFragment extends Fragment
     mPhoto = (PhotoView) view.findViewById(R.id.fragment_photo_gallery_image_banner_image);
     mPhoto.setOnViewTapListener(this);
     mPhoto.setOnLongClickListener(this);
-    ImageLoader.loadImageError(getActivity().getApplicationContext(), imageUrl, ERROR_IMAGE, mPhoto);
+    // 转成Drawable 加载，不然下面长按保存会报错。
+    Glide.with(getActivity()).load(InteractionAPIConstants.API_LOAD_IMAGE + imageUrl).asBitmap()
+        .error(ERROR_IMAGE)
+        .into(new SimpleTarget<Bitmap>() {
+          @Override
+          public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+            mPhoto.setImageBitmap(resource);
+          }
+        });
+    //ImageLoader.loadImageError(getActivity().getApplicationContext(), imageUrl, ERROR_IMAGE, mPhoto);
     mPhoto.setImageResource(R.mipmap.interaction_place_image);
     return view;
   }

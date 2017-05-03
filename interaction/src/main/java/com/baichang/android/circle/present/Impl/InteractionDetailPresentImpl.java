@@ -1,8 +1,12 @@
 package com.baichang.android.circle.present.Impl;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
@@ -29,7 +33,10 @@ import com.baichang.android.circle.view.InteractionDetailView;
 import com.baichang.android.circle.widget.CommentTextView.CommentOnClickListener;
 import com.baichang.android.circle.widget.ForceClickImageView;
 import com.baichang.android.circle.widget.photocontents.PhotoContents;
+import com.baichang.android.circle.widget.photocontents.PhotoContents.OnItemClickListener;
 import com.baichang.android.circle.widget.photocontents.adapter.PhotoContentsBaseAdapter;
+import com.baichang.android.circle.widget.photopreview.PhotoGalleryActivity;
+import com.baichang.android.circle.widget.photopreview.PhotoGalleryData;
 import com.baichang.android.common.BaseEventData;
 import com.baichang.android.common.IBaseInteraction.BaseListener;
 import com.baichang.android.imageloader.ImageLoader;
@@ -48,9 +55,10 @@ import org.greenrobot.eventbus.ThreadMode;
 
 public class InteractionDetailPresentImpl implements
     InteractionDetailPresent, OnClickListener, CommentOnClickListener,
-    ParentContentOnClickListener {
+    ParentContentOnClickListener, OnItemClickListener {
 
   private static final int REPLY_TYPE = 132;
+  private static final int REPLY_TYPE2 = 133;
   private static final int CHILD_COMMENT_TYPE = 641;
   private static final int PARENT_COMMENT_TYPE = 642;
   private static final int THEM_TYPE = 643;
@@ -64,6 +72,7 @@ public class InteractionDetailPresentImpl implements
   private ImageView ivComment;
   private TextView tvCount;
   private CircleImageView ivAvatar;
+  private PhotoContents mPhotos;
   private PhotoContentsAdapter mPhotoAdapter;
   private InteractionDetailAdapter mAdapter;
   private InteractionCommentReplyList mCommentListData;
@@ -108,8 +117,8 @@ public class InteractionDetailPresentImpl implements
     ivComment.setOnClickListener(this);
     header.findViewById(R.id.interaction_detail_tv_report).setOnClickListener(this);
     initConfig();
-    PhotoContents mPhotos = (PhotoContents) header.findViewById(R.id.interaction_detail_photo_content);
-    mPhotos.setAdapter(mPhotoAdapter);
+    mPhotos = (PhotoContents) header.findViewById(R.id.interaction_detail_photo_content);
+    mPhotos.setmOnItemClickListener(this);
   }
 
   private void initConfig() {
@@ -149,6 +158,20 @@ public class InteractionDetailPresentImpl implements
         replyData.commentUserId = mCommentListData.commentUserId;
         replyData.commentName = mCommentListData.commentName;
         addCommentChild(replyData);
+        break;
+      case REPLY_TYPE2:
+        if (mCommentListData == null) {
+          break;
+        }
+        InteractionCommentReplyList replyData2 = new InteractionCommentReplyList();
+        replyData2.replayName = user.name;
+        replyData2.replayContent = content;
+        replyData2.replayUserId = user.id;
+        replyData2.trendsId = String.valueOf(trendsId);
+        replyData2.commentId = mCommentListData.commentId;
+        replyData2.commentUserId = mCommentListData.replayUserId;
+        replyData2.commentName = mCommentListData.replayName;
+        addCommentChild(replyData2);
         break;
       case CHILD_COMMENT_TYPE:
         InteractionCommentReplyList ownerData = new InteractionCommentReplyList();
@@ -221,6 +244,17 @@ public class InteractionDetailPresentImpl implements
     mInteraction.reply(data, replyListener);
   }
 
+  // 评论该帖子
+  private void addComment(InteractionCommentList data) {
+    mAdapter.addComment(data);
+    mView.hideInputKeyBord();
+    mView.setReportHint("回复");
+    mView.scrollToPosition(1);// 滚动到顶部
+    mInteraction.comment(trendsId, data, commentListener);
+    // 评论数量 +1
+    EventBus.getDefault().post(new BaseEventData(Event.INTERACTION_COMMENT_COUNT_ADD.ordinal()));
+  }
+
   private BaseListener<Boolean> replyListener = new BaseListener<Boolean>() {
     @Override
     public void success(Boolean aBoolean) {
@@ -232,17 +266,6 @@ public class InteractionDetailPresentImpl implements
       mView.showMsg(error);
     }
   };
-
-  // 评论该帖子
-  private void addComment(InteractionCommentList data) {
-    mAdapter.addComment(data);
-    mView.hideInputKeyBord();
-    mView.setReportHint("回复");
-    mView.scrollToPosition(1);// 滚动到顶部
-    mInteraction.comment(trendsId, data, commentListener);
-    // 评论数量 +1
-    EventBus.getDefault().post(new BaseEventData(Event.INTERACTION_COMMENT_COUNT_ADD.ordinal()));
-  }
 
   private BaseListener<Boolean> commentListener = new BaseListener<Boolean>() {
     @Override
@@ -293,6 +316,14 @@ public class InteractionDetailPresentImpl implements
     currentType = REPLY_TYPE;
   }
 
+  @Override
+  public void replyOnClick2(InteractionCommentReplyList data) {
+    mView.setReportHint(" 回复 " + data.replayName);
+    mView.showInputKeyBord();
+    mCommentListData = data;
+    currentType = REPLY_TYPE2;
+  }
+
   // 父内容 点击
   @Override
   public void parentContentOnClick(String commentId) {
@@ -321,6 +352,7 @@ public class InteractionDetailPresentImpl implements
     public void success(InteractionDetailData detail) {
       mView.hideProgressBar();
       if (detail.images != null && !detail.images.isEmpty()) {
+        mPhotos.setAdapter(mPhotoAdapter);
         mPhotoAdapter.setData(detail.images);
       }
       tvName.setText(detail.name);
@@ -332,6 +364,7 @@ public class InteractionDetailPresentImpl implements
       mCommentCount = detail.commentList.size();
       tvCount.setText("评论（" + mCommentCount + "）");
       mView.setCollectState(detail.isCollection == 1);
+      mView.setPraiseState(detail.isPraise == 1);
     }
 
     @Override
@@ -376,6 +409,16 @@ public class InteractionDetailPresentImpl implements
     }
   };
 
+  @Override
+  public void onItemClick(ImageView imageView, int position) {
+    PhotoGalleryData galleryData = new PhotoGalleryData(position, mPhotoAdapter.getList());
+    Intent intent = new Intent(imageView.getContext(), PhotoGalleryActivity.class);
+    intent.putExtra(PhotoGalleryActivity.IMAGE_DATA, galleryData);
+    ActivityOptionsCompat compat = ActivityOptionsCompat
+        .makeSceneTransitionAnimation((Activity) imageView.getContext(), imageView, "photo");
+    ActivityCompat.startActivity(imageView.getContext(), intent, compat.toBundle());
+  }
+
   private class PhotoContentsAdapter extends PhotoContentsBaseAdapter {
 
     private Context mContext;
@@ -408,6 +451,10 @@ public class InteractionDetailPresentImpl implements
     public void setData(List<String> list) {
       mList = list;
       notifyDataChanged();
+    }
+
+    public List<String> getList() {
+      return mList;
     }
   }
 

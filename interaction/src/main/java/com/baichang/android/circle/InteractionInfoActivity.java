@@ -31,6 +31,7 @@ public class InteractionInfoActivity extends BaseActivity
   ViewPager mViewPager;
   ContentLoadingProgressBar mProgress;
   TextView tvBusiness;
+  TextView tvName;
   private InteractionInfoPresent mPresent;
 
   @Override
@@ -39,6 +40,7 @@ public class InteractionInfoActivity extends BaseActivity
     super.onCreate(savedInstanceState);
     setContentView(R.layout.interaction_activity_info);
     ivAvatar = (CircleImageView) findViewById(R.id.interaction_info_iv_avatar);
+    tvName = (TextView) findViewById(R.id.interaction_info_tv_name);
     mBlur = (AppBarLayout) findViewById(R.id.interaction_info_barLayout);
     mIndicator = (MagicIndicator) findViewById(R.id.interaction_info_indicator);
     mViewPager = (ViewPager) findViewById(R.id.interaction_info_viewPager);
@@ -122,7 +124,7 @@ public class InteractionInfoActivity extends BaseActivity
 
   @Override
   public void setUserName(String name) {
-    tvBusiness.setText(name);
+    tvName.setText(name);
   }
 
   @Override

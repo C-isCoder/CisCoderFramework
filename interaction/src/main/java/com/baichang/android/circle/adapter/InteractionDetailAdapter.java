@@ -229,6 +229,14 @@ public class InteractionDetailAdapter extends Adapter<Holder> {
     }
 
     @Override
+    public void replyOnClick2(InteractionCommentReplyList data) {
+      if (listener != null) {
+        listener.replyOnClick2(data);
+        currentPosition = getLayoutPosition();
+      }
+    }
+
+    @Override
     public void childContentOnClick(InteractionCommentReplyList data) {
       if (listener != null) {
         listener.replyOnClick(data);

@@ -208,14 +208,15 @@ public class InteractionInfoPresentImpl implements
           break;
         case REPORT:
           simplePagerTitleView.setText(getString(R.string.str_interaction_info_report, replayNumbers));
-          if (isOneself) {
-            ImageView badge = new ImageView(context);
-            badge.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.interaction_ic_red_dot));
-            badgePagerTitleView.setBadgeView(badge);
-            badgePagerTitleView.setAutoCancelBadge(true);
-            badgePagerTitleView.setXBadgeRule(new BadgeRule(BadgeAnchor.CONTENT_RIGHT, -UIUtil.dip2px(context, 6)));
-            badgePagerTitleView.setYBadgeRule(new BadgeRule(BadgeAnchor.CONTENT_TOP, 0));
-          }
+          // 是否显示小红点
+//          if (isOneself) {
+//            ImageView badge = new ImageView(context);
+//            badge.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.interaction_ic_red_dot));
+//            badgePagerTitleView.setBadgeView(badge);
+//            badgePagerTitleView.setAutoCancelBadge(true);
+//            badgePagerTitleView.setXBadgeRule(new BadgeRule(BadgeAnchor.CONTENT_RIGHT, -UIUtil.dip2px(context, 6)));
+//            badgePagerTitleView.setYBadgeRule(new BadgeRule(BadgeAnchor.CONTENT_TOP, 0));
+//          }
           break;
         case COLLECT:
           simplePagerTitleView.setText(getString(R.string.str_interaction_info_collect, collectNumbers));
@@ -256,6 +257,7 @@ public class InteractionInfoPresentImpl implements
   private BaseListener<InteractionUserInfo> userInfoListener = new BaseListener<InteractionUserInfo>() {
     @Override
     public void success(InteractionUserInfo userInfo) {
+      mView.setUserName(userInfo.name);
       // 1 汽修厂
       isBusiness = userInfo.type != 1;
       // 是否显示联系商家

@@ -151,7 +151,7 @@ public class InteractInteractionImpl implements InteractInteraction {
     map.put("hostName", user.name);
     map.put("hostIcon", user.avatar);
     map.put("address", user.address);
-    map.put("id", user.id);
+    map.put("userId", user.id);
     InteractionAPIWrapper.getInstance()
         .publish(map)
         .compose(HttpSubscriber.<Boolean>applySchedulers())

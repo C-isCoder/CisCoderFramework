@@ -166,6 +166,11 @@ public class InteractionDetailActivity extends InteractionCommonActivity
   }
 
   @Override
+  public void setPraiseState(boolean isPraise) {
+    btnPraise.setSelected(isPraise);
+  }
+
+  @Override
   public void onRefresh() {
     mPresent.refresh();
   }

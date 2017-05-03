@@ -47,7 +47,6 @@ public class InteractionContentAdapter extends Adapter<ViewHolder> {
 
   private static final String TAG = "CID";
   private List<InteractionListData> mList = new ArrayList<>();
-  private InteractionPhotoAdapter mAdapter;
   private int mType;
 
   public InteractionContentAdapter(int type) {
@@ -88,11 +87,13 @@ public class InteractionContentAdapter extends Adapter<ViewHolder> {
       holder.tvButton.setVisibility(View.GONE);
     }
     holder.tvPraise.setSelected(data.isPraise == 1);
-    if (data.images == null || data.images.isEmpty()) {
-      return;
+    if (data.images != null && !data.images.isEmpty()) {
+      InteractionPhotoAdapter mAdapter = new InteractionPhotoAdapter(data.images);
+      holder.mPhotos.setAdapter(mAdapter);
+      holder.mPhotos.setVisibility(View.VISIBLE);
+    } else {
+      holder.mPhotos.setVisibility(View.GONE);
     }
-    mAdapter = new InteractionPhotoAdapter(data.images);
-    holder.mPhotos.setAdapter(mAdapter);
   }
 
   public void setData(List<InteractionListData> list) {
@@ -114,8 +115,9 @@ public class InteractionContentAdapter extends Adapter<ViewHolder> {
   }
 
   public void remove(InteractionListData data) {
-    mList.remove(data);
-    notifyItemRemoved(getIndex(data));
+    int index = getIndex(data);
+    mList.remove(index);
+    notifyItemRemoved(index);
   }
 
   private InteractionClickListener interactionClickListener;
