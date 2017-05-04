@@ -63,7 +63,9 @@ public class InteractionContentPresentImpl implements InteractionContentPresent,
       mInteraction.getInteractionList(typeId, 1, this);
     } else {
       switch (modelType) {
-        case InteractionInfoPresent.DYNAMIC: // 动态
+        // 动态
+        case InteractionInfoPresent.NORMAL:
+        case InteractionInfoPresent.DYNAMIC:
           mInteraction.getDynamics(mView.getUserId(), 1, this);
           break;
         case InteractionInfoPresent.COLLECT: // 收藏的动态
@@ -82,7 +84,9 @@ public class InteractionContentPresentImpl implements InteractionContentPresent,
       mInteraction.getInteractionList(typeId, nowPage, this);
     } else {
       switch (modelType) {
-        case InteractionInfoPresent.DYNAMIC: // 动态
+        // 动态
+        case InteractionInfoPresent.NORMAL:
+        case InteractionInfoPresent.DYNAMIC:
           mInteraction.getDynamics(mView.getUserId(), nowPage, this);
           break;
         case InteractionInfoPresent.COLLECT: // 收藏的动态
@@ -106,7 +110,9 @@ public class InteractionContentPresentImpl implements InteractionContentPresent,
             mInteraction.getInteractionList(typeId, nowPage, InteractionContentPresentImpl.this);
           } else {
             switch (modelType) {
-              case InteractionInfoPresent.DYNAMIC: // 动态
+              // 动态
+              case InteractionInfoPresent.NORMAL:
+              case InteractionInfoPresent.DYNAMIC:
                 mInteraction.getDynamics(mView.getUserId(), nowPage, InteractionContentPresentImpl.this);
                 break;
               case InteractionInfoPresent.COLLECT: // 收藏的动态

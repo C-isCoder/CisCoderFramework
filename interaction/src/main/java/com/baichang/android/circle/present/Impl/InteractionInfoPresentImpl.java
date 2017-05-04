@@ -11,7 +11,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.ImageView;
 import com.baichang.android.circle.InteractionContentFragment;
 import com.baichang.android.circle.InteractionReplyFragment;
 import com.baichang.android.circle.R;
@@ -28,7 +27,6 @@ import com.baichang.android.circle.utils.UIUtil;
 import com.baichang.android.circle.view.InteractionMeView;
 import com.baichang.android.common.BaseEventData;
 import com.baichang.android.common.IBaseInteraction.BaseListener;
-import com.baichang.android.widget.circleImageView.CircleImageView;
 import com.baichang.android.widget.magicIndicator.MagicIndicator;
 import com.baichang.android.widget.magicIndicator.ViewPagerHelper;
 import com.baichang.android.widget.magicIndicator.buildins.commonnavigator.CommonNavigator;
@@ -38,10 +36,9 @@ import com.baichang.android.widget.magicIndicator.buildins.commonnavigator.abs.I
 import com.baichang.android.widget.magicIndicator.buildins.commonnavigator.indicators.LinePagerIndicator;
 import com.baichang.android.widget.magicIndicator.buildins.commonnavigator.titles.ColorTransitionPagerTitleView;
 import com.baichang.android.widget.magicIndicator.buildins.commonnavigator.titles.SimplePagerTitleView;
-import com.baichang.android.widget.magicIndicator.buildins.commonnavigator.titles.badge.BadgeAnchor;
 import com.baichang.android.widget.magicIndicator.buildins.commonnavigator.titles.badge.BadgePagerTitleView;
-import com.baichang.android.widget.magicIndicator.buildins.commonnavigator.titles.badge.BadgeRule;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import jp.wasabeef.glide.transformations.BlurTransformation;
@@ -87,8 +84,7 @@ public class InteractionInfoPresentImpl implements
   }
 
   @Override
-  public void attachView(final ViewPager viewPager, MagicIndicator indicator,
-      CircleImageView circleImageView) {
+  public void attachView(final ViewPager viewPager, MagicIndicator indicator) {
     mNavigatorAdapter = new NavigatorAdapter(viewPager);
     viewPager.setOffscreenPageLimit(3);
     viewPager.setAdapter(mAdapter);
@@ -97,7 +93,6 @@ public class InteractionInfoPresentImpl implements
     commonNavigator.setAdapter(mNavigatorAdapter);
     indicator.setNavigator(commonNavigator);
     ViewPagerHelper.bind(indicator, viewPager);
-    circleImageView.setImageResource(R.mipmap.interaction_icon_default);
   }
 
   @Override
@@ -257,13 +252,15 @@ public class InteractionInfoPresentImpl implements
   private BaseListener<InteractionUserInfo> userInfoListener = new BaseListener<InteractionUserInfo>() {
     @Override
     public void success(InteractionUserInfo userInfo) {
-      mView.setUserName(userInfo.name);
-      // 1 汽修厂
-      isBusiness = userInfo.type != 1;
-      // 是否显示联系商家
-      InteractionConfig.getInstance().setIsNeedBusinessStore(userInfo.type != 1);
+      Glide.with(mView.getContext()).load(InteractionAPIConstants.API_LOAD_IMAGE+userInfo.headPic)
+          .error(R.mipmap.interaction_icon_default).into(new SimpleTarget<GlideDrawable>() {
+        @Override
+        public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
+          mView.setAvatar(resource);
+        }
+      });
       Glide.with(mView.getContext())
-          .load(InteractionAPIConstants.API_LOAD_IMAGE + userInfo.headPicpath)
+          .load(InteractionAPIConstants.API_LOAD_IMAGE + userInfo.headPic)
           .asBitmap().error(R.mipmap.interaction_icon_default)
           .transform(new BlurTransformation(mView.getContext()))
           .into(new SimpleTarget<Bitmap>() {
@@ -272,6 +269,11 @@ public class InteractionInfoPresentImpl implements
               mView.setBackground(new BitmapDrawable(mView.getContext().getResources(), resource));
             }
           });
+      mView.setUserName(userInfo.name);
+      // 1 汽修厂
+      isBusiness = userInfo.type != 1;
+      // 是否显示联系商家
+      InteractionConfig.getInstance().setIsNeedBusinessStore(userInfo.type != 1);
     }
 
     @Override

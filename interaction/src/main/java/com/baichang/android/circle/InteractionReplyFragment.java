@@ -10,13 +10,22 @@ import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import com.baichang.android.circle.common.InteractionCommonFragment;
 import com.baichang.android.circle.common.InteractionConfig;
 import com.baichang.android.circle.common.InteractionFlag;
+import com.baichang.android.circle.common.InteractionFlag.Event;
+import com.baichang.android.circle.dialog.InteractionReplyDialogFragment;
+import com.baichang.android.circle.dialog.InteractionReplyDialogFragment.OnInputContentListener;
 import com.baichang.android.circle.present.Impl.InteractionInfoReplyPresentImpl;
 import com.baichang.android.circle.present.InteractionInfoReportPresent;
 import com.baichang.android.circle.view.InteractionOtherReportView;
+import com.baichang.android.common.BaseEventData;
+import org.greenrobot.eventbus.EventBus;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -118,5 +127,18 @@ public class InteractionReplyFragment extends InteractionCommonFragment
     Intent intent = new Intent(getActivity(), InteractionDetailActivity.class);
     intent.putExtra(InteractionFlag.ACTION_INTERACTION_ID, id);
     startActivity(intent);
+  }
+
+  @Override
+  public void showReplyDialog(String name) {
+    InteractionReplyDialogFragment dialog = new InteractionReplyDialogFragment();
+    dialog.setEtContentHint(name);
+    dialog.setOnInputContentListener(new OnInputContentListener() {
+      @Override
+      public void result(String content) {
+        mPresent.reply(content);
+      }
+    });
+    dialog.show(getFragmentManager(), "tag");
   }
 }

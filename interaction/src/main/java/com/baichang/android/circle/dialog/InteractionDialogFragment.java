@@ -1,12 +1,15 @@
 package com.baichang.android.circle.dialog;
 
+import android.app.Dialog;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Toast;
 import com.baichang.android.circle.R;
 import com.baichang.android.circle.adapter.InteractionDialogAdapter;
@@ -40,10 +43,15 @@ public class InteractionDialogFragment extends DialogFragment
     return new InteractionDialogFragment();
   }
 
-
+  @NonNull
   @Override
-  public void onCreate(@Nullable Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
+  public Dialog onCreateDialog(Bundle savedInstanceState) {
+    Dialog dialog = super.onCreateDialog(savedInstanceState);
+    Window window = dialog.getWindow();
+    if (window != null) {
+      window.requestFeature(Window.FEATURE_NO_TITLE);
+    }
+    return dialog;
   }
 
   @Override

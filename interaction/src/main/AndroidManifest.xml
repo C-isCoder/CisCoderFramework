@@ -16,8 +16,9 @@
       android:name=".common.InteractionApplication"
       android:supportsRtl="true">
       <activity
-         android:name=".widget.photopreview.PhotoGalleryActivity"
-         android:screenOrientation="portrait" />
+         android:name=".widget.photopreview.ImagePreviewActivity"
+         android:screenOrientation="portrait"
+         android:theme="@android:style/Theme.Translucent.NoTitleBar" />
       <activity
          android:name=".InteractionDetailActivity"
          android:screenOrientation="portrait"

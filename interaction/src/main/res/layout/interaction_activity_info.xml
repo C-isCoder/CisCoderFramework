@@ -34,10 +34,8 @@
                android:id="@+id/interaction_info_iv_avatar"
                android:layout_width="60dp"
                android:layout_height="60dp"
-               android:layout_marginTop="36dp"
-               android:layout_centerHorizontal="true"
-               app:civ_border_overlay="true"
-               tools:src="@mipmap/interaction_icon_default" />
+               android:layout_centerInParent="true"
+               app:civ_border_overlay="true" />
 
             <TextView
                android:id="@+id/interaction_info_tv_name"

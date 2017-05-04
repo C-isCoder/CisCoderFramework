@@ -53,4 +53,5 @@ public interface InteractInteraction extends IBaseInteraction {
   void getUserInfo(String userId, BaseListener<InteractionUserInfo> listener);
 
   void getShareLink(String id, BaseListener<String> listener);
+
 }

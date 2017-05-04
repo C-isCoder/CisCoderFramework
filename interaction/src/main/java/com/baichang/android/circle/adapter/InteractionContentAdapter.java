@@ -6,9 +6,8 @@ import android.content.res.ColorStateList;
 import android.graphics.drawable.Drawable;
 import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.Adapter;
@@ -32,10 +31,11 @@ import com.baichang.android.circle.widget.ForceClickImageView;
 import com.baichang.android.circle.widget.photocontents.PhotoContents;
 import com.baichang.android.circle.widget.photocontents.PhotoContents.OnItemClickListener;
 import com.baichang.android.circle.widget.photocontents.adapter.PhotoContentsBaseAdapter;
-import com.baichang.android.circle.widget.photopreview.PhotoGalleryActivity;
-import com.baichang.android.circle.widget.photopreview.PhotoGalleryData;
+import com.baichang.android.circle.widget.photopreview.ImageInfo;
+import com.baichang.android.circle.widget.photopreview.ImagePreviewActivity;
 import com.baichang.android.imageloader.ImageLoader;
 import com.baichang.android.widget.circleImageView.CircleImageView;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -170,7 +170,7 @@ public class InteractionContentAdapter extends Adapter<ViewHolder> {
       tvButton = (TextView) itemView.findViewById(R.id.item_interaction_content_tv_button);
       initConfig();
       itemView.setOnTouchListener(this);
-      mPhotos.setmOnItemClickListener(this);
+      mPhotos.setOnItemClickListener(this);
       // 列表不能点赞
       //tvPraise.setOnClickListener(this);
       ivAvatar.setOnClickListener(this);
@@ -200,14 +200,28 @@ public class InteractionContentAdapter extends Adapter<ViewHolder> {
     }
 
     @Override
-    public void onItemClick(ImageView imageView, int position) {
+    public void onItemClick(PhotoContents photoContents, int position) {
       InteractionListData data = mList.get(getAdapterPosition());
-      PhotoGalleryData galleryData = new PhotoGalleryData(position, data.images);
-      Intent intent = new Intent(imageView.getContext(), PhotoGalleryActivity.class);
-      intent.putExtra(PhotoGalleryActivity.IMAGE_DATA, galleryData);
-      ActivityOptionsCompat compat = ActivityOptionsCompat
-          .makeSceneTransitionAnimation((Activity) imageView.getContext(), imageView, "photo");
-      ActivityCompat.startActivity(imageView.getContext(), intent, compat.toBundle());
+      List<ImageInfo> imageInfoList = new ArrayList<>();
+      for (int i = 0; i < data.images.size(); i++) {
+        ImageInfo info = new ImageInfo();
+        View imageView = photoContents.getChildAt(i);
+        info.bigImageUrl = data.images.get(i);
+        info.imageViewWidth = imageView.getWidth();
+        info.imageViewHeight = imageView.getHeight();
+        int[] points = new int[2];
+        imageView.getLocationInWindow(points);
+        info.imageViewX = points[0];
+        info.imageViewY = points[1];
+        imageInfoList.add(info);
+      }
+      Intent intent = new Intent(photoContents.getContext(), ImagePreviewActivity.class);
+      Bundle bundle = new Bundle();
+      bundle.putSerializable(ImagePreviewActivity.IMAGE_INFO, (Serializable) imageInfoList);
+      bundle.putInt(ImagePreviewActivity.CURRENT_ITEM, position);
+      intent.putExtras(bundle);
+      photoContents.getContext().startActivity(intent);
+      ((Activity) photoContents.getContext()).overridePendingTransition(0, 0);
     }
 
     @Override

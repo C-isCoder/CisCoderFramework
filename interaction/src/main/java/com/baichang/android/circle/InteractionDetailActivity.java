@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -47,8 +46,8 @@ public class InteractionDetailActivity extends InteractionCommonActivity
     setContentView(R.layout.interaction_activity_detail);
     mRefresh = (SwipeRefreshLayout) findViewById(R.id.interaction_detail_refresh);
     rvList = (RecyclerView) findViewById(R.id.interaction_detail_rv_list);
-    tvSend = (TextView) findViewById(R.id.interaction_detail_tv_send);
-    etReport = (EditText) findViewById(R.id.interaction_detail_et_report);
+    tvSend = (TextView) findViewById(R.id.interaction_me_reply_tv_send);
+    etReport = (EditText) findViewById(R.id.interaction_me_reply_et_report);
     btnShare = (ImageButton) findViewById(R.id.interaction_detail_btn_share);
     btnCollect = (ImageButton) findViewById(R.id.interaction_detail_btn_collect);
     btnPraise = (ImageButton) findViewById(R.id.interaction_detail_iv_praise);

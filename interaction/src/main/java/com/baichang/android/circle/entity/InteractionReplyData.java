@@ -10,7 +10,7 @@ import java.util.List;
 public class InteractionReplyData {
 
   @Expose
-  public int trendsId;
+  public String trendsId;
 
   @Expose
   public String hostName;
@@ -41,4 +41,7 @@ public class InteractionReplyData {
 
   @Expose
   public String replyId;
+
+  @Expose
+  public String replayUserId;
 }

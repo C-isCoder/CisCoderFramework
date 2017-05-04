@@ -11,7 +11,7 @@ android {
         //targetSdkVersion rootProject.ext.android.targetSdkVersion
         targetSdkVersion 22
         ndk {
-            abiFilters 'armeabi-v7a','x86','armeabi','arm64-v8a'//or armeabi、arm64-v8a、x86
+            abiFilters 'armeabi-v7a', 'x86', 'armeabi', 'arm64-v8a'//or armeabi、arm64-v8a、x86
         }
     }
     buildTypes {

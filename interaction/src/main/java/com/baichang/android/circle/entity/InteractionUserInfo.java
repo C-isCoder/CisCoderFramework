@@ -13,7 +13,7 @@ public class InteractionUserInfo {
   @Expose
   public String name;
   @Expose
-  public String headPicpath;
+  public String headPic;
   @Expose
   public int type;
 }

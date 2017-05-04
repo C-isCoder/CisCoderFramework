@@ -4,6 +4,7 @@ public class InteractionAPIConstants {
 
   //接口地址
   public static final String API_DEFAULT_HOST = "http://120.27.36.21:8088/trends/mobile/";
+  //public static final String API_DEFAULT_HOST = "http://120.27.36.21:8082/trends/mobile/";
   //上传图片
   public static final String API_UPLOAD_IMAGE = "http://120.27.45.128:8080/fileUpload/";
   //加载图片
@@ -11,5 +12,4 @@ public class InteractionAPIConstants {
 
   //页数
   public static final int PAGE_SIZE = 20;
-
 }

@@ -16,7 +16,7 @@ public interface InteractionInfoPresent extends IBasePresent {
   int COLLECT = 2;
   int NORMAL = -1;
 
-  void attachView(ViewPager viewPager, MagicIndicator indicator, CircleImageView imageView);
+  void attachView(ViewPager viewPager, MagicIndicator indicator);
 
   void setIsOneself(boolean isOneself, String userId);
 

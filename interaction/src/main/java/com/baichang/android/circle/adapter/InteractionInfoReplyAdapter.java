@@ -78,9 +78,12 @@ public class InteractionInfoReplyAdapter extends RecyclerView.Adapter<Holder> {
     this.listener = listener;
   }
 
+
   public interface OnItemContentClickListener {
 
     void onContentClick(int id);
+
+    void onReplyClick(InteractionReplyData data);
   }
 
   class Holder extends ViewHolder implements OnClickListener {
@@ -106,23 +109,31 @@ public class InteractionInfoReplyAdapter extends RecyclerView.Adapter<Holder> {
       mContentLayout = (LinearLayout) itemView.findViewById(R.id.item_interaction_reply_content_layout);
       tvReply = (TextView) itemView.findViewById(R.id.item_interaction_reply_tv_reply);
       mContentLayout.setOnClickListener(this);
+      tvReply.setOnClickListener(this);
       initConfig();
     }
 
     private void initConfig() {
-      int deleteDrawableRes = InteractionConfig.getInstance().getButtonDrawableRes();
-      if (deleteDrawableRes != -1) {
+      int replyColorRes = InteractionConfig.getInstance().getTextFontColor();
+      if (replyColorRes != -1) {
         ColorStateList stateList = new ColorStateList(
             new int[][]{new int[]{android.R.attr.state_pressed}, new int[]{0}},
-            new int[]{deleteDrawableRes, R.color.cm_tv_black1});
+            new int[]{replyColorRes, R.color.cm_tv_black1});
         tvReply.setTextColor(stateList);
       }
     }
 
     @Override
     public void onClick(View view) {
+      int id = view.getId();
       if (listener != null) {
-        listener.onContentClick(mList.get(getLayoutPosition()).trendsId);
+        if (id == mContentLayout.getId()) {
+          listener.onContentClick(
+              Integer.parseInt(mList.get(getLayoutPosition()).trendsId));
+        } else {
+          listener.onReplyClick(
+              mList.get(getLayoutPosition()));
+        }
       }
     }
   }

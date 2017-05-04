@@ -310,7 +310,7 @@ public class PhotoContents extends FlowLayout {
   public boolean performItemClick(ImageView view, int position) {
     final boolean result;
     if (mOnItemClickListener != null) {
-      mOnItemClickListener.onItemClick(view, position);
+      mOnItemClickListener.onItemClick(this, position);
       result = true;
     } else {
       result = false;
@@ -476,7 +476,7 @@ public class PhotoContents extends FlowLayout {
     return mOnItemClickListener;
   }
 
-  public void setmOnItemClickListener(OnItemClickListener mOnItemClickListener) {
+  public void setOnItemClickListener(OnItemClickListener mOnItemClickListener) {
     this.mOnItemClickListener = mOnItemClickListener;
   }
 
@@ -566,6 +566,6 @@ public class PhotoContents extends FlowLayout {
 
   public interface OnItemClickListener {
 
-    void onItemClick(ImageView view, int position);
+    void onItemClick(PhotoContents view, int position);
   }
 }

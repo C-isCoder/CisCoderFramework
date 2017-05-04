@@ -8,6 +8,7 @@
    <string name="btn_interaction_report">举报</string>
    <string name="tips_report">回复</string>
    <string name="btn_send">发送</string>
+   <string name="btn_cancel">取消</string>
    <string name="btn_see_more">查看更多回复</string>
    <string name="btn_publish">发布</string>
    <string name="str_publish_interaction">发表互动</string>
@@ -18,5 +19,5 @@
    <string name="str_interaction_info_report">回复（%s）</string>
    <string name="str_interaction_info_collect">收藏（%s）</string>
    <string name="str_interaction_business">商家详情</string>
-
+   <string name="str_select">%1$s/%2$s</string>
 </resources>

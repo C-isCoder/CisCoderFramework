@@ -10,4 +10,7 @@ import com.baichang.android.common.IBaseView;
 public interface InteractionOtherReportView extends IBaseView {
 
   void gotoDetail(int id);
+
+  void showReplyDialog(String replyName);
+
 }

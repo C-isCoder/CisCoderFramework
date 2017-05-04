@@ -1,6 +1,10 @@
 package com.baichang.android.circle.present.Impl;
 
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
+import com.baichang.android.circle.common.InteractionConfig;
+import com.baichang.android.circle.entity.InteractionCommentReplyList;
+import com.baichang.android.circle.entity.InteractionUserData;
 import com.baichang.android.circle.model.Impl.InteractInteractionImpl;
 import com.baichang.android.circle.model.InteractInteraction;
 import com.baichang.android.common.IBaseInteraction.BaseListener;
@@ -22,6 +26,7 @@ public class InteractionInfoReplyPresentImpl implements InteractionInfoReportPre
   private InteractInteraction mInteraction;
   private InteractionInfoReplyAdapter mAdapter;
   private String mUserId;
+  private InteractionReplyData mReplyData;
 
   public InteractionInfoReplyPresentImpl(String userId, InteractionOtherReportView view) {
     mView = view;
@@ -53,6 +58,41 @@ public class InteractionInfoReplyPresentImpl implements InteractionInfoReportPre
   }
 
   @Override
+  public void reply(String content) {
+    if (TextUtils.isEmpty(content)) {
+      mView.showMsg("请输入回复的内容");
+    } else if (mReplyData != null) {
+      InteractionUserData user = InteractionConfig.getInstance().getUser();
+      if (user == null) {
+        return;
+      }
+      InteractionCommentReplyList replyData = new InteractionCommentReplyList();
+      replyData.trendsId = mReplyData.trendsId;
+      replyData.replayUserId = user.id;
+      replyData.replayContent = content;
+      replyData.commentId = mReplyData.commentId;
+      replyData.commentUserId = mReplyData.replayUserId;
+      mView.showProgressBar();
+      mInteraction.reply(replyData, replyListener);
+    }
+  }
+
+  private BaseListener<Boolean> replyListener = new BaseListener<Boolean>() {
+    @Override
+    public void success(Boolean aBoolean) {
+      mView.hideProgressBar();
+      mView.showMsg("回复成功");
+      mView.showReplyDialog("");
+    }
+
+    @Override
+    public void error(String error) {
+      mView.hideProgressBar();
+      mView.showMsg(error);
+    }
+  };
+
+  @Override
   public void success(List<InteractionReplyData> list) {
     mView.hideProgressBar();
     mAdapter.setData(list);
@@ -67,5 +107,11 @@ public class InteractionInfoReplyPresentImpl implements InteractionInfoReportPre
   @Override
   public void onContentClick(int id) {
     mView.gotoDetail(id);
+  }
+
+  @Override
+  public void onReplyClick(InteractionReplyData data) {
+    mReplyData = data;
+    mView.showReplyDialog(data.replyName);
   }
 }

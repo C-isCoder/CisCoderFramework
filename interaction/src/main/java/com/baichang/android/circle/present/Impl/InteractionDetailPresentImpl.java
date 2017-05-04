@@ -4,9 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
@@ -35,14 +34,15 @@ import com.baichang.android.circle.widget.ForceClickImageView;
 import com.baichang.android.circle.widget.photocontents.PhotoContents;
 import com.baichang.android.circle.widget.photocontents.PhotoContents.OnItemClickListener;
 import com.baichang.android.circle.widget.photocontents.adapter.PhotoContentsBaseAdapter;
-import com.baichang.android.circle.widget.photopreview.PhotoGalleryActivity;
-import com.baichang.android.circle.widget.photopreview.PhotoGalleryData;
+import com.baichang.android.circle.widget.photopreview.ImageInfo;
+import com.baichang.android.circle.widget.photopreview.ImagePreviewActivity;
 import com.baichang.android.common.BaseEventData;
 import com.baichang.android.common.IBaseInteraction.BaseListener;
 import com.baichang.android.imageloader.ImageLoader;
 import com.baichang.android.utils.BCDialogUtil;
 import com.baichang.android.utils.BCToolsUtil;
 import com.baichang.android.widget.circleImageView.CircleImageView;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import org.greenrobot.eventbus.EventBus;
@@ -118,7 +118,7 @@ public class InteractionDetailPresentImpl implements
     header.findViewById(R.id.interaction_detail_tv_report).setOnClickListener(this);
     initConfig();
     mPhotos = (PhotoContents) header.findViewById(R.id.interaction_detail_photo_content);
-    mPhotos.setmOnItemClickListener(this);
+    mPhotos.setOnItemClickListener(this);
   }
 
   private void initConfig() {
@@ -410,13 +410,27 @@ public class InteractionDetailPresentImpl implements
   };
 
   @Override
-  public void onItemClick(ImageView imageView, int position) {
-    PhotoGalleryData galleryData = new PhotoGalleryData(position, mPhotoAdapter.getList());
-    Intent intent = new Intent(imageView.getContext(), PhotoGalleryActivity.class);
-    intent.putExtra(PhotoGalleryActivity.IMAGE_DATA, galleryData);
-    ActivityOptionsCompat compat = ActivityOptionsCompat
-        .makeSceneTransitionAnimation((Activity) imageView.getContext(), imageView, "photo");
-    ActivityCompat.startActivity(imageView.getContext(), intent, compat.toBundle());
+  public void onItemClick(PhotoContents photoContents, int position) {
+    List<ImageInfo> imageInfoList = new ArrayList<>();
+    for (int i = 0; i < mPhotoAdapter.getList().size(); i++) {
+      ImageInfo info = new ImageInfo();
+      View imageView = photoContents.getChildAt(i);
+      info.bigImageUrl = mPhotoAdapter.getList().get(i);
+      info.imageViewWidth = imageView.getWidth();
+      info.imageViewHeight = imageView.getHeight();
+      int[] points = new int[2];
+      imageView.getLocationInWindow(points);
+      info.imageViewX = points[0];
+      info.imageViewY = points[1];
+      imageInfoList.add(info);
+    }
+    Intent intent = new Intent(photoContents.getContext(), ImagePreviewActivity.class);
+    Bundle bundle = new Bundle();
+    bundle.putSerializable(ImagePreviewActivity.IMAGE_INFO, (Serializable) imageInfoList);
+    bundle.putInt(ImagePreviewActivity.CURRENT_ITEM, position);
+    intent.putExtras(bundle);
+    photoContents.getContext().startActivity(intent);
+    ((Activity) photoContents.getContext()).overridePendingTransition(0, 0);
   }
 
   private class PhotoContentsAdapter extends PhotoContentsBaseAdapter {
