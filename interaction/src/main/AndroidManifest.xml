@@ -8,12 +8,52 @@
    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
    <uses-permission android:name="android.permission.CAMERA" />
    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+   <!--Test-->
+   <!--<application-->
+      <!--android:allowBackup="true"-->
+      <!--android:icon="@mipmap/ic_circle_launcher"-->
+      <!--android:label="@string/app_name"-->
+      <!--android:name=".common.InteractionApplication"-->
+      <!--android:supportsRtl="true">-->
+      <!--<activity-->
+         <!--android:name=".widget.photopreview.ImagePreviewActivity"-->
+         <!--android:screenOrientation="portrait"-->
+         <!--android:theme="@android:style/Theme.Translucent.NoTitleBar" />-->
+      <!--<activity-->
+         <!--android:name=".InteractionDetailActivity"-->
+         <!--android:screenOrientation="portrait"-->
+         <!--android:windowSoftInputMode="adjustResize" />-->
+      <!--<activity-->
+         <!--android:name=".InteractionPublishActivity"-->
+         <!--android:screenOrientation="portrait" />-->
+      <!--<activity-->
+         <!--android:name=".InteractionInfoActivity"-->
+         <!--android:screenOrientation="portrait" />-->
+      <!--&lt;!&ndash;Boxing &ndash;&gt;-->
+      <!--<provider-->
+         <!--android:authorities="${applicationId}.file.provider"-->
+         <!--android:exported="false"-->
+         <!--android:grantUriPermissions="true"-->
+         <!--android:name="android.support.v4.content.FileProvider">-->
+         <!--<meta-data-->
+            <!--android:name="android.support.FILE_PROVIDER_PATHS"-->
+            <!--android:resource="@xml/boxing_file_provider" />-->
+      <!--</provider>-->
 
+      <!--<activity-->
+      <!--android:name=".common.InteractionMainActivity"-->
+      <!--android:screenOrientation="portrait"-->
+      <!--android:theme="@style/Theme.AppCompat.Light.NoActionBar">-->
+      <!--<intent-filter>-->
+         <!--<action android:name="android.intent.action.MAIN" />-->
+
+         <!--<category android:name="android.intent.category.LAUNCHER" />-->
+      <!--</intent-filter>-->
+   <!--</activity>-->
+   <!--</application>-->
+   <!--Release-->
    <application
       android:allowBackup="true"
-      android:icon="@mipmap/ic_circle_launcher"
-      android:label="@string/app_name"
-      android:name=".common.InteractionApplication"
       android:supportsRtl="true">
       <activity
          android:name=".widget.photopreview.ImagePreviewActivity"
@@ -30,26 +70,15 @@
          android:name=".InteractionInfoActivity"
          android:screenOrientation="portrait" />
       <!--Boxing -->
-      <provider
-         android:authorities="${applicationId}.file.provider"
-         android:exported="false"
-         android:grantUriPermissions="true"
-         android:name="android.support.v4.content.FileProvider">
-         <meta-data
-            android:name="android.support.FILE_PROVIDER_PATHS"
-            android:resource="@xml/boxing_file_provider" />
-      </provider>
-
-      <activity
-         android:name=".common.InteractionMainActivity"
-         android:screenOrientation="portrait"
-         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-         <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
-
-            <category android:name="android.intent.category.LAUNCHER" />
-         </intent-filter>
-      </activity>
+      <!--<provider-->
+         <!--android:authorities="${applicationId}.file.provider"-->
+         <!--android:exported="false"-->
+         <!--android:grantUriPermissions="true"-->
+         <!--android:name="android.support.v4.content.FileProvider">-->
+         <!--<meta-data-->
+            <!--android:name="android.support.FILE_PROVIDER_PATHS"-->
+            <!--android:resource="@xml/boxing_file_provider" />-->
+      <!--</provider>-->
    </application>
 
 </manifest>

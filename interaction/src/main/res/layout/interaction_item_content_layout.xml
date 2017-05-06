@@ -76,7 +76,7 @@
 
    <com.baichang.android.circle.widget.photocontents.PhotoContents
       android:id="@+id/item_interaction_content_photo_content"
-      android:layout_width="match_parent"
+      android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginTop="8dp" />
 

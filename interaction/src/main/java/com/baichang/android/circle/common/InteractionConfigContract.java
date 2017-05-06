@@ -1,5 +1,7 @@
 package com.baichang.android.circle.common;
 
+import android.app.Activity;
+import android.content.Context;
 import com.baichang.android.circle.common.InteractionConfig.InteractionListener;
 import com.baichang.android.circle.entity.InteractionUserData;
 
@@ -33,12 +35,9 @@ public interface InteractionConfigContract {
 
   boolean isNeedBusinessStore();
 
-  void share(String title, String summary, String url);
+  void share(Activity activity, String title, String summary, String url);
 
   void businessStore(String id);
 
   InteractionUserData getUser();
-
-  void setUser(InteractionUserData user);
-
 }

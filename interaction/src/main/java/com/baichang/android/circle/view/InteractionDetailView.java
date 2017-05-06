@@ -1,5 +1,6 @@
 package com.baichang.android.circle.view;
 
+import android.app.Activity;
 import android.content.Context;
 import com.baichang.android.common.IBaseView;
 
@@ -10,6 +11,8 @@ import com.baichang.android.common.IBaseView;
 public interface InteractionDetailView extends IBaseView {
 
   Context getContext();
+
+  Activity getActivity();
 
   void setReportHint(String tips);
 

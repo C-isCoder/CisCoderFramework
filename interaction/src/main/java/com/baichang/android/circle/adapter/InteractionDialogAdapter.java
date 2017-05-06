@@ -6,18 +6,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 import com.baichang.android.circle.R;
 import com.baichang.android.circle.entity.InteractionTypeData;
+import com.baichang.android.circle.present.Impl.InteractionPresentImpl;
 import java.util.ArrayList;
 import java.util.List;
 
 public class InteractionDialogAdapter extends
     RecyclerView.Adapter<InteractionDialogAdapter.ViewHolder> {
 
-  private List<InteractionTypeData> mValues = new ArrayList<>();
+  private List<InteractionTypeData> mValues;
 
   public InteractionDialogAdapter(OnDialogItemClickListener listener) {
     setOnDialogItemClickListener(listener);
+    mValues = InteractionPresentImpl.mTypeList;
   }
 
   @Override
@@ -25,14 +28,6 @@ public class InteractionDialogAdapter extends
     View view = LayoutInflater.from(parent.getContext())
         .inflate(R.layout.interaction_dialog_fragment, parent, false);
     return new ViewHolder(view);
-  }
-
-  public void setData(List<InteractionTypeData> list) {
-    if (!mValues.isEmpty()) {
-      mValues.clear();
-    }
-    mValues.addAll(list);
-    notifyDataSetChanged();
   }
 
   @Override
@@ -47,8 +42,6 @@ public class InteractionDialogAdapter extends
         }
       }
     });
-    Log.d("CID", holder.mItem.toString());
-    Log.d("CID", holder.toString());
   }
 
   @Override

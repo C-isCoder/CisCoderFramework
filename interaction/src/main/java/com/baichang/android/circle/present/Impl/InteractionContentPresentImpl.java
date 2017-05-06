@@ -6,7 +6,6 @@ import android.support.v7.widget.RecyclerView.OnScrollListener;
 import android.text.TextUtils;
 import com.baichang.android.circle.R;
 import com.baichang.android.circle.common.InteractionConfig;
-import com.baichang.android.circle.common.InteractionFlag;
 import com.baichang.android.circle.common.InteractionFlag.Event;
 import com.baichang.android.circle.entity.InteractionUserData;
 import com.baichang.android.circle.model.Impl.InteractInteractionImpl;
@@ -153,11 +152,11 @@ public class InteractionContentPresentImpl implements InteractionContentPresent,
 
   @Override
   public void avatar(InteractionListData data) {
-    InteractionUserData userData = InteractionConfig.getInstance().getUser();
-    if (userData == null) {
+    InteractionUserData user = InteractionConfig.getInstance().getUser();
+    if (user == null) {
       return;
     }
-    mView.gotoInfo(TextUtils.equals(data.hostUserId, userData.id), data.hostUserId);
+    mView.gotoInfo(TextUtils.equals(data.hostUserId, user.id), data.hostUserId);
   }
 
   @Override

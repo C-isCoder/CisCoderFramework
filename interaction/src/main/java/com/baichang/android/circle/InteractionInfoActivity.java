@@ -46,6 +46,7 @@ public class InteractionInfoActivity extends BaseActivity
     mIndicator = (MagicIndicator) findViewById(R.id.interaction_info_indicator);
     mViewPager = (ViewPager) findViewById(R.id.interaction_info_viewPager);
     mProgress = (ContentLoadingProgressBar) findViewById(R.id.interaction_info_progress);
+    tvBusiness = (TextView) findViewById(R.id.interaction_other_tv_business);
     initConfig();
     init();
   }
@@ -56,20 +57,17 @@ public class InteractionInfoActivity extends BaseActivity
   }
 
   private void initConfig() {
-    if (InteractionConfig.getInstance().isNeedBusinessStore()) {
-      tvBusiness = (TextView) findViewById(R.id.interaction_other_tv_business);
-      tvBusiness.setOnClickListener(this);
-      tvBusiness.setVisibility(View.VISIBLE);
-
-      int textColor = InteractionConfig.getInstance().getTextFontColor();
-      if (textColor != -1) {
-        tvBusiness.setTextColor(textColor);
-        int businessDrawableRes = InteractionConfig.getInstance().getBusinessDrawableRes();
-        if (businessDrawableRes != -1) {
-          tvBusiness.setBackgroundResource(businessDrawableRes);
-        }
+    int textColor = InteractionConfig.getInstance().getTextFontColor();
+    if (textColor != -1) {
+      tvBusiness.setTextColor(textColor);
+      int businessDrawableRes = InteractionConfig.getInstance().getBusinessDrawableRes();
+      if (businessDrawableRes != -1) {
+        tvBusiness.setBackgroundResource(businessDrawableRes);
       }
     }
+    tvBusiness.setOnClickListener(this);
+    tvBusiness.setVisibility(InteractionConfig.getInstance().isNeedBusinessStore()
+        ? View.VISIBLE : View.INVISIBLE);
   }
 
   private void init() {
@@ -131,6 +129,13 @@ public class InteractionInfoActivity extends BaseActivity
   @Override
   public void setAvatar(Drawable drawable) {
     ivAvatar.setImageDrawable(drawable);
+  }
+
+  @Override
+  public void setBusinessVisitState(boolean isVisit) {
+    if (InteractionConfig.getInstance().isNeedBusinessStore()) {
+      tvBusiness.setVisibility(isVisit ? View.VISIBLE : View.INVISIBLE);
+    }
   }
 
   @Override

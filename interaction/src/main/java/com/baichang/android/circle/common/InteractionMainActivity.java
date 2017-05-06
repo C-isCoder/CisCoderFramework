@@ -17,7 +17,7 @@ public class InteractionMainActivity extends InteractionCommonActivity {
     userData.avatar = "头像";
     userData.id = "1";
     userData.name = "用户名字";
-    InteractionDiskCache.setUser(userData);
+    InteractionConfig.getInstance().setUser(userData);
     FragmentManager manager = getSupportFragmentManager();
     manager.beginTransaction().add(R.id.content_layout, new InteractionFragment()).commit();
   }

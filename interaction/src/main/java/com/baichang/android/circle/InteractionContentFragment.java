@@ -9,6 +9,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -141,6 +142,9 @@ public class InteractionContentFragment extends InteractionCommonFragment
 
   @Override
   public void gotoInfo(boolean isOneself, String userId) {
+    if (TextUtils.isEmpty(userId)) {
+      return;
+    }
     Intent intent = new Intent(getActivity(), InteractionInfoActivity.class);
     intent.putExtra(InteractionFlag.ACTION_INTERACTION_IS_ONESELF, isOneself);
     intent.putExtra(InteractionFlag.ACTION_INTERACTION_USER_ID, userId);

@@ -212,7 +212,7 @@ public class InteractionDetailPresentImpl implements
       mInteraction.getShareLink(String.valueOf(trendsId), new BaseListener<String>() {
         @Override
         public void success(String url) {
-          listener.share(tvTitle.getText().toString(),
+          listener.share(mView.getActivity(), tvTitle.getText().toString(),
               tvContent.getText().toString(), url);
         }
 

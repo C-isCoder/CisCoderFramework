@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
    xmlns:app="http://schemas.android.com/apk/res-auto"
+   xmlns:tools="http://schemas.android.com/tools"
    android:layout_width="match_parent"
    android:layout_height="wrap_content"
    android:orientation="vertical">
@@ -8,10 +9,10 @@
    <View
       android:id="@+id/interaction_dialog_view"
       android:layout_width="match_parent"
-      android:layout_height="32dp"
+      android:layout_height="10dp"
       android:background="@color/interaction_text_font" />
 
-   <android.support.v7.widget.RecyclerView xmlns:tools="http://schemas.android.com/tools"
+   <android.support.v7.widget.RecyclerView
       android:id="@+id/interaction_fragment_dialog_rv_list"
       android:layout_width="match_parent"
       android:layout_height="match_parent"

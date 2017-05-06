@@ -45,7 +45,7 @@ ext {
             snapshot  : 'http://svn.weiidu.com:8081/nexus/content/repositories/snapshots/',
             repository: 'http://svn.weiidu.com:8081/nexus/content/repositories/android/',
             library   : 'com.baichang.android.library',
-            model     : 'com.baichang.android.module',
+            module     : 'com.baichang.android.module',
     ]
     common = [
             version    : '1.0.1',
@@ -96,7 +96,7 @@ ext {
             artifacts  : 'request.aar',
     ]
     umShare = [
-            version    : '1.0.1',
+            version    : '2.0.0',
             artifactId : 'umShare',
             packaging  : 'aar',
             description: 'umShare library',
@@ -124,7 +124,7 @@ ext {
             artifactId : 'interaction',
             packaging  : 'aar',
             description: 'Interaction Model',
-            groupId    : maven.model,
+            groupId    : maven.module,
             artifacts  : 'interaction.aar',
     ]
 }

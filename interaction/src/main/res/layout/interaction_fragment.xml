@@ -4,12 +4,13 @@
    android:layout_width="match_parent"
    android:layout_height="match_parent"
    android:background="@color/interaction_layout_background"
-   android:fitsSystemWindows="true"
    tools:context="com.baichang.android.circle.InteractionFragment">
 
    <RelativeLayout
       android:id="@+id/title"
       style="@style/top_bar_layout"
+      android:layout_height="74dp"
+      android:paddingTop="24dp"
       android:background="@color/interaction_top_title_color">
 
       <TextView

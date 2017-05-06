@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import com.baichang.android.circle.InteractionContentFragment;
@@ -252,16 +253,19 @@ public class InteractionInfoPresentImpl implements
   private BaseListener<InteractionUserInfo> userInfoListener = new BaseListener<InteractionUserInfo>() {
     @Override
     public void success(InteractionUserInfo userInfo) {
-      Glide.with(mView.getContext()).load(InteractionAPIConstants.API_LOAD_IMAGE+userInfo.headPic)
-          .error(R.mipmap.interaction_icon_default).into(new SimpleTarget<GlideDrawable>() {
-        @Override
-        public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
-          mView.setAvatar(resource);
-        }
-      });
       Glide.with(mView.getContext())
-          .load(InteractionAPIConstants.API_LOAD_IMAGE + userInfo.headPic)
-          .asBitmap().error(R.mipmap.interaction_icon_default)
+          .load(TextUtils.isEmpty(userInfo.headPic) ? R.mipmap.interaction_icon_default
+              : InteractionAPIConstants.API_LOAD_IMAGE + userInfo.headPic)
+          .into(new SimpleTarget<GlideDrawable>() {
+            @Override
+            public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
+              mView.setAvatar(resource);
+            }
+          });
+      Glide.with(mView.getContext())
+          .load(TextUtils.isEmpty(userInfo.headPic) ? R.mipmap.interaction_icon_default
+              : InteractionAPIConstants.API_LOAD_IMAGE + userInfo.headPic)
+          .asBitmap()
           .transform(new BlurTransformation(mView.getContext()))
           .into(new SimpleTarget<Bitmap>() {
             @Override
@@ -273,7 +277,7 @@ public class InteractionInfoPresentImpl implements
       // 1 汽修厂
       isBusiness = userInfo.type != 1;
       // 是否显示联系商家
-      InteractionConfig.getInstance().setIsNeedBusinessStore(userInfo.type != 1);
+      mView.setBusinessVisitState(userInfo.type == 1);
     }
 
     @Override

@@ -22,4 +22,6 @@ public interface InteractionMeView extends IBaseView {
   void setUserName(String name);
 
   void setAvatar(Drawable drawable);
+
+  void setBusinessVisitState(boolean isVisit);
 }

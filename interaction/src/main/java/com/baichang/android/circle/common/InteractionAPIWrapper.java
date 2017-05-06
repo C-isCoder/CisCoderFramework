@@ -31,7 +31,8 @@ public class InteractionAPIWrapper implements InteractionAPI {
     if (Instance == null) {
       synchronized (InteractionAPIWrapper.class) {
         if (Instance == null) {
-          Instance = HttpFactory.creatHttp(InteractionAPI.class);
+          Instance = HttpFactory.creatHttp(InteractionAPI.class,
+              InteractionAPIConstants.API_DEFAULT_HOST);
         }
       }
     }

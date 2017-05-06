@@ -25,11 +25,9 @@ import java.util.List;
  * A fragment representing a list of Items.
  * interface.
  */
-public class InteractionDialogFragment extends DialogFragment
-    implements OnDialogItemClickListener, BaseListener<List<InteractionTypeData>> {
+public class InteractionDialogFragment extends DialogFragment implements OnDialogItemClickListener{
 
   private static OnDialogItemClickListener mListener;
-  private InteractionDialogAdapter mAdapter;
 
   /**
    * Mandatory empty constructor for the fragment manager to instantiate the
@@ -66,14 +64,12 @@ public class InteractionDialogFragment extends DialogFragment
     super.onViewCreated(view, savedInstanceState);
     RecyclerView recycler = (RecyclerView) view.findViewById(
         R.id.interaction_fragment_dialog_rv_list);
-    mAdapter = new InteractionDialogAdapter(this);
-    recycler.setAdapter(mAdapter);
+    recycler.setAdapter(new InteractionDialogAdapter(this));
     int textColor = InteractionConfig.getInstance().getTextFontColor();
     if (textColor != -1) {
       View title = view.findViewById(R.id.interaction_dialog_view);
       title.setBackgroundResource(textColor);
     }
-    new InteractInteractionImpl().getInteractionTypeList(this);
   }
 
   @Override
@@ -82,15 +78,5 @@ public class InteractionDialogFragment extends DialogFragment
       mListener.onItemClick(data);
     }
     dismiss();
-  }
-
-  @Override
-  public void success(List<InteractionTypeData> list) {
-    mAdapter.setData(list);
-  }
-
-  @Override
-  public void error(String error) {
-    Toast.makeText(getContext(), error, Toast.LENGTH_SHORT).show();
   }
 }

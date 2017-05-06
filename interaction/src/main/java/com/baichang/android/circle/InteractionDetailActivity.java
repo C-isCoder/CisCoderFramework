@@ -2,6 +2,7 @@ package com.baichang.android.circle;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -133,6 +134,11 @@ public class InteractionDetailActivity extends InteractionCommonActivity
 
   @Override
   public Context getContext() {
+    return this;
+  }
+
+  @Override
+  public Activity getActivity() {
     return this;
   }
 

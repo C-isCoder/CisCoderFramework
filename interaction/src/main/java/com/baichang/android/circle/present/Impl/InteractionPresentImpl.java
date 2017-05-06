@@ -45,12 +45,11 @@ public class InteractionPresentImpl implements InteractionPresent,
   private TextView tvMe;
   private FloatingActionButton mFloating;
   private InteractInteraction mInteraction;
-  private List<InteractionTypeData> mTypeList;
+  public static List<InteractionTypeData> mTypeList = new ArrayList<>();
 
   public InteractionPresentImpl(InteractionView view) {
     mView = view;
     mAdapter = new InteractionAdapter(mView.getFragmentManager());
-    mTypeList = new ArrayList<>();
     mInteraction = new InteractInteractionImpl();
   }
 

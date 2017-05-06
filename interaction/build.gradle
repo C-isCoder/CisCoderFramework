@@ -1,6 +1,6 @@
-//apply plugin: 'com.android.library'
-apply plugin: 'com.android.application'
 apply plugin: 'maven'
+apply plugin: 'com.android.library'        // 仓库
+//apply plugin: 'com.android.application'    // 测试
 
 android {
     compileSdkVersion rootProject.ext.android.compileSdkVersion
@@ -24,23 +24,23 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-//    provided project(':config')
-//    provided project(':request')
-//    //compile project(':widget')
-//    compile 'com.baichang.android.library:widget:1.0.1'
-//    provided project(':imageloader')
-//    provided project(':common')
-//    provided project(':utils')
-//    provided rootProject.ext.depend.v4
+
+    provided project(':config')
+    provided project(':request')
+    compile 'com.baichang.android.library:widget:1.0.1'
+    provided project(':imageloader')
+    provided project(':common')
+    provided project(':utils')
+    provided rootProject.ext.depend.v4
 
     //测试
-    compile project(':config')
-    compile project(':request')
-    compile project(':widget')
-    compile project(':imageloader')
-    compile project(':common')
-    compile project(':utils')
-    compile rootProject.ext.depend.v4
+//    compile project(':config')
+//    compile project(':request')
+//    compile project(':widget')
+//    compile project(':imageloader')
+//    compile project(':common')
+//    compile project(':utils')
+//    compile rootProject.ext.depend.v4
 
     compile rootProject.ext.depend.design
     compile rootProject.ext.depend.recyclerview
@@ -51,29 +51,29 @@ dependencies {
     compile rootProject.ext.depend.eventbus
     compile rootProject.ext.depend.imageCompressed
 }
-//uploadArchives {
-//    configuration = configurations.archives
-//    repositories {
-//        mavenDeployer {
-//            snapshotRepository(url: rootProject.ext.maven.snapshot) {
-//                authentication(name: rootProject.ext.maven.name,
-//                        password: rootProject.ext.maven.password)
-//            }
-//            repository(url: rootProject.ext.maven.repository) {
-//                authentication(name: rootProject.ext.maven.name,
-//                        password: rootProject.ext.maven.password)
-//            }
-//            pom.project {
-//                version rootProject.ext.interaction.version
-//                artifactId rootProject.ext.interaction.artifactId
-//                groupId rootProject.ext.interaction.groupId
-//                packaging rootProject.ext.interaction.packaging
-//                description rootProject.ext.interaction.description
-//            }
-//        }
-//    }
-//}
-//
-//artifacts {
-//    archives file(rootProject.ext.interaction.artifacts)
-//}
+uploadArchives {
+    configuration = configurations.archives
+    repositories {
+        mavenDeployer {
+            snapshotRepository(url: rootProject.ext.maven.snapshot) {
+                authentication(userName: rootProject.ext.maven.name,
+                        password: rootProject.ext.maven.password)
+            }
+            repository(url: rootProject.ext.maven.repository) {
+                authentication(userName: rootProject.ext.maven.name,
+                        password: rootProject.ext.maven.password)
+            }
+            pom.project {
+                version rootProject.ext.interaction.version
+                artifactId rootProject.ext.interaction.artifactId
+                groupId rootProject.ext.interaction.groupId
+                packaging rootProject.ext.interaction.packaging
+                description rootProject.ext.interaction.description
+            }
+        }
+    }
+}
+
+artifacts {
+    archives file(rootProject.ext.interaction.artifacts)
+}

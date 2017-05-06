@@ -1,5 +1,7 @@
 package com.baichang.android.circle.common;
 
+import android.app.Activity;
+import android.content.Context;
 import com.baichang.android.circle.entity.InteractionUserData;
 
 /**
@@ -22,7 +24,7 @@ public class InteractionConfig implements InteractionConfigContract {
   private static int mBackDrawableResRes = -1;
   private static boolean isNeedBusinessStore = false;
   private static String mTitleText = null;
-  private static InteractionUserData mUserData;
+  private static InteractionUserData mUser;
   private static InteractionListener listener = null;
 
   private InteractionConfig() {
@@ -100,9 +102,9 @@ public class InteractionConfig implements InteractionConfigContract {
   }
 
   @Override
-  public void share(String title, String summary, String url) {
+  public void share(Activity activity, String title, String summary, String url) {
     if (listener != null) {
-      listener.share(title, summary, url);
+      listener.share(activity, title, summary, url);
     }
   }
 
@@ -115,16 +117,7 @@ public class InteractionConfig implements InteractionConfigContract {
 
   @Override
   public InteractionUserData getUser() {
-    if (mUserData == null) {
-      mUserData = InteractionDiskCache.getUser();
-    }
-    return mUserData;
-  }
-
-  @Override
-  public void setUser(InteractionUserData user) {
-    mUserData = user;
-    InteractionDiskCache.setUser(user);
+    return mUser;
   }
 
   public InteractionConfig setTextFontColor(int mTextFontColor) {
@@ -192,9 +185,14 @@ public class InteractionConfig implements InteractionConfigContract {
     return this;
   }
 
+  public InteractionConfig setUser(InteractionUserData userData) {
+    InteractionConfig.mUser = userData;
+    return this;
+  }
+
   public interface InteractionListener {
 
-    void share(String title, String summary, String url);
+    void share(Activity activity, String title, String summary, String url);
 
     void businessClick(String id);
   }

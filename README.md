@@ -1,6 +1,12 @@
 # Android框架文档说明
 
 ## 更新说明：
+ ### 2017-05-06
+ 
+ * 互动模块进本完成
+ * 友盟分享大改版，升到最新版本，解决与微信支付的冲突。 
+ 可以设置分享的类型(BCUmUtil.setShareMedia(SHARE_MEDIA[] displayList //要分享的 ))
+ 
  ### 2017-04-14
  
  * request 网络请求 新增 网络不通畅的提示。
@@ -51,7 +57,7 @@ allprojects {
 * 动态权限  `compile 'com.baichang.android.library:permission:1.0.0'`
 * 基础配置  `compile 'com.baichang.android.library:config:1.0.0'`
 * 佰昌互动  `compile 'com.baichang.android.module:interaction:0.0.1'`
-* 友盟分享  `compile 'com.baichang.android.library:umShare:1.0.1'`
+* 友盟分享  `compile 'com.baichang.android.library:umShare:2.0.0'`
 
 ## 项目初始化配置
 

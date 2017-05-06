@@ -50,7 +50,7 @@ public class InteractionInfoReplyAdapter extends RecyclerView.Adapter<Holder> {
     holder.tvContent.setText(data.replyContent);
     holder.tvTime.setText(data.replyTime);
     holder.tvSummary.setText(Html.fromHtml(
-        String.format("<font color=\"#67c4fe\">%s</font>,<font color=\"#666666\">%s</font>",
+        String.format("<font color=\"#67c4fe\">%s</font>:<font color=\"#666666\">%s</font>",
             data.hostName, data.trendsContent)));
     // 去掉不要了。
     //holder.tvMe.setVisibility(isOneself ? View.VISIBLE : View.GONE);
