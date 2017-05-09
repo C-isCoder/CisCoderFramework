@@ -169,7 +169,7 @@ public class InteractionContentPresentImpl implements InteractionContentPresent,
           public void onClick(DialogInterface dialog, int which) {
             mAdapter.remove(data);
             mInteraction.delete(data.id, deleteListener);
-            EventBus.getDefault().post(new BaseEventData(Event.INTERACTION_LIST_DELETE.ordinal()));
+            EventBus.getDefault().post(new BaseEventData(Event.INTERACTION_LIST_DELETE));
           }
         }, null);
   }
@@ -184,7 +184,7 @@ public class InteractionContentPresentImpl implements InteractionContentPresent,
           public void onClick(DialogInterface dialog, int which) {
             mAdapter.remove(data);
             mInteraction.collect(data.id, cancelCollectListener);
-            EventBus.getDefault().post(new BaseEventData(Event.INTERACTION_LIST_CANCEL_COLLECT.ordinal()));
+            EventBus.getDefault().post(new BaseEventData(Event.INTERACTION_LIST_CANCEL_COLLECT));
           }
         }, null);
   }

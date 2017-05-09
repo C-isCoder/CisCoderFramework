@@ -19,11 +19,13 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.baichang.android.circle.common.InteractionCommonActivity;
 import com.baichang.android.circle.common.InteractionConfig;
+import com.baichang.android.circle.common.InteractionFlag.Event;
 import com.baichang.android.circle.present.Impl.InteractionPublishImpl;
 import com.baichang.android.circle.present.InteractionPublishPresent;
 import com.baichang.android.circle.utils.AnimatorUtil;
 import com.baichang.android.circle.utils.BoxingPicassoLoader;
 import com.baichang.android.circle.view.InteractionPublishView;
+import com.baichang.android.common.BaseEventData;
 import com.baichang.android.utils.photo.BCPhotoUtil;
 import com.bilibili.boxing.Boxing;
 import com.bilibili.boxing.BoxingMediaLoader;
@@ -34,6 +36,7 @@ import com.bilibili.boxing.model.entity.BaseMedia;
 import com.bilibili.boxing.model.entity.impl.ImageMedia;
 import com.bilibili.boxing_impl.ui.BoxingActivity;
 import java.util.ArrayList;
+import org.greenrobot.eventbus.EventBus;
 
 public class InteractionPublishActivity extends InteractionCommonActivity
     implements InteractionPublishView, OnClickListener {
@@ -135,7 +138,9 @@ public class InteractionPublishActivity extends InteractionCommonActivity
   }
 
   @Override
-  public void close() {
+  public void close(String typeId) {
+    EventBus.getDefault()
+        .post(new BaseEventData<Integer, Integer>(Event.INTERACTION_JUMP_PAGE, Integer.parseInt(typeId)));
     finish();
   }
 

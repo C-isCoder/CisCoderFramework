@@ -111,7 +111,7 @@ public class InteractionPublishImpl implements InteractionPublishPresent,
   public void success(Boolean aBoolean) {
     mView.hideProgressBar();
     mView.showMsg("发布成功");
-    mView.close();
+    mView.close(typeId);
   }
 
   @Override

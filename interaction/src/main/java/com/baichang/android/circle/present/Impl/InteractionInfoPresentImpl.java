@@ -161,8 +161,8 @@ public class InteractionInfoPresentImpl implements
 
   @Subscribe(threadMode = ThreadMode.MAIN)
   public void event(BaseEventData data) {
-    if (data.type == Event.INTERACTION_LIST_DELETE.ordinal() ||
-        data.type == Event.INTERACTION_LIST_CANCEL_COLLECT.ordinal()) {
+    if (data.key == Event.INTERACTION_LIST_DELETE ||
+        data.key == Event.INTERACTION_LIST_CANCEL_COLLECT) {
       mInteraction.getNumbers(mUserId, this);
     }
   }

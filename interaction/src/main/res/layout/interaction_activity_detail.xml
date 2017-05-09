@@ -55,6 +55,7 @@
    </android.support.v4.widget.SwipeRefreshLayout>
 
    <LinearLayout
+      android:id="@+id/interaction_detail_comment_layout"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_alignParentBottom="true"
@@ -64,20 +65,12 @@
       android:gravity="center_vertical"
       android:orientation="horizontal">
 
-      <ImageButton
-         android:id="@+id/interaction_detail_iv_praise"
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-         android:layout_marginLeft="10dp"
-         android:layout_marginRight="10dp"
-         android:background="@drawable/interaction_detail_praise_btn_bg"
-         android:src="@drawable/interaction_ic_praise" />
-
       <EditText
          android:id="@+id/interaction_me_reply_et_report"
          android:layout_width="0dp"
          android:layout_height="28dp"
          android:layout_weight="1"
+         android:layout_marginLeft="10dp"
          android:paddingLeft="10dp"
          android:paddingRight="10dp"
          android:background="@drawable/interaction_detail_report_btn_bg"
@@ -97,6 +90,17 @@
          android:gravity="center"
          android:text="@string/btn_send"
          android:textColor="@color/cm_tv_black2"
-         android:textSize="@dimen/cm_tv_size_body12" />
+         android:textSize="@dimen/cm_tv_size_body12"
+         android:visibility="gone"
+         tools:visibility="visible" />
+
+      <ImageButton
+         android:id="@+id/interaction_detail_iv_praise"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_marginLeft="10dp"
+         android:layout_marginRight="10dp"
+         android:background="@drawable/interaction_detail_praise_btn_bg"
+         android:src="@drawable/interaction_ic_praise" />
    </LinearLayout>
 </RelativeLayout>

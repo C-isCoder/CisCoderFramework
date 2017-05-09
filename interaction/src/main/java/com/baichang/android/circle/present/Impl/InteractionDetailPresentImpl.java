@@ -252,7 +252,7 @@ public class InteractionDetailPresentImpl implements
     mView.scrollToPosition(1);// 滚动到顶部
     mInteraction.comment(trendsId, data, commentListener);
     // 评论数量 +1
-    EventBus.getDefault().post(new BaseEventData(Event.INTERACTION_COMMENT_COUNT_ADD.ordinal()));
+    EventBus.getDefault().post(new BaseEventData(Event.INTERACTION_COMMENT_COUNT_ADD));
   }
 
   private BaseListener<Boolean> replyListener = new BaseListener<Boolean>() {
@@ -474,7 +474,7 @@ public class InteractionDetailPresentImpl implements
 
   @Subscribe(threadMode = ThreadMode.MAIN)
   public void event(BaseEventData data) {
-    if (data.type == Event.INTERACTION_COMMENT_COUNT_ADD.ordinal()) {
+    if (data.key == Event.INTERACTION_COMMENT_COUNT_ADD) {
       mCommentCount++;
       tvCount.setText("评论（" + mCommentCount + "）");
     }

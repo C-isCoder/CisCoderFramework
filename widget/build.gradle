@@ -21,7 +21,7 @@ dependencies {
     compile rootProject.ext.depend.v7
     provided rootProject.ext.depend.recyclerview
     provided rootProject.ext.depend.gson
-    compile rootProject.ext.depend.banner
+    //compile rootProject.ext.depend.banner
     compile rootProject.ext.depend.swipedelmenulayout
     provided project(':imageloader')
     provided project(':config')

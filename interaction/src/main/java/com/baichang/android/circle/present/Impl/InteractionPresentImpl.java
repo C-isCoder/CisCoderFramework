@@ -20,6 +20,7 @@ import com.baichang.android.circle.InteractionPublishActivity;
 import com.baichang.android.circle.R;
 import com.baichang.android.circle.common.InteractionConfig;
 import com.baichang.android.circle.common.InteractionFlag;
+import com.baichang.android.circle.common.InteractionFlag.Event;
 import com.baichang.android.circle.entity.InteractionTypeData;
 import com.baichang.android.circle.model.Impl.InteractInteractionImpl;
 import com.baichang.android.circle.model.InteractInteraction;
@@ -28,9 +29,13 @@ import com.baichang.android.circle.present.InteractionPresent;
 import com.baichang.android.circle.utils.AnimatorUtil;
 import com.baichang.android.circle.utils.ColorUtil;
 import com.baichang.android.circle.view.InteractionView;
+import com.baichang.android.common.BaseEventData;
 import com.baichang.android.common.IBaseInteraction.BaseListener;
 import java.util.ArrayList;
 import java.util.List;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 /**
  * Created by iCong on 2017/3/20.
@@ -45,17 +50,20 @@ public class InteractionPresentImpl implements InteractionPresent,
   private TextView tvMe;
   private FloatingActionButton mFloating;
   private InteractInteraction mInteraction;
+  private ViewPager mViewPager;
   public static List<InteractionTypeData> mTypeList = new ArrayList<>();
 
   public InteractionPresentImpl(InteractionView view) {
     mView = view;
     mAdapter = new InteractionAdapter(mView.getFragmentManager());
     mInteraction = new InteractInteractionImpl();
+    EventBus.getDefault().register(this);
   }
 
   @Override
   public void onDestroy() {
     mView = null;
+    EventBus.getDefault().unregister(this);
   }
 
   @Override
@@ -68,7 +76,7 @@ public class InteractionPresentImpl implements InteractionPresent,
 
   @Override
   public void attachView(View contentView) {
-    ViewPager mViewPager = (ViewPager) contentView.findViewById(R.id.interaction_view_pager);
+    mViewPager = (ViewPager) contentView.findViewById(R.id.interaction_view_pager);
     mTabLayout = (TabLayout) contentView.findViewById(R.id.interaction_tab_layout);
     tvMe = (TextView) contentView.findViewById(R.id.interaction_tv_me);
     mFloating = (FloatingActionButton) contentView.findViewById(R.id.interaction_floating_btn_publish);
@@ -115,6 +123,22 @@ public class InteractionPresentImpl implements InteractionPresent,
   public void error(String error) {
     mView.hideProgressBar();
     mView.showMsg(error);
+  }
+
+  @Subscribe(threadMode = ThreadMode.MAIN)
+  public void event(BaseEventData<Integer, Integer> event) {
+    if (event.key == Event.INTERACTION_JUMP_PAGE) {
+      int typeId = event.value;
+      int index = -1;
+      for (InteractionTypeData typeData : mTypeList) {
+        if (typeData.id == typeId) {
+          index = mTypeList.indexOf(typeData);
+        }
+      }
+      if (index != -1) {
+        mViewPager.setCurrentItem(index);
+      }
+    }
   }
 
   private class InteractionAdapter extends FragmentPagerAdapter {

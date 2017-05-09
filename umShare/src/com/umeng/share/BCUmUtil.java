@@ -46,18 +46,18 @@ public class BCUmUtil {
    * @param url 连接
    * @param icon 图标
    */
-  public static void share(final Activity activity, String content, String title, String url, int icon) {
-    final ProgressDialog dialog = new ProgressDialog(activity);
+  public static void share(final Activity activity, String title, String content, String url, int icon) {
+    //final ProgressDialog dialog = new ProgressDialog(activity);
     UMImage image = new UMImage(activity, icon);
     UMWeb web = new UMWeb(url);
     web.setThumb(image);
     web.setTitle(title);
     web.setDescription(content);
-    dialog.setTitle("分享");
-    dialog.setMessage("正在分享...");
-    dialog.setCanceledOnTouchOutside(false);
-    dialog.setCancelable(false);
-    dialog.setProgressStyle(AlertDialog.THEME_HOLO_LIGHT);
+    //dialog.setTitle("分享");
+    //dialog.setMessage("正在分享...");
+    //dialog.setCanceledOnTouchOutside(false);
+    //dialog.setCancelable(false);
+    //dialog.setProgressStyle(AlertDialog.THEME_HOLO_LIGHT);
     new ShareAction(activity)
         .setDisplayList(DisplayList)
         .withMedia(image)
@@ -68,26 +68,46 @@ public class BCUmUtil {
           @Override
           public void onStart(SHARE_MEDIA share_media) {
             // start
-            SocializeUtils.safeShowDialog(dialog);
+            /*activity.runOnUiThread(new Runnable() {
+              @Override
+              public void run() {
+                SocializeUtils.safeShowDialog(dialog);
+              }
+            });*/
           }
 
           @Override
           public void onResult(SHARE_MEDIA share_media) {
             // result
-            SocializeUtils.safeCloseDialog(dialog);
+            /*activity.runOnUiThread(new Runnable() {
+              @Override
+              public void run() {
+                SocializeUtils.safeCloseDialog(dialog);
+              }
+            });*/
           }
 
           @Override
-          public void onError(SHARE_MEDIA share_media, Throwable throwable) {
-            SocializeUtils.safeCloseDialog(dialog);
-            Toast.makeText(activity, "分享失败：" + throwable.getMessage(), Toast.LENGTH_SHORT).show();
+          public void onError(SHARE_MEDIA share_media, final Throwable throwable) {
+            activity.runOnUiThread(new Runnable() {
+              @Override
+              public void run() {
+                //SocializeUtils.safeCloseDialog(dialog);
+                Toast.makeText(activity, "分享失败：" + throwable.getMessage(), Toast.LENGTH_SHORT).show();
+              }
+            });
             Log.e("UMShare", "友盟分享Error: " + throwable.toString());
           }
 
           @Override
           public void onCancel(SHARE_MEDIA share_media) {
-            SocializeUtils.safeCloseDialog(dialog);
-            Toast.makeText(activity, "分享取消", Toast.LENGTH_SHORT).show();
+            activity.runOnUiThread(new Runnable() {
+              @Override
+              public void run() {
+                //SocializeUtils.safeCloseDialog(dialog);
+                Toast.makeText(activity, "分享取消", Toast.LENGTH_SHORT).show();
+              }
+            });
           }
         }).open();
   }
@@ -102,19 +122,19 @@ public class BCUmUtil {
    * @param icon 图标
    * @param imageUrl 缩略图
    */
-  public static void share(final Activity activity, String content, String title, String url, int icon,
+  public static void share(final Activity activity, String title, String content, String url, int icon,
       String imageUrl) {
-    final ProgressDialog dialog = new ProgressDialog(activity);
+    //final ProgressDialog dialog = new ProgressDialog(activity);
     UMImage image = new UMImage(activity, icon);
     UMWeb web = new UMWeb(url);
     web.setThumb(new UMImage(activity, imageUrl));
     web.setTitle(title);
     web.setDescription(content);
-    dialog.setTitle("分享");
-    dialog.setMessage("正在分享...");
-    dialog.setCanceledOnTouchOutside(false);
-    dialog.setCancelable(false);
-    dialog.setProgressStyle(AlertDialog.THEME_HOLO_LIGHT);
+    //dialog.setTitle("分享");
+    //dialog.setMessage("正在分享...");
+    //dialog.setCanceledOnTouchOutside(false);
+    //dialog.setCancelable(false);
+    //dialog.setProgressStyle(AlertDialog.THEME_HOLO_LIGHT);
     new ShareAction(activity)
         .setDisplayList(DisplayList)
         .withMedia(image)
@@ -125,26 +145,36 @@ public class BCUmUtil {
           @Override
           public void onStart(SHARE_MEDIA share_media) {
             // start
-            SocializeUtils.safeShowDialog(dialog);
+            //SocializeUtils.safeShowDialog(dialog);
           }
 
           @Override
           public void onResult(SHARE_MEDIA share_media) {
             // result
-            SocializeUtils.safeCloseDialog(dialog);
+            //SocializeUtils.safeCloseDialog(dialog);
           }
 
           @Override
-          public void onError(SHARE_MEDIA share_media, Throwable throwable) {
-            SocializeUtils.safeCloseDialog(dialog);
-            Toast.makeText(activity, "分享失败：" + throwable.getMessage(), Toast.LENGTH_SHORT).show();
+          public void onError(SHARE_MEDIA share_media, final Throwable throwable) {
+            //SocializeUtils.safeCloseDialog(dialog);
+            activity.runOnUiThread(new Runnable() {
+              @Override
+              public void run() {
+                Toast.makeText(activity, "分享失败：" + throwable.getMessage(), Toast.LENGTH_SHORT).show();
+              }
+            });
             Log.e("UMShare", "友盟分享Error: " + throwable.toString());
           }
 
           @Override
           public void onCancel(SHARE_MEDIA share_media) {
-            SocializeUtils.safeCloseDialog(dialog);
-            Toast.makeText(activity, "分享取消", Toast.LENGTH_SHORT).show();
+            //SocializeUtils.safeCloseDialog(dialog);
+            activity.runOnUiThread(new Runnable() {
+              @Override
+              public void run() {
+                Toast.makeText(activity, "分享取消", Toast.LENGTH_SHORT).show();
+              }
+            });
           }
         }).open();
   }

@@ -9,12 +9,15 @@ import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnLayoutChangeListener;
 import android.view.View.OnTouchListener;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.baichang.android.circle.common.InteractionCommonActivity;
@@ -28,7 +31,7 @@ import com.baichang.android.utils.BCToolsUtil;
 
 public class InteractionDetailActivity extends InteractionCommonActivity
     implements InteractionDetailView, OnRefreshListener,
-    OnClickListener, OnTouchListener {
+    OnClickListener, OnTouchListener, OnLayoutChangeListener {
 
   SwipeRefreshLayout mRefresh;
   RecyclerView rvList;
@@ -38,8 +41,11 @@ public class InteractionDetailActivity extends InteractionCommonActivity
   ImageButton btnCollect;
   ImageButton mBack;
   ImageButton btnPraise;
-
+  LinearLayout mCommentLayout;
   private InteractionDetailPresent mPresent;
+  private int[] locations = new int[2];
+  private int initHeight;
+  private boolean isFirst = true;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -53,11 +59,17 @@ public class InteractionDetailActivity extends InteractionCommonActivity
     btnCollect = (ImageButton) findViewById(R.id.interaction_detail_btn_collect);
     btnPraise = (ImageButton) findViewById(R.id.interaction_detail_iv_praise);
     mBack = (ImageButton) findViewById(R.id.back);
+    mCommentLayout = (LinearLayout) findViewById(R.id.interaction_detail_comment_layout);
 
+    initLayoutChange();
     btnShare.setOnClickListener(this);
     btnCollect.setOnClickListener(this);
     btnPraise.setOnClickListener(this);
     init();
+  }
+
+  private void initLayoutChange() {
+    getWindow().getDecorView().addOnLayoutChangeListener(this);
   }
 
   private void init() {
@@ -218,5 +230,29 @@ public class InteractionDetailActivity extends InteractionCommonActivity
   @Override
   public void back(View view) {
     onBackPressed();
+  }
+
+  @Override
+  public void onLayoutChange(View v, int left, int top, int right, int bottom,
+      int oldLeft, int oldTop, int oldRight, int oldBottom) {
+    if (isFirst) {
+      mCommentLayout.getLocationOnScreen(locations);
+      initHeight = locations[1];
+    }
+    isFirst = false;
+    int[] currentLocation = new int[2];
+    mCommentLayout.getLocationOnScreen(currentLocation);
+    int currentX = currentLocation[1];
+    //Log.d("CID", "init:" + locations[0] + "-" + locations[1]);
+    //Log.d("CID", "current:" + currentLocation[0] + "-" + currentLocation[1]);
+    if (initHeight > currentX) {
+      //Log.d("CID", "Open");
+      tvSend.setVisibility(View.VISIBLE);
+      btnPraise.setVisibility(View.GONE);
+    } else {
+      //Log.d("CId", "Close");
+      tvSend.setVisibility(View.GONE);
+      btnPraise.setVisibility(View.VISIBLE);
+    }
   }
 }
