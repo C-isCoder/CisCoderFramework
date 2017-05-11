@@ -43,7 +43,6 @@ public class InteractionContentFragment extends InteractionCommonFragment
   private String mUserId;
 
   public InteractionContentFragment() {
-    // Required empty public constructor
   }
 
   public static InteractionContentFragment newInstance(String userId, int modeType) {
@@ -77,7 +76,6 @@ public class InteractionContentFragment extends InteractionCommonFragment
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
-    // Inflate the layout for this fragment
     return inflater.inflate(R.layout.interaction_fragment_content, container, false);
   }
 

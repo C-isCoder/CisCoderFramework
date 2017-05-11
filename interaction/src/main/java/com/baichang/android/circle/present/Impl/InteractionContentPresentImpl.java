@@ -76,11 +76,11 @@ public class InteractionContentPresentImpl implements InteractionContentPresent,
 
   @Override
   public void refresh() {
-    mView.showProgressBar();
     isRefresh = true;
     nowPage = 1;
     if (typeId != -1) {
       mInteraction.getInteractionList(typeId, nowPage, this);
+      EventBus.getDefault().post(new BaseEventData(Event.INTERACTION_TYPE_REFRESH));
     } else {
       switch (modelType) {
         // 动态

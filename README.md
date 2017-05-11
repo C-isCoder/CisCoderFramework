@@ -1,7 +1,13 @@
 # Android框架文档说明
 
 ## 更新说明：
-
+ ### 2017-05-11
+ 
+ * Utils 新增一个拼音转换类，HanziToPinyin 一个从Google官方源码提取的汉字转拼音。
+ ArrayList<HanziToPinyin.Token> tokens = HanziToPinyin.getInstance().get(string);
+ 返回的数据结构是一个HanziToPinyin.Token的ArrayList，HanziToPinyin.Token是HanziToPinyin中的一个公共静态外部类，
+ 其分别有type、source、target等三个成员变量，type是标识token的类型，有三种不同的取值1（拉丁文），2（拼音），3（未知），source是输入的中文，target则是中文转换后对应的拼音。
+ 
  ### 2017-05-09
  
  * 修复banner BUG

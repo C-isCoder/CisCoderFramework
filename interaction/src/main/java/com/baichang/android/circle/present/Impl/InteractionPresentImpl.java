@@ -69,7 +69,6 @@ public class InteractionPresentImpl implements InteractionPresent,
   @Override
   public void onStart() {
     if (mTypeList.isEmpty()) {
-      mView.showProgressBar();
       mInteraction.getInteractionTypeList(this);
     }
   }
@@ -109,7 +108,9 @@ public class InteractionPresentImpl implements InteractionPresent,
 
   @Override
   public void success(List<InteractionTypeData> list) {
-    mView.hideProgressBar();
+    if (!mTypeList.isEmpty()) {
+      mTypeList.clear();
+    }
     mTypeList.addAll(list);
     if (mTypeList.size() > 4) {
       mTabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
@@ -121,7 +122,6 @@ public class InteractionPresentImpl implements InteractionPresent,
 
   @Override
   public void error(String error) {
-    mView.hideProgressBar();
     mView.showMsg(error);
   }
 
@@ -138,6 +138,8 @@ public class InteractionPresentImpl implements InteractionPresent,
       if (index != -1) {
         mViewPager.setCurrentItem(index);
       }
+    } else if (event.key == Event.INTERACTION_TYPE_REFRESH) {
+      mInteraction.getInteractionTypeList(this);
     }
   }
 

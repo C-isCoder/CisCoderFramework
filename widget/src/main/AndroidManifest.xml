@@ -1,1 +1,13 @@
-<manifest package="com.baichang.android.widget" />
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+   xmlns:tools="http://schemas.android.com/tools"
+   package="com.baichang.android.widget">
+
+   <application
+      android:allowBackup="true"
+      android:supportsRtl="true">
+      <activity
+         android:name=".photoGallery.PhotoGalleryActivity"
+         android:screenOrientation="portrait" />
+   </application>
+
+</manifest>

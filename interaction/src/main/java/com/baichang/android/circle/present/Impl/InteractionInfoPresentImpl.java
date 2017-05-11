@@ -28,6 +28,8 @@ import com.baichang.android.circle.utils.UIUtil;
 import com.baichang.android.circle.view.InteractionMeView;
 import com.baichang.android.common.BaseEventData;
 import com.baichang.android.common.IBaseInteraction.BaseListener;
+import com.baichang.android.config.Configuration;
+import com.baichang.android.config.ConfigurationImpl;
 import com.baichang.android.widget.magicIndicator.MagicIndicator;
 import com.baichang.android.widget.magicIndicator.ViewPagerHelper;
 import com.baichang.android.widget.magicIndicator.buildins.commonnavigator.CommonNavigator;
@@ -255,7 +257,7 @@ public class InteractionInfoPresentImpl implements
     public void success(InteractionUserInfo userInfo) {
       Glide.with(mView.getContext())
           .load(TextUtils.isEmpty(userInfo.headPic) ? R.mipmap.interaction_icon_default
-              : InteractionAPIConstants.API_LOAD_IMAGE + userInfo.headPic)
+              : ConfigurationImpl.get().getApiLoadImage() + userInfo.headPic)
           .into(new SimpleTarget<GlideDrawable>() {
             @Override
             public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
@@ -264,7 +266,7 @@ public class InteractionInfoPresentImpl implements
           });
       Glide.with(mView.getContext())
           .load(TextUtils.isEmpty(userInfo.headPic) ? R.mipmap.interaction_icon_default
-              : InteractionAPIConstants.API_LOAD_IMAGE + userInfo.headPic)
+              : ConfigurationImpl.get().getApiLoadImage() + userInfo.headPic)
           .asBitmap()
           .transform(new BlurTransformation(mView.getContext()))
           .into(new SimpleTarget<Bitmap>() {
@@ -277,7 +279,7 @@ public class InteractionInfoPresentImpl implements
       // 1 汽修厂
       isBusiness = userInfo.type != 1;
       // 是否显示联系商家
-      mView.setBusinessVisitState(userInfo.type == 1);
+      mView.setBusinessVisitState(userInfo.type != 1);
     }
 
     @Override

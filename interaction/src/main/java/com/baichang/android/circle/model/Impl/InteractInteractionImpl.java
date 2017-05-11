@@ -4,6 +4,7 @@ import android.app.Application;
 import com.baichang.android.circle.common.InteractionAPI;
 import com.baichang.android.circle.common.InteractionAPIWrapper;
 import com.baichang.android.circle.common.InteractionConfig;
+import com.baichang.android.circle.common.InteractionDiskCache;
 import com.baichang.android.circle.entity.InteractionCommentList;
 import com.baichang.android.circle.entity.InteractionCommentReplyList;
 import com.baichang.android.circle.entity.InteractionDetailData;
@@ -46,6 +47,7 @@ public class InteractInteractionImpl implements InteractInteraction {
     Map<String, String> map = new HashMap<>();
     map.put("typeId", String.valueOf(typeId));
     map.put("nowPage", String.valueOf(nowPage));
+    map.put("userId", InteractionConfig.getInstance().getUser().id);
     InteractionAPIWrapper.getInstance().getTrendsList(map)
         .compose(HttpSubscriber.<List<InteractionListData>>applySchedulers())
         .subscribe(new HttpSubscriber<>(new HttpSuccessListener<List<InteractionListData>>() {

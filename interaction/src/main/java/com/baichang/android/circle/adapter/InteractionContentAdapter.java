@@ -23,6 +23,7 @@ import android.widget.TextView;
 import com.baichang.android.circle.R;
 import com.baichang.android.circle.adapter.InteractionContentAdapter.ViewHolder;
 import com.baichang.android.circle.common.InteractionConfig;
+import com.baichang.android.circle.common.InteractionDiskCache;
 import com.baichang.android.circle.entity.InteractionListData;
 import com.baichang.android.circle.present.InteractionInfoPresent;
 import com.baichang.android.circle.utils.AnimatorUtil;
@@ -37,7 +38,12 @@ import com.baichang.android.imageloader.ImageLoader;
 import com.baichang.android.widget.circleImageView.CircleImageView;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by iCong on 2017/3/20.
@@ -46,6 +52,7 @@ import java.util.List;
 public class InteractionContentAdapter extends Adapter<ViewHolder> {
 
   private static final String TAG = "CID";
+  //private List<InteractionListData> mList = InteractionDiskCache.getCache();
   private List<InteractionListData> mList = new ArrayList<>();
   private int mType;
 
@@ -97,11 +104,36 @@ public class InteractionContentAdapter extends Adapter<ViewHolder> {
   }
 
   public void setData(List<InteractionListData> list) {
+    // FIXME: 2017/5/11 缓存处理不完美,点赞返回数据不刷新。
     if (list != null) {
       mList = list;
       notifyDataSetChanged();
     }
+//    if (list == null) {
+//      return;
+//    }
+//    if (mList == null) {
+//      mList = list;
+//      notifyDataSetChanged();
+//    } else if (list.size() > getItemCount()) {
+//      setDiffData(list, mList);
+//    }
   }
+
+//  private void setDiffData(List<InteractionListData> first,
+//      List<InteractionListData> two) {
+//    List<InteractionListData> list = new ArrayList<>();
+//    for (InteractionListData firstData : first) {
+//      if (two.contains(firstData)) {
+//        list.add(firstData);
+//      }
+//    }
+//    first.removeAll(list);
+//    for (InteractionListData data : first) {
+//      mList.add(0, data);
+//      notifyItemChanged(0);
+//    }
+//  }
 
   public void addData(List<InteractionListData> list) {
     if (list != null) {

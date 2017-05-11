@@ -1,10 +1,17 @@
 package com.baichang.android.circle.common;
 
 
+import com.baichang.android.circle.entity.InteractionListData;
 import com.baichang.android.circle.entity.InteractionUserData;
 import com.baichang.android.common.BCApplication;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import java.util.ArrayList;
+import java.util.List;
 
 public class InteractionDiskCache {
+
+  private static Gson mGson = new Gson();
 
   /**
    * 用户的token
@@ -40,4 +47,16 @@ public class InteractionDiskCache {
     return BCApplication.aCache.remove(InteractionFlag.CACHE_USER);
   }
 
+  public static void setCache(List<InteractionListData> list) {
+    String json = mGson.toJson(list);
+    BCApplication.aCache.put(InteractionFlag.CACHE_REQUEST, json);
+  }
+
+  public static List<InteractionListData> getCache() {
+    List<InteractionListData> list = new ArrayList<>();
+    String json = BCApplication.aCache.getAsString(InteractionFlag.CACHE_REQUEST);
+    list = mGson.fromJson(json, new TypeToken<List<InteractionListData>>() {
+    }.getType());
+    return list;
+  }
 }
