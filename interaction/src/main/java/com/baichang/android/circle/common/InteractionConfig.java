@@ -1,7 +1,6 @@
 package com.baichang.android.circle.common;
 
 import android.app.Activity;
-import android.content.Context;
 import com.baichang.android.circle.entity.InteractionUserData;
 
 /**
@@ -23,6 +22,7 @@ public class InteractionConfig implements InteractionConfigContract {
   private static int mBusinessDrawableRes = -1;
   private static int mBackDrawableResRes = -1;
   private static boolean isNeedBusinessStore = false;
+  private static boolean isNeedSetTitleHeight = false;
   private static String mTitleText = null;
   private static InteractionUserData mUser;
   private static InteractionListener listener = null;
@@ -99,6 +99,11 @@ public class InteractionConfig implements InteractionConfigContract {
   @Override
   public boolean isNeedBusinessStore() {
     return isNeedBusinessStore;
+  }
+
+  @Override
+  public boolean isNeedSetTitleHeight() {
+    return isNeedSetTitleHeight;
   }
 
   @Override
@@ -182,6 +187,11 @@ public class InteractionConfig implements InteractionConfigContract {
 
   public InteractionConfig setListener(InteractionListener listener) {
     InteractionConfig.listener = listener;
+    return this;
+  }
+
+  public InteractionConfig setIsNeedSetTitleHeight(boolean isNeedSetTitleHeight) {
+    InteractionConfig.isNeedSetTitleHeight = isNeedSetTitleHeight;
     return this;
   }
 

@@ -4,8 +4,10 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
@@ -69,7 +71,7 @@ public class InteractionDetailPresentImpl implements
   private TextView tvTime;
   private TextView tvTitle;
   private TextView tvContent;
-  private ImageView ivComment;
+  private TextView tvComment;
   private TextView tvCount;
   private CircleImageView ivAvatar;
   private PhotoContents mPhotos;
@@ -109,12 +111,12 @@ public class InteractionDetailPresentImpl implements
     tvName = (TextView) header.findViewById(R.id.interaction_detail_tv_name);
     tvTime = (TextView) header.findViewById(R.id.interaction_detail_tv_time);
     tvTitle = (TextView) header.findViewById(R.id.interaction_detail_tv_title);
-    ivComment = (ImageView) header.findViewById(R.id.interaction_detail_iv_comment);
+    tvComment = (TextView) header.findViewById(R.id.interaction_detail_tv_comment);
     tvContent = (TextView) header.findViewById(R.id.interaction_detail_tv_content);
     tvCount = (TextView) header.findViewById(R.id.interaction_detail_tv_count);
     ivAvatar = (CircleImageView) header.findViewById(R.id.interaction_detail_iv_avatar);
 
-    ivComment.setOnClickListener(this);
+    tvComment.setOnClickListener(this);
     header.findViewById(R.id.interaction_detail_tv_report).setOnClickListener(this);
     initConfig();
     mPhotos = (PhotoContents) header.findViewById(R.id.interaction_detail_photo_content);
@@ -124,7 +126,9 @@ public class InteractionDetailPresentImpl implements
   private void initConfig() {
     int commentDrawableRes = InteractionConfig.getInstance().getCommentDrawableRes();
     if (commentDrawableRes != -1) {
-      ivComment.setImageResource(commentDrawableRes);
+      Drawable drawable = ContextCompat.getDrawable(tvComment.getContext(), commentDrawableRes);
+      drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+      tvComment.setCompoundDrawables(drawable, null, null, null);
     }
   }
 
@@ -292,7 +296,7 @@ public class InteractionDetailPresentImpl implements
               mInteraction.report(InteractionDetailPresentImpl.this.trendsId, reportListener);
             }
           }, null);
-    } else if (id == ivComment.getId()) {
+    } else if (id == tvComment.getId()) {
       AnimatorUtil.scale(v);
       mView.setReportHint(" 评论 ");
       mView.showInputKeyBord();

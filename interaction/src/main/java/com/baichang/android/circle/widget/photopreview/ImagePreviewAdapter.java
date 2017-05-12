@@ -24,6 +24,8 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 import com.baichang.android.circle.R;
 import com.baichang.android.circle.common.InteractionAPIConstants;
+import com.baichang.android.config.Configuration;
+import com.baichang.android.config.ConfigurationImpl;
 import com.baichang.android.imageloader.ImageLoader;
 import com.baichang.android.utils.BCDialogUtil;
 import com.baichang.android.widget.photoView.PhotoView;
@@ -96,7 +98,7 @@ public class ImagePreviewAdapter extends PagerAdapter implements OnViewTapListen
 
     //如果需要加载的loading,需要自己改写,不能使用这个方法
     // 转成Drawable 加载，不然下面长按保存会报错。
-    Glide.with(context).load(InteractionAPIConstants.API_LOAD_IMAGE + info.bigImageUrl).asBitmap()
+    Glide.with(context).load(ConfigurationImpl.get().getApiLoadImage() + info.bigImageUrl).asBitmap()
         .error(ERROR_IMAGE)
         .into(new SimpleTarget<Bitmap>() {
           @Override

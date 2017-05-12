@@ -65,6 +65,9 @@ public class PhotoContents extends FlowLayout {
   }
 
   private void init(Context context) {
+    if (isInEditMode()) {
+      return;
+    }
     itemMargin = dp2Px(4f);
     recycler = new InnerRecyclerHelper();
     setOrientation(CommonLogic.HORIZONTAL);

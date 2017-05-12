@@ -94,8 +94,9 @@
          android:textColor="@color/cm_tv_black2"
          android:textSize="@dimen/cm_tv_size_body10" />
 
-      <ImageView
-         android:id="@+id/interaction_detail_iv_comment"
+
+      <TextView
+         android:id="@+id/interaction_detail_tv_comment"
          android:layout_width="wrap_content"
          android:layout_height="wrap_content"
          android:layout_alignParentRight="true"
@@ -103,8 +104,23 @@
          android:paddingBottom="10dp"
          android:paddingLeft="10dp"
          android:paddingRight="10dp"
-         android:background="@null"
-         android:src="@drawable/interaction_ic_comment" />
+         android:drawableLeft="@drawable/interaction_ic_comment"
+         android:drawablePadding="4dp"
+         android:gravity="center_vertical"
+         android:text="@string/btn_comment"
+         android:textColor="@color/cm_tv_black2"
+         android:textSize="@dimen/cm_tv_size_body10" />
+      <!--<ImageView-->
+      <!--android:id="@+id/interaction_detail_tv_comment"-->
+      <!--android:layout_width="wrap_content"-->
+      <!--android:layout_height="wrap_content"-->
+      <!--android:layout_alignParentRight="true"-->
+      <!--android:paddingTop="10dp"-->
+      <!--android:paddingBottom="10dp"-->
+      <!--android:paddingLeft="10dp"-->
+      <!--android:paddingRight="10dp"-->
+      <!--android:background="@null"-->
+      <!--android:src="@drawable/interaction_ic_comment" />-->
 
    </RelativeLayout>
 

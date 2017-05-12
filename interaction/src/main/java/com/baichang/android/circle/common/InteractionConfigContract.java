@@ -35,6 +35,8 @@ public interface InteractionConfigContract {
 
   boolean isNeedBusinessStore();
 
+  boolean isNeedSetTitleHeight();
+
   void share(Activity activity, String title, String summary, String url);
 
   void businessStore(String id);

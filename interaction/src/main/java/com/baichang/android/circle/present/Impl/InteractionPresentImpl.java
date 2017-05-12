@@ -13,6 +13,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.RelativeLayout;
+import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 import com.baichang.android.circle.InteractionContentFragment;
 import com.baichang.android.circle.InteractionInfoActivity;
@@ -31,6 +32,7 @@ import com.baichang.android.circle.utils.ColorUtil;
 import com.baichang.android.circle.view.InteractionView;
 import com.baichang.android.common.BaseEventData;
 import com.baichang.android.common.IBaseInteraction.BaseListener;
+import com.baichang.android.utils.BCDensityUtil;
 import java.util.ArrayList;
 import java.util.List;
 import org.greenrobot.eventbus.EventBus;
@@ -171,7 +173,6 @@ public class InteractionPresentImpl implements InteractionPresent,
 
     int textColor = InteractionConfig.getInstance().getTextFontColor();
     if (textColor != -1) {
-      tvMe.setTextColor(textColor);
       mFloating.setBackgroundTintList(ColorUtil.createdPressColorList(
           contentView.getContext(), textColor, textColor));
       mTabLayout.setSelectedTabIndicatorColor(ContextCompat.getColor(
@@ -186,11 +187,19 @@ public class InteractionPresentImpl implements InteractionPresent,
       title.setBackgroundResource(topColor);
       TextView tvTitle = (TextView) contentView.findViewById(R.id.interaction_tv_title);
       tvTitle.setTextColor(Color.WHITE);
-
+      tvMe.setTextColor(Color.WHITE);
       String titleText = InteractionConfig.getInstance().getTitleText();
       if (!TextUtils.isEmpty(titleText)) {
         tvTitle.setText(titleText);
       }
+    }
+
+    boolean isNeedSetTitleHeight = InteractionConfig.getInstance().isNeedSetTitleHeight();
+    if (isNeedSetTitleHeight) {
+      RelativeLayout title = (RelativeLayout) contentView.findViewById(R.id.title);
+      LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, BCDensityUtil.dip2px(title.getContext(), 72));
+      title.setLayoutParams(params);
+      title.setPadding(0, BCDensityUtil.dip2px(title.getContext(), 24), 0, 0);
     }
   }
 }

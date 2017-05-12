@@ -20,4 +20,5 @@
    <string name="str_interaction_info_collect">收藏（%s）</string>
    <string name="str_interaction_business">商家详情</string>
    <string name="str_select">%1$s/%2$s</string>
+   <string name="btn_comment">评论</string>
 </resources>
