@@ -8,6 +8,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -97,7 +98,7 @@ public class PhotoGalleryFragment extends Fragment
         .setPositiveButton("保存", new DialogInterface.OnClickListener() {
           @Override
           public void onClick(DialogInterface dialog, int which) {
-            GlideBitmapDrawable drawable = (GlideBitmapDrawable) ((ImageView) v).getDrawable();
+            BitmapDrawable drawable = (BitmapDrawable) ((ImageView) v).getDrawable();
             if (drawable != null) {
               saveBitmap(drawable.getBitmap());
             }
