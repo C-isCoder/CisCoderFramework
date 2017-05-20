@@ -85,10 +85,10 @@ public class InteractionContentAdapter extends Adapter<ViewHolder> {
       holder.tvButton.setTextColor(stateList);
     }
     if (mType == InteractionInfoPresent.COLLECT) {
-      holder.tvButton.setText("取消收藏");
+      holder.tvButton.setText(R.string.button_cancel_collect);
       holder.tvButton.setVisibility(View.VISIBLE);
     } else if (mType == InteractionInfoPresent.DYNAMIC) {
-      holder.tvButton.setText("删除");
+      holder.tvButton.setText(R.string.button_delete);
       holder.tvButton.setVisibility(View.VISIBLE);
     } else {
       holder.tvButton.setVisibility(View.GONE);

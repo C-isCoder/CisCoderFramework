@@ -82,7 +82,6 @@ public class InteractionInfoReplyPresentImpl implements InteractionInfoReportPre
     public void success(Boolean aBoolean) {
       mView.hideProgressBar();
       mView.showMsg("回复成功");
-      mView.showReplyDialog("");
     }
 
     @Override

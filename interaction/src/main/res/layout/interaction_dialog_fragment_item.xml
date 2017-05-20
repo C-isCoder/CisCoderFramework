@@ -9,7 +9,7 @@
    <View
       android:id="@+id/interaction_dialog_view"
       android:layout_width="match_parent"
-      android:layout_height="10dp"
+      android:layout_height="4dp"
       android:background="@color/interaction_text_font" />
 
    <android.support.v7.widget.RecyclerView

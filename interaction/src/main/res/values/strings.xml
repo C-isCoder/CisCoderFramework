@@ -15,10 +15,12 @@
    <string name="tips_title">标题</string>
    <string name="tips_write_some">说点什么吧…</string>
    <string name="btn_interaction_model">板块</string>
-   <string name="str_interaction_info_dynamic">动态（%s）</string>
-   <string name="str_interaction_info_report">回复（%s）</string>
-   <string name="str_interaction_info_collect">收藏（%s）</string>
+   <string name="str_interaction_info_dynamic">动态</string>
+   <string name="str_interaction_info_report">回复</string>
+   <string name="str_interaction_info_collect">收藏</string>
    <string name="str_interaction_business">商家详情</string>
    <string name="str_select">%1$s/%2$s</string>
    <string name="btn_comment">评论</string>
+   <string name="button_cancel_collect">取消收藏</string>
+   <string name="button_delete">删除</string>
 </resources>

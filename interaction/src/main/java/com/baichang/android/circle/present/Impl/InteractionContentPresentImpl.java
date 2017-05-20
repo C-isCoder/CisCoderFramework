@@ -169,7 +169,6 @@ public class InteractionContentPresentImpl implements InteractionContentPresent,
           public void onClick(DialogInterface dialog, int which) {
             mAdapter.remove(data);
             mInteraction.delete(data.id, deleteListener);
-            EventBus.getDefault().post(new BaseEventData(Event.INTERACTION_LIST_DELETE));
           }
         }, null);
   }
@@ -184,7 +183,6 @@ public class InteractionContentPresentImpl implements InteractionContentPresent,
           public void onClick(DialogInterface dialog, int which) {
             mAdapter.remove(data);
             mInteraction.collect(data.id, cancelCollectListener);
-            EventBus.getDefault().post(new BaseEventData(Event.INTERACTION_LIST_CANCEL_COLLECT));
           }
         }, null);
   }
@@ -193,6 +191,7 @@ public class InteractionContentPresentImpl implements InteractionContentPresent,
     @Override
     public void success(Boolean aBoolean) {
       mView.showMsg("删除成功");
+      EventBus.getDefault().post(new BaseEventData(Event.INTERACTION_LIST_DELETE));
     }
 
     @Override
@@ -204,6 +203,7 @@ public class InteractionContentPresentImpl implements InteractionContentPresent,
     @Override
     public void success(Boolean aBoolean) {
       mView.showMsg("取消成功");
+      EventBus.getDefault().post(new BaseEventData(Event.INTERACTION_LIST_CANCEL_COLLECT));
     }
 
     @Override

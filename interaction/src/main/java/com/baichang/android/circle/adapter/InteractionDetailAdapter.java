@@ -18,6 +18,8 @@ import com.baichang.android.circle.entity.InteractionCommentReplyList;
 import com.baichang.android.circle.utils.SimpleObjectPool;
 import com.baichang.android.circle.widget.CommentTextView;
 import com.baichang.android.circle.widget.CommentTextView.CommentOnClickListener;
+import com.baichang.android.config.ConfigurationImpl;
+import com.baichang.android.imageloader.ImageLoader;
 import com.baichang.android.widget.circleImageView.CircleImageView;
 import java.util.List;
 
@@ -155,7 +157,8 @@ public class InteractionDetailAdapter extends Adapter<Holder> {
       tvName.setText(data.name);
       tvContent.setText(data.content);
       tvTime.setText(data.time);
-      ivAvatar.setImageResource(R.mipmap.interaction_icon_default);
+      ImageLoader.loadImageError(ivAvatar.getContext(), ConfigurationImpl.get().getApiLoadImage() + data.avatar,
+          R.mipmap.interaction_icon_default, ivAvatar);
       commentLayout.setVisibility(data.isNullComment() ? View.GONE : View.VISIBLE);
       tvMore.setVisibility(data.isShowMore() ? View.VISIBLE : View.GONE);
       tvMore.setOnClickListener(new CommentOnClick(data));

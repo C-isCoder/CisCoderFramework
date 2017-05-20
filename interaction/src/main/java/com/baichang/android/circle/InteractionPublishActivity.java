@@ -81,11 +81,6 @@ public class InteractionPublishActivity extends InteractionCommonActivity
   }
 
   private void initConfig() {
-    int textColor = InteractionConfig.getInstance().getTextFontColor();
-    if (textColor != -1) {
-      tvPublish.setTextColor(textColor);
-    }
-
     int drawableRes = InteractionConfig.getInstance().getBackDrawableRes();
     if (drawableRes != -1) {
       mBack.setImageResource(drawableRes);
@@ -97,6 +92,7 @@ public class InteractionPublishActivity extends InteractionCommonActivity
       titleLayout.setBackgroundResource(topColor);
       TextView tvTitle = (TextView) findViewById(R.id.interaction_publish_tv_title);
       tvTitle.setTextColor(Color.WHITE);
+      tvPublish.setTextColor(Color.WHITE);
     }
   }
 

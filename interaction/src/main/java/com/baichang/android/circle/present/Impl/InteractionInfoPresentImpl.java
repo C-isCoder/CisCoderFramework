@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import com.baichang.android.circle.InteractionContentFragment;
@@ -64,8 +65,8 @@ public class InteractionInfoPresentImpl implements
   private int dynamicNumbers = 0;
   private int replayNumbers = 0;
   private int collectNumbers = 0;
-  private NavigatorAdapter mNavigatorAdapter;
   private boolean isBusiness = false;
+  private NavigatorAdapter mNavigator;
 
   public InteractionInfoPresentImpl(InteractionMeView view) {
     mView = view;
@@ -76,8 +77,8 @@ public class InteractionInfoPresentImpl implements
 
   @Override
   public void onStart() {
-    mInteraction.getUserInfo(mUserId, userInfoListener);
     mInteraction.getNumbers(mUserId, this);
+    mInteraction.getUserInfo(mUserId, userInfoListener);
   }
 
   @Override
@@ -87,14 +88,14 @@ public class InteractionInfoPresentImpl implements
   }
 
   @Override
-  public void attachView(final ViewPager viewPager, MagicIndicator indicator) {
-    mNavigatorAdapter = new NavigatorAdapter(viewPager);
+  public void attachView(ViewPager viewPager, MagicIndicator indicator) {
     viewPager.setOffscreenPageLimit(3);
     viewPager.setAdapter(mAdapter);
-    CommonNavigator commonNavigator = new CommonNavigator(viewPager.getContext());
-    commonNavigator.setAdjustMode(true);
-    commonNavigator.setAdapter(mNavigatorAdapter);
-    indicator.setNavigator(commonNavigator);
+    mNavigator = new NavigatorAdapter(viewPager);
+    CommonNavigator mCommonNavigator = new CommonNavigator(mView.getContext());
+    mCommonNavigator.setAdjustMode(true);
+    mCommonNavigator.setAdapter(mNavigator);
+    indicator.setNavigator(mCommonNavigator);
     ViewPagerHelper.bind(indicator, viewPager);
   }
 
@@ -118,7 +119,7 @@ public class InteractionInfoPresentImpl implements
     dynamicNumbers = data.trendsNum;
     replayNumbers = data.replayNum;
     collectNumbers = data.collectionNum;
-    mNavigatorAdapter.notifyDataSetChanged();
+    mNavigator.notifyDataSetChanged();
   }
 
   @Override
@@ -176,6 +177,7 @@ public class InteractionInfoPresentImpl implements
 
     NavigatorAdapter(ViewPager viewPager) {
       this.viewPager = viewPager;
+      context = viewPager.getContext();
     }
 
     @Override
@@ -189,7 +191,6 @@ public class InteractionInfoPresentImpl implements
 
     @Override
     public IPagerTitleView getTitleView(Context context, final int index) {
-      this.context = context;
       BadgePagerTitleView badgePagerTitleView = new BadgePagerTitleView(context);
       SimplePagerTitleView simplePagerTitleView = new ColorTransitionPagerTitleView(context);
       simplePagerTitleView.setNormalColor(Color.GRAY);
@@ -202,10 +203,12 @@ public class InteractionInfoPresentImpl implements
       }
       switch (index) {
         case DYNAMIC:
-          simplePagerTitleView.setText(getString(R.string.str_interaction_info_dynamic, dynamicNumbers));
+          simplePagerTitleView
+              .setText(getString(R.string.str_interaction_info_dynamic, dynamicNumbers));
           break;
         case REPORT:
-          simplePagerTitleView.setText(getString(R.string.str_interaction_info_report, replayNumbers));
+          simplePagerTitleView
+              .setText(getString(R.string.str_interaction_info_report, replayNumbers));
           // 是否显示小红点
 //          if (isOneself) {
 //            ImageView badge = new ImageView(context);
@@ -217,7 +220,8 @@ public class InteractionInfoPresentImpl implements
 //          }
           break;
         case COLLECT:
-          simplePagerTitleView.setText(getString(R.string.str_interaction_info_collect, collectNumbers));
+          simplePagerTitleView
+              .setText(getString(R.string.str_interaction_info_collect, collectNumbers));
           break;
       }
       simplePagerTitleView.setOnClickListener(new OnClickListener() {
@@ -247,8 +251,8 @@ public class InteractionInfoPresentImpl implements
       return linePagerIndicator;
     }
 
-    private String getString(int resId, Object... args) {
-      return context.getString(resId, args);
+    String getString(int resId, int number) {
+      return context.getString(resId) + "(" + number + ")";
     }
   }
 

@@ -6,6 +6,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import com.baichang.android.circle.InteractionFragment;
 import com.baichang.android.circle.adapter.InteractionDialogAdapter.OnDialogItemClickListener;
 import com.baichang.android.circle.adapter.InteractionPublishAdapter;
 import com.baichang.android.circle.adapter.InteractionPublishAdapter.SelectPhotoClickListener;
@@ -103,8 +104,12 @@ public class InteractionPublishImpl implements InteractionPublishPresent,
 
   @Override
   public void selectModel() {
-    InteractionDialogFragment dialog = InteractionDialogFragment.Instance(this);
-    dialog.show(mView.getManager(), "tag");
+    if (InteractionPresentImpl.mTypeList.isEmpty()) {
+      mView.showMsg("暂无分类");
+    } else {
+      InteractionDialogFragment dialog = InteractionDialogFragment.Instance(this);
+      dialog.show(mView.getManager(), "tag");
+    }
   }
 
   @Override

@@ -40,5 +40,6 @@ public class BCHttpsWebView extends WebView {
         });
         getSettings().setUseWideViewPort(true);
         getSettings().setLoadWithOverviewMode(true);
+        getSettings().setJavaScriptEnabled(true);
     }
 }
