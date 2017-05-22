@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.Adapter;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -157,14 +158,13 @@ public class InteractionDetailAdapter extends Adapter<Holder> {
       tvName.setText(data.name);
       tvContent.setText(data.content);
       tvTime.setText(data.time);
-      ImageLoader.loadImageError(ivAvatar.getContext(), ConfigurationImpl.get().getApiLoadImage() + data.avatar,
-          R.mipmap.interaction_icon_default, ivAvatar);
       commentLayout.setVisibility(data.isNullComment() ? View.GONE : View.VISIBLE);
       tvMore.setVisibility(data.isShowMore() ? View.VISIBLE : View.GONE);
       tvMore.setOnClickListener(new CommentOnClick(data));
       tvContent.setOnClickListener(new CommentOnClick(data));
       tvMore.setText(OPEN_SEE_MORE_TEXT);
       vLine.setVisibility(data.comments.isEmpty() ? View.INVISIBLE : View.VISIBLE);
+      ImageLoader.loadImageError(getContext(), data.avatar, R.mipmap.interaction_icon_default, ivAvatar);
     }
 
     void onBindCommentData(InteractionCommentList data, boolean isMore) {
