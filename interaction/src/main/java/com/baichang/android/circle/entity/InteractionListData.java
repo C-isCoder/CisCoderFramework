@@ -54,4 +54,7 @@ public class InteractionListData implements Serializable {
 
   @Expose
   public String hostUserId;
+
+  @Expose
+  public String type;
 }

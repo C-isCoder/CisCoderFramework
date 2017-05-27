@@ -92,6 +92,7 @@ public class InteractionDetailActivity extends InteractionCommonActivity
   }
 
   private void setConfig() {
+    btnShare.setVisibility(InteractionConfig.getInstance().isNeedShare() ? View.VISIBLE : View.GONE);
     int topColor = InteractionConfig.getInstance().getTopBarColor();
     if (topColor != -1) {
       RelativeLayout title = (RelativeLayout) findViewById(R.id.title);

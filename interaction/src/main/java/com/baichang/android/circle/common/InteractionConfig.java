@@ -21,8 +21,11 @@ public class InteractionConfig implements InteractionConfigContract {
   private static int mCollectDrawableRes = -1;
   private static int mBusinessDrawableRes = -1;
   private static int mBackDrawableResRes = -1;
+  private static int mBusinessBrandRes = -1;
   private static boolean isNeedBusinessStore = false;
   private static boolean isNeedSetTitleHeight = false;
+  private static boolean isNeedShowBusinessBrand = true;
+  private static boolean isNeedShare = true;
   private static String mTitleText = null;
   private static InteractionUserData mUser;
   private static InteractionListener listener = null;
@@ -87,6 +90,11 @@ public class InteractionConfig implements InteractionConfigContract {
   }
 
   @Override
+  public int getBusinessBrandRes() {
+    return mBusinessBrandRes;
+  }
+
+  @Override
   public InteractionListener getListener() {
     return listener;
   }
@@ -104,6 +112,16 @@ public class InteractionConfig implements InteractionConfigContract {
   @Override
   public boolean isNeedSetTitleHeight() {
     return isNeedSetTitleHeight;
+  }
+
+  @Override
+  public boolean isNeedShowBusinessBrand() {
+    return isNeedShowBusinessBrand;
+  }
+
+  @Override
+  public boolean isNeedShare() {
+    return isNeedShare;
   }
 
   @Override
@@ -192,6 +210,21 @@ public class InteractionConfig implements InteractionConfigContract {
 
   public InteractionConfig setIsNeedSetTitleHeight(boolean isNeedSetTitleHeight) {
     InteractionConfig.isNeedSetTitleHeight = isNeedSetTitleHeight;
+    return this;
+  }
+
+  public InteractionConfig setBusinessBrandRes(int businessBrandRes) {
+    InteractionConfig.mBusinessBrandRes = businessBrandRes;
+    return this;
+  }
+
+  public InteractionConfig setIsNeedShare(boolean isNeedShare) {
+    InteractionConfig.isNeedShare = isNeedShare;
+    return this;
+  }
+
+  public InteractionConfig setIsNeedShowBusinessBrand(boolean isNeedShowBusinessBrand) {
+    InteractionConfig.isNeedShowBusinessBrand = isNeedShowBusinessBrand;
     return this;
   }
 

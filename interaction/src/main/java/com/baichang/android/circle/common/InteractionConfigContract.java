@@ -29,6 +29,8 @@ public interface InteractionConfigContract {
 
   int getBackDrawableRes();
 
+  int getBusinessBrandRes();
+
   InteractionListener getListener();
 
   String getTitleText();
@@ -36,6 +38,10 @@ public interface InteractionConfigContract {
   boolean isNeedBusinessStore();
 
   boolean isNeedSetTitleHeight();
+
+  boolean isNeedShowBusinessBrand();
+
+  boolean isNeedShare();
 
   void share(Activity activity, String title, String summary, String url);
 

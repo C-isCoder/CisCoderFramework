@@ -28,6 +28,15 @@
          android:textSize="@dimen/cm_tv_size_body13"
          tools:text="阿拉蕾" />
 
+      <ImageView
+         android:id="@+id/item_interaction_content_iv_brand"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_marginLeft="5dp"
+         android:layout_toRightOf="@id/item_interaction_content_tv_name"
+         android:src="@mipmap/lable_merchants"
+         android:visibility="gone" />
+
       <TextView
          android:id="@+id/item_interaction_content_tv_time"
          android:layout_width="wrap_content"

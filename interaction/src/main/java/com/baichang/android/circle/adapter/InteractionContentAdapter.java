@@ -11,6 +11,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.Adapter;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -23,7 +24,6 @@ import android.widget.TextView;
 import com.baichang.android.circle.R;
 import com.baichang.android.circle.adapter.InteractionContentAdapter.ViewHolder;
 import com.baichang.android.circle.common.InteractionConfig;
-import com.baichang.android.circle.common.InteractionDiskCache;
 import com.baichang.android.circle.entity.InteractionListData;
 import com.baichang.android.circle.present.InteractionInfoPresent;
 import com.baichang.android.circle.utils.AnimatorUtil;
@@ -35,15 +35,11 @@ import com.baichang.android.circle.widget.photocontents.adapter.PhotoContentsBas
 import com.baichang.android.circle.widget.photopreview.ImageInfo;
 import com.baichang.android.circle.widget.photopreview.ImagePreviewActivity;
 import com.baichang.android.imageloader.ImageLoader;
+import com.baichang.android.utils.BCDensityUtil;
 import com.baichang.android.widget.circleImageView.CircleImageView;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by iCong on 2017/3/20.
@@ -83,6 +79,20 @@ public class InteractionContentAdapter extends Adapter<ViewHolder> {
       ColorStateList stateList = ColorUtil.createdPressColorList(
           holder.tvButton.getContext(), R.color.cm_tv_black2, textColor);
       holder.tvButton.setTextColor(stateList);
+    }
+    int businessBrandRes = InteractionConfig.getInstance().getBusinessBrandRes();
+    if (businessBrandRes != -1) {
+      holder.ivBusinessBrand.setImageResource(businessBrandRes);
+    }
+    if (!TextUtils.isEmpty(data.type)) {
+      if (!"1".equals(data.type) && InteractionConfig.
+          getInstance().isNeedShowBusinessBrand()) {
+        holder.ivBusinessBrand.setVisibility(View.VISIBLE);
+      } else {
+        holder.ivBusinessBrand.setVisibility(View.GONE);
+      }
+    }else {
+      holder.ivBusinessBrand.setVisibility(View.GONE);
     }
     if (mType == InteractionInfoPresent.COLLECT) {
       holder.tvButton.setText(R.string.button_cancel_collect);
@@ -188,6 +198,7 @@ public class InteractionContentAdapter extends Adapter<ViewHolder> {
     PhotoContents mPhotos;
     CircleImageView ivAvatar;
     TextView tvButton;
+    ImageView ivBusinessBrand;
 
     ViewHolder(View itemView) {
       super(itemView);
@@ -200,6 +211,7 @@ public class InteractionContentAdapter extends Adapter<ViewHolder> {
       mPhotos = (PhotoContents) itemView.findViewById(R.id.item_interaction_content_photo_content);
       ivAvatar = (CircleImageView) itemView.findViewById(R.id.item_interaction_content_iv_avatar);
       tvButton = (TextView) itemView.findViewById(R.id.item_interaction_content_tv_button);
+      ivBusinessBrand = (ImageView) itemView.findViewById(R.id.item_interaction_content_iv_brand);
       initConfig();
       itemView.setOnTouchListener(this);
       mPhotos.setOnItemClickListener(this);
