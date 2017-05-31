@@ -26,16 +26,18 @@
          android:textColor="@color/cm_tv_black1" />
 
       <ImageButton
-         android:id="@+id/interaction_detail_btn_share"
-         style="@style/top_bar_btn_right"
-         android:src="@drawable/interaction_ic_share" />
-
-      <ImageButton
          android:id="@+id/interaction_detail_btn_collect"
          style="@style/top_bar_btn_right"
-         android:layout_alignParentRight="false"
-         android:layout_toLeftOf="@id/interaction_detail_btn_share"
+         android:layout_alignParentRight="true"
          android:src="@drawable/interaction_ic_collect" />
+
+      <ImageButton
+         android:id="@+id/interaction_detail_btn_share"
+         style="@style/top_bar_btn_right"
+         android:layout_alignParentRight="false"
+         android:layout_toLeftOf="@id/interaction_detail_btn_collect"
+         android:src="@drawable/interaction_ic_share" />
+
    </RelativeLayout>
 
    <android.support.v4.widget.SwipeRefreshLayout
