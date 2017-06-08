@@ -73,6 +73,11 @@ public class InteractionPresentImpl implements InteractionPresent,
     if (mTypeList.isEmpty()) {
       mInteraction.getInteractionTypeList(this);
     }
+    if (mTypeList.size() > 4) {
+      mTabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
+    } else {
+      mTabLayout.setTabMode(TabLayout.MODE_FIXED);
+    }
   }
 
   @Override
