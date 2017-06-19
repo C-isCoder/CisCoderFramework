@@ -29,8 +29,9 @@ import org.greenrobot.eventbus.EventBus;
  * Created by iCong on 2017/3/20.
  */
 
-public class InteractionContentPresentImpl implements InteractionContentPresent,
-    BaseListener<List<InteractionListData>>, ItemOnClickListener, InteractionClickListener {
+public class InteractionContentPresentImpl
+    implements InteractionContentPresent, BaseListener<List<InteractionListData>>,
+    ItemOnClickListener, InteractionClickListener {
 
   private InteractionContentView mView;
   private InteractInteraction mInteraction;
@@ -50,13 +51,11 @@ public class InteractionContentPresentImpl implements InteractionContentPresent,
     modelType = mModelType;
   }
 
-  @Override
-  public void onDestroy() {
+  @Override public void onDestroy() {
     mView = null;
   }
 
-  @Override
-  public void onStart() {
+  @Override public void onStart() {
     mView.showProgressBar();
     if (typeId != -1) {
       mInteraction.getInteractionList(typeId, 1, this);
@@ -74,8 +73,7 @@ public class InteractionContentPresentImpl implements InteractionContentPresent,
     }
   }
 
-  @Override
-  public void refresh() {
+  @Override public void refresh() {
     isRefresh = true;
     nowPage = 1;
     if (typeId != -1) {
@@ -95,14 +93,12 @@ public class InteractionContentPresentImpl implements InteractionContentPresent,
     }
   }
 
-  @Override
-  public void attachRecyclerView(RecyclerView recyclerView) {
+  @Override public void attachRecyclerView(RecyclerView recyclerView) {
     recyclerView.setAdapter(mAdapter);
     recyclerView.addOnScrollListener(new OnScrollListener() {
-      @Override
-      public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-        if (RecyclerViewUtils.isScrollBottom(recyclerView) &&
-            mAdapter.getItemCount() % InteractionAPIConstants.PAGE_SIZE == 0) {
+      @Override public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+        if (RecyclerViewUtils.isScrollBottom(recyclerView)
+            && mAdapter.getItemCount() % InteractionAPIConstants.PAGE_SIZE == 0) {
           isRefresh = false;
           nowPage++;
           if (typeId != -1) {
@@ -112,7 +108,8 @@ public class InteractionContentPresentImpl implements InteractionContentPresent,
               // 动态
               case InteractionInfoPresent.NORMAL:
               case InteractionInfoPresent.DYNAMIC:
-                mInteraction.getDynamics(mView.getUserId(), nowPage, InteractionContentPresentImpl.this);
+                mInteraction.getDynamics(mView.getUserId(), nowPage,
+                    InteractionContentPresentImpl.this);
                 break;
               case InteractionInfoPresent.COLLECT: // 收藏的动态
                 mInteraction.getCollect(nowPage, InteractionContentPresentImpl.this);
@@ -124,8 +121,7 @@ public class InteractionContentPresentImpl implements InteractionContentPresent,
     });
   }
 
-  @Override
-  public void success(List<InteractionListData> list) {
+  @Override public void success(List<InteractionListData> list) {
     mView.hideProgressBar();
     if (isRefresh) {
       mAdapter.setData(list);
@@ -134,24 +130,20 @@ public class InteractionContentPresentImpl implements InteractionContentPresent,
     }
   }
 
-  @Override
-  public void error(String error) {
+  @Override public void error(String error) {
     mView.hideProgressBar();
     mView.showMsg(error);
   }
 
-  @Override
-  public void onItemClick(InteractionListData data) {
+  @Override public void onItemClick(InteractionListData data) {
     mView.gotoDetail(data);
   }
 
-  @Override
-  public void praise(InteractionListData data) {
+  @Override public void praise(InteractionListData data) {
     // 点赞
   }
 
-  @Override
-  public void avatar(InteractionListData data) {
+  @Override public void avatar(InteractionListData data) {
     InteractionUserData user = InteractionConfig.getInstance().getUser();
     if (user == null) {
       return;
@@ -159,28 +151,24 @@ public class InteractionContentPresentImpl implements InteractionContentPresent,
     mView.gotoInfo(TextUtils.equals(data.hostUserId, user.id), data.hostUserId);
   }
 
-  @Override
-  public void delete(final InteractionListData data) {
+  @Override public void delete(final InteractionListData data) {
     int colorRes = InteractionConfig.getInstance().getTextFontColor();
-    BCDialogUtil.showDialog(mView.getContext(), colorRes == -1 ? R.color.interaction_text_font : colorRes,
-        "删除", "确定删除吗？",
+    BCDialogUtil.showDialog(mView.getContext(),
+        colorRes == -1 ? R.color.interaction_text_font : colorRes, "删除", "确定删除吗？",
         new DialogInterface.OnClickListener() {
-          @Override
-          public void onClick(DialogInterface dialog, int which) {
+          @Override public void onClick(DialogInterface dialog, int which) {
             mAdapter.remove(data);
             mInteraction.delete(data.id, deleteListener);
           }
         }, null);
   }
 
-  @Override
-  public void cancel(final InteractionListData data) {
+  @Override public void cancel(final InteractionListData data) {
     int colorRes = InteractionConfig.getInstance().getTextFontColor();
-    BCDialogUtil.showDialog(mView.getContext(), colorRes == -1 ? R.color.interaction_text_font : colorRes,
-        "取消收藏", "确定取消收藏吗？",
+    BCDialogUtil.showDialog(mView.getContext(),
+        colorRes == -1 ? R.color.interaction_text_font : colorRes, "取消收藏", "确定取消收藏吗？",
         new DialogInterface.OnClickListener() {
-          @Override
-          public void onClick(DialogInterface dialog, int which) {
+          @Override public void onClick(DialogInterface dialog, int which) {
             mAdapter.remove(data);
             mInteraction.collect(data.id, cancelCollectListener);
           }
@@ -188,26 +176,30 @@ public class InteractionContentPresentImpl implements InteractionContentPresent,
   }
 
   private BaseListener<Boolean> deleteListener = new BaseListener<Boolean>() {
-    @Override
-    public void success(Boolean aBoolean) {
-      mView.showMsg("删除成功");
-      EventBus.getDefault().post(new BaseEventData(Event.INTERACTION_LIST_DELETE));
+    @Override public void success(Boolean aBoolean) {
+      if (aBoolean) {
+        mView.showMsg("删除成功");
+        EventBus.getDefault().post(new BaseEventData(Event.INTERACTION_LIST_DELETE));
+      } else {
+        mView.showMsg("删除失败");
+      }
     }
 
-    @Override
-    public void error(String error) {
+    @Override public void error(String error) {
       mView.showMsg(error);
     }
   };
   private BaseListener<Boolean> cancelCollectListener = new BaseListener<Boolean>() {
-    @Override
-    public void success(Boolean aBoolean) {
-      mView.showMsg("取消成功");
-      EventBus.getDefault().post(new BaseEventData(Event.INTERACTION_LIST_CANCEL_COLLECT));
+    @Override public void success(Boolean aBoolean) {
+      if (aBoolean) {
+        mView.showMsg("取消成功");
+        EventBus.getDefault().post(new BaseEventData(Event.INTERACTION_LIST_CANCEL_COLLECT));
+      } else {
+        mView.showMsg("取消失败");
+      }
     }
 
-    @Override
-    public void error(String error) {
+    @Override public void error(String error) {
       mView.showMsg(error);
     }
   };

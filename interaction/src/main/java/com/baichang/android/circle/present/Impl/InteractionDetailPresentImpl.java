@@ -55,8 +55,8 @@ import org.greenrobot.eventbus.ThreadMode;
  * Created by iCong on 2017/3/21.
  */
 
-public class InteractionDetailPresentImpl implements
-    InteractionDetailPresent, OnClickListener, CommentOnClickListener,
+public class InteractionDetailPresentImpl
+    implements InteractionDetailPresent, OnClickListener, CommentOnClickListener,
     ParentContentOnClickListener, OnItemClickListener {
 
   private static final int REPLY_TYPE = 132;
@@ -92,20 +92,17 @@ public class InteractionDetailPresentImpl implements
     EventBus.getDefault().register(this);
   }
 
-  @Override
-  public void onDestroy() {
+  @Override public void onDestroy() {
     mView = null;
     EventBus.getDefault().unregister(this);
   }
 
-  @Override
-  public void onStart() {
+  @Override public void onStart() {
     mView.showProgressBar();
     mInteraction.getInteractionDetail(trendsId, detailListener);
   }
 
-  @Override
-  public void attachView(RecyclerView recyclerView, View header) {
+  @Override public void attachView(RecyclerView recyclerView, View header) {
     mAdapter.addHeaderView(header);
     recyclerView.setAdapter(mAdapter);
     tvName = (TextView) header.findViewById(R.id.interaction_detail_tv_name);
@@ -132,14 +129,12 @@ public class InteractionDetailPresentImpl implements
     }
   }
 
-  @Override
-  public void refresh() {
+  @Override public void refresh() {
     mView.showProgressBar();
     mInteraction.getInteractionDetail(trendsId, detailListener);
   }
 
-  @Override
-  public void send(String content) {
+  @Override public void send(String content) {
     if (TextUtils.isEmpty(content)) {
       mView.showMsg("请输入回复内容");
       return;
@@ -158,6 +153,7 @@ public class InteractionDetailPresentImpl implements
         replyData.replayContent = content;
         replyData.replayUserId = user.id;
         replyData.trendsId = String.valueOf(trendsId);
+        replyData.created = BCToolsUtil.getCurrentTime();
         replyData.commentId = mCommentListData.commentId;
         replyData.commentUserId = mCommentListData.commentUserId;
         replyData.commentName = mCommentListData.commentName;
@@ -171,6 +167,7 @@ public class InteractionDetailPresentImpl implements
         replyData2.replayName = user.name;
         replyData2.replayContent = content;
         replyData2.replayUserId = user.id;
+        replyData2.created = BCToolsUtil.getCurrentTime();
         replyData2.trendsId = String.valueOf(trendsId);
         replyData2.commentId = mCommentListData.commentId;
         replyData2.commentUserId = mCommentListData.replayUserId;
@@ -183,6 +180,7 @@ public class InteractionDetailPresentImpl implements
         ownerData.commentName = user.name;
         ownerData.commentUserId = user.id;
         ownerData.trendsId = String.valueOf(trendsId);
+        ownerData.created = BCToolsUtil.getCurrentTime();
         ownerData.commentId = commentId;
         addCommentChild(ownerData);
         break;
@@ -191,6 +189,7 @@ public class InteractionDetailPresentImpl implements
         parentComment.replayContent = content;
         parentComment.commentName = user.name;
         parentComment.commentUserId = user.id;
+        parentComment.created = BCToolsUtil.getCurrentTime();
         parentComment.trendsId = String.valueOf(trendsId);
         parentComment.commentId = commentId;
         addCommentChild(parentComment);
@@ -206,35 +205,29 @@ public class InteractionDetailPresentImpl implements
         addComment(data);
         break;
     }
-
   }
 
-  @Override
-  public void share() {
+  @Override public void share() {
     final InteractionListener listener = InteractionConfig.getInstance().getListener();
     if (listener != null) {
       mInteraction.getShareLink(String.valueOf(trendsId), new BaseListener<String>() {
-        @Override
-        public void success(String url) {
+        @Override public void success(String url) {
           listener.share(mView.getActivity(), tvTitle.getText().toString(),
               tvContent.getText().toString(), url);
         }
 
-        @Override
-        public void error(String error) {
+        @Override public void error(String error) {
           mView.showMsg(error);
         }
       });
     }
   }
 
-  @Override
-  public void collect() {
+  @Override public void collect() {
     mInteraction.collect(trendsId, collectListener);
   }
 
-  @Override
-  public void praise() {
+  @Override public void praise() {
     mInteraction.praise(trendsId, praiseListener);
   }
 
@@ -260,39 +253,33 @@ public class InteractionDetailPresentImpl implements
   }
 
   private BaseListener<Boolean> replyListener = new BaseListener<Boolean>() {
-    @Override
-    public void success(Boolean aBoolean) {
+    @Override public void success(Boolean aBoolean) {
       mView.showMsg("回复成功");
     }
 
-    @Override
-    public void error(String error) {
+    @Override public void error(String error) {
       mView.showMsg(error);
     }
   };
 
   private BaseListener<Boolean> commentListener = new BaseListener<Boolean>() {
-    @Override
-    public void success(Boolean aBoolean) {
+    @Override public void success(Boolean aBoolean) {
       mView.showMsg("评论成功");
     }
 
-    @Override
-    public void error(String error) {
+    @Override public void error(String error) {
       mView.showMsg(error);
     }
   };
 
-  @Override
-  public void onClick(View v) {
+  @Override public void onClick(View v) {
     int id = v.getId();
     if (id == R.id.interaction_detail_tv_report) {
       int colorRes = InteractionConfig.getInstance().getTextFontColor();
-      BCDialogUtil.showDialog(v.getContext(), colorRes == -1 ? R.color.interaction_text_font : colorRes,
-          "举报", "确定举报该条内容吗？",
+      BCDialogUtil.showDialog(v.getContext(),
+          colorRes == -1 ? R.color.interaction_text_font : colorRes, "举报", "确定举报该条内容吗？",
           new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
+            @Override public void onClick(DialogInterface dialog, int which) {
               mInteraction.report(InteractionDetailPresentImpl.this.trendsId, reportListener);
             }
           }, null);
@@ -304,24 +291,21 @@ public class InteractionDetailPresentImpl implements
     }
   }
 
-  @Override
-  public void commentOnClick(String commentId) {
+  @Override public void commentOnClick(String commentId) {
     this.commentId = commentId;
     mView.setReportHint(" 评论 ");
     mView.showInputKeyBord();
     currentType = CHILD_COMMENT_TYPE;
   }
 
-  @Override
-  public void replyOnClick(InteractionCommentReplyList data) {
+  @Override public void replyOnClick(InteractionCommentReplyList data) {
     mView.setReportHint(" 回复 " + data.replayName);
     mView.showInputKeyBord();
     mCommentListData = data;
     currentType = REPLY_TYPE;
   }
 
-  @Override
-  public void replyOnClick2(InteractionCommentReplyList data) {
+  @Override public void replyOnClick2(InteractionCommentReplyList data) {
     mView.setReportHint(" 回复 " + data.replayName);
     mView.showInputKeyBord();
     mCommentListData = data;
@@ -329,8 +313,7 @@ public class InteractionDetailPresentImpl implements
   }
 
   // 父内容 点击
-  @Override
-  public void parentContentOnClick(String commentId) {
+  @Override public void parentContentOnClick(String commentId) {
     this.commentId = commentId;
     mView.setReportHint(" 评论 ");
     mView.showInputKeyBord();
@@ -338,8 +321,7 @@ public class InteractionDetailPresentImpl implements
   }
 
   // 子内容点击
-  @Override
-  public void childContentOnClick(InteractionCommentReplyList data) {
+  @Override public void childContentOnClick(InteractionCommentReplyList data) {
     if (TextUtils.isEmpty(data.replayName)) {
       mView.setReportHint(" 回复 " + data.commentName);
     } else {
@@ -350,71 +332,64 @@ public class InteractionDetailPresentImpl implements
     currentType = REPLY_TYPE;
   }
 
-  private BaseListener<InteractionDetailData> detailListener = new BaseListener<InteractionDetailData>() {
+  private BaseListener<InteractionDetailData> detailListener =
+      new BaseListener<InteractionDetailData>() {
 
-    @Override
-    public void success(InteractionDetailData detail) {
-      mView.hideProgressBar();
-      if (detail.images != null && !detail.images.isEmpty()) {
-        mPhotos.setAdapter(mPhotoAdapter);
-        mPhotoAdapter.setData(detail.images);
-      }
-      tvName.setText(detail.name);
-      tvTime.setText(detail.time);
-      tvTitle.setText(detail.title);
-      tvContent.setText(detail.content);
-      ImageLoader.loadImageError(mView.getContext(), detail.avatar, R.mipmap.interaction_icon_default, ivAvatar);
-      mAdapter.setData(detail.commentList);
-      mCommentCount = detail.commentList.size();
-      tvCount.setText("评论（" + mCommentCount + "）");
-      mView.setCollectState(detail.isCollection == 1);
-      mView.setPraiseState(detail.isPraise == 1);
-    }
+        @Override public void success(InteractionDetailData detail) {
+          mView.hideProgressBar();
+          if (detail.images != null && !detail.images.isEmpty()) {
+            mPhotos.setAdapter(mPhotoAdapter);
+            mPhotoAdapter.setData(detail.images);
+          }
+          tvName.setText(detail.name);
+          tvTime.setText(detail.time);
+          tvTitle.setText(detail.title);
+          tvContent.setText(detail.content);
+          ImageLoader.loadImageError(mView.getContext(), detail.avatar,
+              R.mipmap.interaction_icon_default, ivAvatar);
+          mAdapter.setData(detail.commentList);
+          mCommentCount = detail.commentList.size();
+          tvCount.setText("评论（" + mCommentCount + "）");
+          mView.setCollectState(detail.isCollection == 1);
+          mView.setPraiseState(detail.isPraise == 1);
+        }
 
-    @Override
-    public void error(String error) {
-      mView.hideProgressBar();
-      mView.showMsg(error);
-    }
-  };
+        @Override public void error(String error) {
+          mView.hideProgressBar();
+          mView.showMsg(error);
+        }
+      };
 
   private BaseListener<Boolean> reportListener = new BaseListener<Boolean>() {
-    @Override
-    public void success(Boolean aBoolean) {
+    @Override public void success(Boolean aBoolean) {
       mView.showMsg("举报成功");
     }
 
-    @Override
-    public void error(String error) {
+    @Override public void error(String error) {
       mView.showMsg(error);
     }
   };
   private BaseListener<Boolean> praiseListener = new BaseListener<Boolean>() {
-    @Override
-    public void success(Boolean aBoolean) {
+    @Override public void success(Boolean aBoolean) {
       mView.showMsg("操作成功");
     }
 
-    @Override
-    public void error(String error) {
+    @Override public void error(String error) {
       mView.showMsg(error);
     }
   };
 
   private BaseListener<Boolean> collectListener = new BaseListener<Boolean>() {
-    @Override
-    public void success(Boolean aBoolean) {
+    @Override public void success(Boolean aBoolean) {
       mView.showMsg("操作成功");
     }
 
-    @Override
-    public void error(String error) {
+    @Override public void error(String error) {
       mView.showMsg(error);
     }
   };
 
-  @Override
-  public void onItemClick(PhotoContents photoContents, int position) {
+  @Override public void onItemClick(PhotoContents photoContents, int position) {
     List<ImageInfo> imageInfoList = new ArrayList<>();
     for (int i = 0; i < mPhotoAdapter.getList().size(); i++) {
       ImageInfo info = new ImageInfo();
@@ -447,8 +422,7 @@ public class InteractionDetailPresentImpl implements
       mList = new ArrayList<>();
     }
 
-    @Override
-    public ImageView onCreateView(ImageView imageView, ViewGroup viewGroup, int i) {
+    @Override public ImageView onCreateView(ImageView imageView, ViewGroup viewGroup, int i) {
       if (imageView == null) {
         imageView = new ForceClickImageView(viewGroup.getContext());
         imageView.setScaleType(ScaleType.CENTER_CROP);
@@ -456,13 +430,12 @@ public class InteractionDetailPresentImpl implements
       return imageView;
     }
 
-    @Override
-    public void onBindData(int i, @NonNull ImageView imageView) {
-      ImageLoader.loadImageError(mContext, mList.get(i), R.mipmap.interaction_icon_default, imageView);
+    @Override public void onBindData(int i, @NonNull ImageView imageView) {
+      ImageLoader.loadImageError(mContext, mList.get(i), R.mipmap.interaction_icon_default,
+          imageView);
     }
 
-    @Override
-    public int getCount() {
+    @Override public int getCount() {
       return mList.size();
     }
 
@@ -476,8 +449,7 @@ public class InteractionDetailPresentImpl implements
     }
   }
 
-  @Subscribe(threadMode = ThreadMode.MAIN)
-  public void event(BaseEventData data) {
+  @Subscribe(threadMode = ThreadMode.MAIN) public void event(BaseEventData data) {
     if (data.key == Event.INTERACTION_COMMENT_COUNT_ADD) {
       mCommentCount++;
       tvCount.setText("评论（" + mCommentCount + "）");
