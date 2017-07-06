@@ -1,6 +1,11 @@
 # Android框架文档说明
 
 ## 更新说明：
+ ### 2017-07-06
+ 
+ * 新增请求框架 request2 模块，升级 Retrofit 版本，切换到 RxJava2 ，替换 Json 解析为 Gson ，优化
+ `compile 'com.baichang.android.library:request2:2.0.0'`
+ 
  ### 2017-05-11
  
  * Utils 新增一个拼音转换类，HanziToPinyin 一个从Google官方源码提取的汉字转拼音。
@@ -59,7 +64,8 @@ allprojects {
 }
 ```
 
-* 网络请求 `compile 'com.baichang.android.library:request:1.0.1'`
+* 网络请求1 `compile 'com.baichang.android.library:request:1.0.1'`
+* 网络请求2  `compile 'com.baichang.android.library:request2:2.0.0'`
 * 图片加载 `compile 'com.baichang.android.library:imageLoader:1.0.1'`
 * 基础组件 `compile 'com.baichang.android.library:common:1.0.1'`
 * 控件集合 `compile 'com.baichang.android.library:widget:1.0.1'`

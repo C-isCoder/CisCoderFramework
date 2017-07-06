@@ -1,4 +1,4 @@
-include ':utils', ':config', ':permission', ':interaction'
+include ':utils', ':config', ':permission', ':interaction', ':request2'
 include ':qrcode'
 include ':umShare'
 include ':common'

@@ -1,0 +1,56 @@
+apply plugin: 'com.android.library'
+apply plugin: 'maven'
+
+android {
+    compileSdkVersion rootProject.ext.android.compileSdkVersion
+    buildToolsVersion rootProject.ext.android.buildToolsVersion
+
+    defaultConfig {
+        minSdkVersion rootProject.ext.android.minSdkVersion
+        targetSdkVersion rootProject.ext.android.targetSdkVersion
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    dependencies {
+        compile fileTree(include: ['*.jar'], dir: 'libs')
+        compile rootProject.ext.depend.retrofit
+        compile rootProject.ext.depend.urlconnection
+        compile rootProject.ext.depend.gsonconverter2
+        compile rootProject.ext.depend.rxjavaadapter2
+        compile rootProject.ext.depend.rxandroid2
+        compile rootProject.ext.depend.v7
+        compile rootProject.ext.depend.logger
+        provided project(':config')
+        provided project(':widget')
+    }
+}
+uploadArchives {
+    configuration = configurations.archives
+    repositories {
+        mavenDeployer {
+            snapshotRepository(url: rootProject.ext.maven.snapshot) {
+                authentication(userName: rootProject.ext.maven.name,
+                        password: rootProject.ext.maven.password)
+            }
+            repository(url: rootProject.ext.maven.repository) {
+                authentication(userName: rootProject.ext.maven.name,
+                        password: rootProject.ext.maven.password)
+            }
+            pom.project {
+                version rootProject.ext.request2.version
+                artifactId rootProject.ext.request2.artifactId
+                groupId rootProject.ext.request2.groupId
+                packaging rootProject.ext.request2.packaging
+                description rootProject.ext.request2.description
+            }
+        }
+    }
+}
+
+artifacts {
+    archives file(rootProject.ext.request2.artifacts)
+}
