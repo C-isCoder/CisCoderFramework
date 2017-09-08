@@ -5,7 +5,11 @@ import android.os.CountDownTimer;
 /**
  * Created by iscod.
  * Time:2016/8/30-16:59.
- */
+ *
+ *
+ * 有比较严重的BUG 勿用
+*/
+@Deprecated
 public class BCTimeCount extends CountDownTimer {
     private static BCTimeCount INSTANCE;
 
@@ -60,9 +64,6 @@ public class BCTimeCount extends CountDownTimer {
         void onFinish();
     }
 
-    /**
-     * 取消，防止倒计时没有结束 Activity销毁造成的内存泄露
-     */
     public void destroy() {
         if (INSTANCE != null) {
             INSTANCE.cancel();
