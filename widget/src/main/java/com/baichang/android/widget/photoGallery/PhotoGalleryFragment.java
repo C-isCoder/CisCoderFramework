@@ -1,6 +1,5 @@
 package com.baichang.android.widget.photoGallery;
 
-
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -11,7 +10,6 @@ import android.graphics.Bitmap.CompressFormat;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog.Builder;
@@ -22,14 +20,11 @@ import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Toast;
-import com.baichang.android.config.Configuration;
 import com.baichang.android.config.ConfigurationImpl;
-import com.baichang.android.imageloader.ImageLoader;
 import com.baichang.android.widget.R;
 import com.baichang.android.widget.photoView.PhotoView;
 import com.baichang.android.widget.photoView.PhotoViewAttacher.OnViewTapListener;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.bitmap.GlideBitmapDrawable;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import java.io.File;
@@ -40,31 +35,33 @@ import java.io.IOException;
 public class PhotoGalleryFragment extends Fragment
     implements OnViewTapListener, OnLongClickListener {
 
-  private static final String ARG_PARAM = "param";
+  private static final String PHOTO_PARAM = "photo_param";
+  private static final String LOCAL_PARAM = "local_param";
   private PhotoView mPhoto;
   private String imageUrl;
+  private boolean isLocal; // 是否加载本地
 
   public PhotoGalleryFragment() {
   }
 
-  public static PhotoGalleryFragment newInstance(String param) {
+  public static PhotoGalleryFragment newInstance(String param, boolean isLocal) {
     PhotoGalleryFragment fragment = new PhotoGalleryFragment();
     Bundle args = new Bundle();
-    args.putString(ARG_PARAM, param);
+    args.putString(PHOTO_PARAM, param);
+    args.putBoolean(LOCAL_PARAM, isLocal);
     fragment.setArguments(args);
     return fragment;
   }
 
-  @Override
-  public void onCreate(Bundle savedInstanceState) {
+  @Override public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     if (getArguments() != null) {
-      imageUrl = getArguments().getString(ARG_PARAM);
+      imageUrl = getArguments().getString(PHOTO_PARAM);
+      isLocal = getArguments().getBoolean(LOCAL_PARAM);
     }
   }
 
-  @Override
-  public View onCreateView(LayoutInflater inflater, ViewGroup container,
+  @Override public View onCreateView(LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
     return createView(inflater, container);
   }
@@ -76,28 +73,26 @@ public class PhotoGalleryFragment extends Fragment
     mPhoto.setOnLongClickListener(this);
     //ImageLoader.loadImage(getActivity().getApplicationContext(), imageUrl, mPhoto);
     // 转成Drawable 加载，不然下面长按保存会报错。
-    Glide.with(getActivity()).load(ConfigurationImpl.get().getApiLoadImage() + imageUrl).asBitmap()
+    Glide.with(getActivity())
+        .load(isLocal ? imageUrl : ConfigurationImpl.get().getApiLoadImage() + imageUrl)
+        .asBitmap()
         .into(new SimpleTarget<Bitmap>() {
-          @Override
-          public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+          @Override public void onResourceReady(Bitmap resource,
+              GlideAnimation<? super Bitmap> glideAnimation) {
             mPhoto.setImageBitmap(resource);
           }
         });
     return view;
   }
 
-  @Override
-  public void onViewTap(View view, float x, float y) {
+  @Override public void onViewTap(View view, float x, float y) {
     getActivity().finish();
   }
 
-  @Override
-  public boolean onLongClick(final View v) {
-    new Builder(getActivity())
-        .setMessage("保存图片")
+  @Override public boolean onLongClick(final View v) {
+    new Builder(getActivity()).setMessage("保存图片")
         .setPositiveButton("保存", new DialogInterface.OnClickListener() {
-          @Override
-          public void onClick(DialogInterface dialog, int which) {
+          @Override public void onClick(DialogInterface dialog, int which) {
             BitmapDrawable drawable = (BitmapDrawable) ((ImageView) v).getDrawable();
             if (drawable != null) {
               saveBitmap(drawable.getBitmap());
@@ -153,14 +148,15 @@ public class PhotoGalleryFragment extends Fragment
 
     // 其次把文件插入到系统图库
     try {
-      MediaStore.Images.Media.insertImage(context.getContentResolver(),
-          file.getAbsolutePath(), fileName, null);
+      MediaStore.Images.Media.insertImage(context.getContentResolver(), file.getAbsolutePath(),
+          fileName, null);
     } catch (FileNotFoundException e) {
       e.printStackTrace();
     }
     // 最后通知图库更新
     String path = file.getAbsolutePath();
-    context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse("file://" + path)));
+    context.sendBroadcast(
+        new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse("file://" + path)));
     return path;
   }
 }

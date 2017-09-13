@@ -10,7 +10,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
 
-
 import com.baichang.android.widget.R;
 
 import java.util.ArrayList;
@@ -25,15 +24,14 @@ public class PhotoGalleryActivity extends FragmentActivity {
   private PhotoGalleryData photoGalleryData;
   public static final String IMAGE_DATA = "Data";
 
-  @Override
-  protected void onCreate(Bundle savedInstanceState) {
+  @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     requestWindowFeature(Window.FEATURE_NO_TITLE);
     //全屏
     getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
         WindowManager.LayoutParams.FLAG_FULLSCREEN);
     setContentView(R.layout.photo_gallery_image_banner);
-    initData(getIntent().getSerializableExtra(IMAGE_DATA));
+    initData(getIntent().getParcelableExtra(IMAGE_DATA));
     initView();
   }
 
@@ -50,7 +48,6 @@ public class PhotoGalleryActivity extends FragmentActivity {
     } else {
       mImageList = photoGalleryData.imageList;
     }
-
   }
 
   private void initView() {
@@ -63,19 +60,16 @@ public class PhotoGalleryActivity extends FragmentActivity {
 
       }
 
-      @Override
-      public void onPageSelected(int position) {
+      @Override public void onPageSelected(int position) {
         tvCount.setText(position + 1 + "/" + mImageList.size());
       }
 
-      @Override
-      public void onPageScrollStateChanged(int state) {
+      @Override public void onPageScrollStateChanged(int state) {
 
       }
     });
     mViewPager.setCurrentItem(photoGalleryData.index);
     tvCount.setText(photoGalleryData.index + 1 + "/" + mImageList.size());
-
   }
 
   private class ImageViewPagerAdapter extends FragmentPagerAdapter {
@@ -84,13 +78,12 @@ public class PhotoGalleryActivity extends FragmentActivity {
       super(fm);
     }
 
-    @Override
-    public Fragment getItem(int position) {
-      return PhotoGalleryFragment.newInstance(mImageList.get(position));
+    @Override public Fragment getItem(int position) {
+      String path = mImageList.get(position);
+      return PhotoGalleryFragment.newInstance(path, photoGalleryData.isLocal);
     }
 
-    @Override
-    public int getCount() {
+    @Override public int getCount() {
       return mImageList.size();
     }
   }
