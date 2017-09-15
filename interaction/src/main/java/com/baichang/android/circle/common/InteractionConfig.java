@@ -22,6 +22,7 @@ public class InteractionConfig implements InteractionConfigContract {
   private static int mBusinessDrawableRes = -1;
   private static int mBackDrawableResRes = -1;
   private static int mBusinessBrandRes = -1;
+  private static int mTitleColor = -1;
   private static boolean isNeedBusinessStore = false;
   private static boolean isNeedSetTitleHeight = false;
   private static boolean isNeedShowBusinessBrand = true;
@@ -44,102 +45,87 @@ public class InteractionConfig implements InteractionConfigContract {
     return INSTANCE;
   }
 
-  @Override
-  public int getTextFontColor() {
+  @Override public int getTextFontColor() {
     return mTextFontColor;
   }
 
-  @Override
-  public int getTopBarColor() {
+  @Override public int getTopBarColor() {
     return mTopBarColor;
   }
 
-  @Override
-  public int getButtonDrawableRes() {
+  @Override public int getButtonDrawableRes() {
     return mButtonDrawableRes;
   }
 
-  @Override
-  public int getShareDrawableRes() {
+  @Override public int getShareDrawableRes() {
     return mShareDrawableRes;
   }
 
-  @Override
-  public int getCommentDrawableRes() {
+  @Override public int getCommentDrawableRes() {
     return mCommentDrawableRes;
   }
 
-  @Override
-  public int getPraiseDrawableRes() {
+  @Override public int getPraiseDrawableRes() {
     return mPraiseDrawableRes;
   }
 
-  @Override
-  public int getCollectDrawableRes() {
+  @Override public int getCollectDrawableRes() {
     return mCollectDrawableRes;
   }
 
-  @Override
-  public int getBusinessDrawableRes() {
+  @Override public int getBusinessDrawableRes() {
     return mBusinessDrawableRes;
   }
 
-  @Override
-  public int getBackDrawableRes() {
+  @Override public int getBackDrawableRes() {
     return mBackDrawableResRes;
   }
 
-  @Override
-  public int getBusinessBrandRes() {
+  @Override public int getBusinessBrandRes() {
     return mBusinessBrandRes;
   }
 
-  @Override
-  public InteractionListener getListener() {
+  @Override public int getTitleColor() {
+    return mTitleColor;
+  }
+
+  @Override public InteractionListener getListener() {
     return listener;
   }
 
-  @Override
-  public String getTitleText() {
+  @Override public String getTitleText() {
     return mTitleText;
   }
 
-  @Override
-  public boolean isNeedBusinessStore() {
+  @Override public boolean isNeedBusinessStore() {
     return isNeedBusinessStore;
   }
 
-  @Override
-  public boolean isNeedSetTitleHeight() {
+  @Override public boolean isNeedSetTitleHeight() {
     return isNeedSetTitleHeight;
   }
 
-  @Override
-  public boolean isNeedShowBusinessBrand() {
+  @Override public boolean isNeedShowBusinessBrand() {
     return isNeedShowBusinessBrand;
   }
 
-  @Override
-  public boolean isNeedShare() {
+  @Override public boolean isNeedShare() {
     return isNeedShare;
   }
 
-  @Override
-  public void share(Activity activity, String title, String summary, String url) {
+  @Override public void share(Activity activity, String title, String summary, String url) {
     if (listener != null) {
       listener.share(activity, title, summary, url);
     }
   }
 
-  @Override
-  public void businessStore(String id) {
+  @Override public void businessStore(String id) {
     if (listener != null) {
       listener.businessClick(id);
     }
   }
 
-  @Override
-  public InteractionUserData getUser() {
+  @Override public InteractionUserData getUser() {
     return mUser;
   }
 
@@ -190,6 +176,11 @@ public class InteractionConfig implements InteractionConfigContract {
 
   public InteractionConfig setIsNeedBusinessStore(boolean isNeedBusinessStore) {
     InteractionConfig.isNeedBusinessStore = isNeedBusinessStore;
+    return this;
+  }
+
+  public InteractionConfig setTitleColor(int titleColorRes) {
+    InteractionConfig.mTitleColor = titleColorRes;
     return this;
   }
 

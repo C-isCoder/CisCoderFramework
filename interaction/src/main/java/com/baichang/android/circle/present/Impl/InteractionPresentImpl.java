@@ -43,8 +43,8 @@ import org.greenrobot.eventbus.ThreadMode;
  * Created by iCong on 2017/3/20.
  */
 
-public class InteractionPresentImpl implements InteractionPresent,
-    OnClickListener, BaseListener<List<InteractionTypeData>> {
+public class InteractionPresentImpl
+    implements InteractionPresent, OnClickListener, BaseListener<List<InteractionTypeData>> {
 
   private InteractionView mView;
   private FragmentPagerAdapter mAdapter;
@@ -62,14 +62,12 @@ public class InteractionPresentImpl implements InteractionPresent,
     EventBus.getDefault().register(this);
   }
 
-  @Override
-  public void onDestroy() {
+  @Override public void onDestroy() {
     mView = null;
     EventBus.getDefault().unregister(this);
   }
 
-  @Override
-  public void onStart() {
+  @Override public void onStart() {
     if (mTypeList.isEmpty()) {
       mInteraction.getInteractionTypeList(this);
     }
@@ -80,12 +78,12 @@ public class InteractionPresentImpl implements InteractionPresent,
     }
   }
 
-  @Override
-  public void attachView(View contentView) {
+  @Override public void attachView(View contentView) {
     mViewPager = (ViewPager) contentView.findViewById(R.id.interaction_view_pager);
     mTabLayout = (TabLayout) contentView.findViewById(R.id.interaction_tab_layout);
     tvMe = (TextView) contentView.findViewById(R.id.interaction_tv_me);
-    mFloating = (FloatingActionButton) contentView.findViewById(R.id.interaction_floating_btn_publish);
+    mFloating =
+        (FloatingActionButton) contentView.findViewById(R.id.interaction_floating_btn_publish);
     tvMe.setOnClickListener(this);
     mFloating.setOnClickListener(this);
 
@@ -95,17 +93,14 @@ public class InteractionPresentImpl implements InteractionPresent,
     mTabLayout.setupWithViewPager(mViewPager);
   }
 
-  @Override
-  public void onClick(View v) {
+  @Override public void onClick(View v) {
     int i = v.getId();
     if (i == mFloating.getId()) {
-      Intent publishIntent = new Intent(v.getContext(),
-          InteractionPublishActivity.class);
+      Intent publishIntent = new Intent(v.getContext(), InteractionPublishActivity.class);
       v.getContext().startActivity(publishIntent);
     } else if (i == tvMe.getId()) {
       AnimatorUtil.scale(v);
-      Intent infoIntent = new Intent(v.getContext(),
-          InteractionInfoActivity.class);
+      Intent infoIntent = new Intent(v.getContext(), InteractionInfoActivity.class);
       infoIntent.putExtra(InteractionFlag.ACTION_INTERACTION_USER_ID,
           InteractionConfig.getInstance().getUser().id);
       infoIntent.putExtra(InteractionFlag.ACTION_INTERACTION_IS_ONESELF, true);
@@ -113,8 +108,7 @@ public class InteractionPresentImpl implements InteractionPresent,
     }
   }
 
-  @Override
-  public void success(List<InteractionTypeData> list) {
+  @Override public void success(List<InteractionTypeData> list) {
     if (!mTypeList.isEmpty()) {
       mTypeList.clear();
     }
@@ -127,8 +121,7 @@ public class InteractionPresentImpl implements InteractionPresent,
     mAdapter.notifyDataSetChanged();
   }
 
-  @Override
-  public void error(String error) {
+  @Override public void error(String error) {
     mView.showMsg(error);
   }
 
@@ -156,20 +149,16 @@ public class InteractionPresentImpl implements InteractionPresent,
       super(fm);
     }
 
-    @Override
-    public Fragment getItem(int position) {
-      return InteractionContentFragment.newInstance(
-          mTypeList.get(position).id,
+    @Override public Fragment getItem(int position) {
+      return InteractionContentFragment.newInstance(mTypeList.get(position).id,
           InteractionInfoPresent.NORMAL);
     }
 
-    @Override
-    public int getCount() {
+    @Override public int getCount() {
       return mTypeList.size();
     }
 
-    @Override
-    public CharSequence getPageTitle(int position) {
+    @Override public CharSequence getPageTitle(int position) {
       return mTypeList.get(position).name;
     }
   }
@@ -178,12 +167,13 @@ public class InteractionPresentImpl implements InteractionPresent,
 
     int textColor = InteractionConfig.getInstance().getTextFontColor();
     if (textColor != -1) {
-      mFloating.setBackgroundTintList(ColorUtil.createdPressColorList(
-          contentView.getContext(), textColor, textColor));
-      mTabLayout.setSelectedTabIndicatorColor(ContextCompat.getColor(
-          contentView.getContext(), textColor));
-      mTabLayout.setTabTextColors(ColorUtil.createdSelectColorList(
-          contentView.getContext(), textColor, R.color.cm_tv_black1));
+      mFloating.setBackgroundTintList(
+          ColorUtil.createdPressColorList(contentView.getContext(), textColor, textColor));
+      mTabLayout.setSelectedTabIndicatorColor(
+          ContextCompat.getColor(contentView.getContext(), textColor));
+      mTabLayout.setTabTextColors(
+          ColorUtil.createdSelectColorList(contentView.getContext(), textColor,
+              R.color.cm_tv_black1));
     }
 
     int topColor = InteractionConfig.getInstance().getTopBarColor();
@@ -191,8 +181,14 @@ public class InteractionPresentImpl implements InteractionPresent,
       RelativeLayout title = (RelativeLayout) contentView.findViewById(R.id.title);
       title.setBackgroundResource(topColor);
       TextView tvTitle = (TextView) contentView.findViewById(R.id.interaction_tv_title);
-      tvTitle.setTextColor(Color.WHITE);
-      tvMe.setTextColor(Color.WHITE);
+      int color = InteractionConfig.getInstance().getTitleColor();
+      if (color != -1) {
+        tvTitle.setTextColor(color);
+        tvMe.setTextColor(color);
+      } else {
+        tvTitle.setTextColor(Color.WHITE);
+        tvMe.setTextColor(Color.WHITE);
+      }
       String titleText = InteractionConfig.getInstance().getTitleText();
       if (!TextUtils.isEmpty(titleText)) {
         tvTitle.setText(titleText);
@@ -202,7 +198,8 @@ public class InteractionPresentImpl implements InteractionPresent,
     boolean isNeedSetTitleHeight = InteractionConfig.getInstance().isNeedSetTitleHeight();
     if (isNeedSetTitleHeight) {
       RelativeLayout title = (RelativeLayout) contentView.findViewById(R.id.title);
-      LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, BCDensityUtil.dip2px(title.getContext(), 72));
+      LayoutParams params =
+          new LayoutParams(LayoutParams.MATCH_PARENT, BCDensityUtil.dip2px(title.getContext(), 72));
       title.setLayoutParams(params);
       title.setPadding(0, BCDensityUtil.dip2px(title.getContext(), 24), 0, 0);
     }

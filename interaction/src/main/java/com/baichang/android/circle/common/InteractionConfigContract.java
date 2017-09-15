@@ -31,6 +31,8 @@ public interface InteractionConfigContract {
 
   int getBusinessBrandRes();
 
+  int getTitleColor();
+
   InteractionListener getListener();
 
   String getTitleText();
