@@ -1,5 +1,6 @@
 package com.baichang.android.circle.common;
 
+import android.text.TextUtils;
 import com.baichang.android.circle.entity.InteractionDetailData;
 import com.baichang.android.circle.entity.InteractionListData;
 import com.baichang.android.circle.entity.InteractionNumberData;
@@ -31,26 +32,27 @@ public class InteractionAPIWrapper implements InteractionAPI {
     if (Instance == null) {
       synchronized (InteractionAPIWrapper.class) {
         if (Instance == null) {
-          Instance = HttpFactory.creatHttp(InteractionAPI.class);
+          if (TextUtils.isEmpty(InteractionConfig.getInstance().getInteractionUrl())) {
+            Instance = HttpFactory.creatHttp(InteractionAPI.class);
+          } else {
+            Instance = HttpFactory.creatHttp(InteractionAPI.class,
+                InteractionConfig.getInstance().getInteractionUrl());
+          }
         }
       }
     }
     return Instance;
   }
 
-  @Override
-  public Observable<List<String>> upload(@Part MultipartBody.Part file) {
+  @Override public Observable<List<String>> upload(@Part MultipartBody.Part file) {
     return HttpFactory.creatUpload(InteractionAPI.class).upload(file);
   }
 
-  @Override
-  public Observable<List<String>> uploads(@Part List<MultipartBody.Part> files) {
+  @Override public Observable<List<String>> uploads(@Part List<MultipartBody.Part> files) {
     return HttpFactory.creatUpload(InteractionAPI.class).uploads(files);
   }
 
-
-  @Override
-  public Observable<ResponseBody> download(@Url String fileUrl) {
+  @Override public Observable<ResponseBody> download(@Url String fileUrl) {
     //下载不需要设置线程，底层已经设置
     return HttpFactory.creatDownload(InteractionAPI.class).download(fileUrl);
   }
@@ -60,8 +62,7 @@ public class InteractionAPIWrapper implements InteractionAPI {
     return getTrendsList(map);
   }
 
-  @Override
-  public Observable<List<InteractionTypeData>> getTrendsType() {
+  @Override public Observable<List<InteractionTypeData>> getTrendsType() {
     return getTrendsType();
   }
 
@@ -70,18 +71,15 @@ public class InteractionAPIWrapper implements InteractionAPI {
     return getTrendsDetail(map);
   }
 
-  @Override
-  public Observable<Boolean> publish(@Body Map<String, String> map) {
+  @Override public Observable<Boolean> publish(@Body Map<String, String> map) {
     return publish(map);
   }
 
-  @Override
-  public Observable<Boolean> praise(@Body Map<String, String> map) {
+  @Override public Observable<Boolean> praise(@Body Map<String, String> map) {
     return praise(map);
   }
 
-  @Override
-  public Observable<Boolean> collect(@Body Map<String, String> map) {
+  @Override public Observable<Boolean> collect(@Body Map<String, String> map) {
     return collect(map);
   }
 
@@ -90,49 +88,39 @@ public class InteractionAPIWrapper implements InteractionAPI {
     return getDynamics(map);
   }
 
-  @Override
-  public Observable<Boolean> delete(@Body Map<String, String> map) {
+  @Override public Observable<Boolean> delete(@Body Map<String, String> map) {
     return delete(map);
   }
 
-  @Override
-  public Observable<List<InteractionListData>> getCollect(@Body Map<String, String> map) {
+  @Override public Observable<List<InteractionListData>> getCollect(@Body Map<String, String> map) {
     return getCollect(map);
   }
 
-  @Override
-  public Observable<InteractionNumberData> getNumbers(@Body Map<String, String> map) {
+  @Override public Observable<InteractionNumberData> getNumbers(@Body Map<String, String> map) {
     return getNumbers(map);
   }
 
-  @Override
-  public Observable<Boolean> report(@Body Map<String, String> map) {
+  @Override public Observable<Boolean> report(@Body Map<String, String> map) {
     return report(map);
   }
 
-  @Override
-  public Observable<List<InteractionReplyData>> getReply(@Body Map<String, String> map) {
+  @Override public Observable<List<InteractionReplyData>> getReply(@Body Map<String, String> map) {
     return getReply(map);
   }
 
-  @Override
-  public Observable<Boolean> comment(@Body Map<String, String> map) {
+  @Override public Observable<Boolean> comment(@Body Map<String, String> map) {
     return comment(map);
   }
 
-  @Override
-  public Observable<Boolean> reply(@Body Map<String, String> map) {
+  @Override public Observable<Boolean> reply(@Body Map<String, String> map) {
     return reply(map);
   }
 
-  @Override
-  public Observable<InteractionUserInfo> getUserInfo(@Body Map<String, String> map) {
+  @Override public Observable<InteractionUserInfo> getUserInfo(@Body Map<String, String> map) {
     return getUserInfo(map);
   }
 
-  @Override
-  public Observable<InteractionShareData> getShareLink(@Body Map<String, String> map) {
+  @Override public Observable<InteractionShareData> getShareLink(@Body Map<String, String> map) {
     return getShareLink(map);
   }
-
 }

@@ -30,6 +30,7 @@ public class InteractionConfig implements InteractionConfigContract {
   private static String mTitleText = null;
   private static InteractionUserData mUser;
   private static InteractionListener listener = null;
+  private static String mInteractionUrl;
 
   private InteractionConfig() {
   }
@@ -129,6 +130,10 @@ public class InteractionConfig implements InteractionConfigContract {
     return mUser;
   }
 
+  @Override public String getInteractionUrl() {
+    return mInteractionUrl;
+  }
+
   public InteractionConfig setTextFontColor(int mTextFontColor) {
     InteractionConfig.mTextFontColor = mTextFontColor;
     return this;
@@ -211,6 +216,11 @@ public class InteractionConfig implements InteractionConfigContract {
 
   public InteractionConfig setIsNeedShare(boolean isNeedShare) {
     InteractionConfig.isNeedShare = isNeedShare;
+    return this;
+  }
+
+  public InteractionConfig setInteractionUrl(String url) {
+    InteractionConfig.mInteractionUrl = url;
     return this;
   }
 

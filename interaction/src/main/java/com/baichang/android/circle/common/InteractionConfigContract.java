@@ -50,4 +50,6 @@ public interface InteractionConfigContract {
   void businessStore(String id);
 
   InteractionUserData getUser();
+
+  String getInteractionUrl();
 }
