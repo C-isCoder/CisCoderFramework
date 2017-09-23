@@ -180,19 +180,19 @@ public class InteractionPresentImpl
     if (topColor != -1) {
       RelativeLayout title = (RelativeLayout) contentView.findViewById(R.id.title);
       title.setBackgroundResource(topColor);
-      TextView tvTitle = (TextView) contentView.findViewById(R.id.interaction_tv_title);
-      int color = InteractionConfig.getInstance().getTitleColor();
-      if (color != -1) {
-        tvTitle.setTextColor(color);
-        tvMe.setTextColor(color);
-      } else {
-        tvTitle.setTextColor(Color.WHITE);
-        tvMe.setTextColor(Color.WHITE);
-      }
-      String titleText = InteractionConfig.getInstance().getTitleText();
-      if (!TextUtils.isEmpty(titleText)) {
-        tvTitle.setText(titleText);
-      }
+    }
+    TextView tvTitle = (TextView) contentView.findViewById(R.id.interaction_tv_title);
+    int color = InteractionConfig.getInstance().getTitleColor();
+    if (color != -1) {
+      tvTitle.setTextColor(ContextCompat.getColor(mView.getContext(), color));
+      tvMe.setTextColor(ContextCompat.getColor(mView.getContext(), color));
+    } else {
+      tvTitle.setTextColor(Color.WHITE);
+      tvMe.setTextColor(Color.WHITE);
+    }
+    String titleText = InteractionConfig.getInstance().getTitleText();
+    if (!TextUtils.isEmpty(titleText)) {
+      tvTitle.setText(titleText);
     }
 
     boolean isNeedSetTitleHeight = InteractionConfig.getInstance().isNeedSetTitleHeight();

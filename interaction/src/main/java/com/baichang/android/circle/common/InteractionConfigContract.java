@@ -33,6 +33,8 @@ public interface InteractionConfigContract {
 
   int getTitleColor();
 
+  int getPublishTitleColor();
+
   InteractionListener getListener();
 
   String getTitleText();

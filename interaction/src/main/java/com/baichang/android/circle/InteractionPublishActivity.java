@@ -9,6 +9,7 @@ import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -51,8 +52,7 @@ public class InteractionPublishActivity extends InteractionCommonActivity
 
   private InteractionPublishPresent mPresent;
 
-  @Override
-  protected void onCreate(Bundle savedInstanceState) {
+  @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.interaction_activity_publish);
     etTitle = (EditText) findViewById(R.id.interaction_publish_et_title);
@@ -91,8 +91,19 @@ public class InteractionPublishActivity extends InteractionCommonActivity
       RelativeLayout titleLayout = (RelativeLayout) findViewById(R.id.title);
       titleLayout.setBackgroundResource(topColor);
       TextView tvTitle = (TextView) findViewById(R.id.interaction_publish_tv_title);
-      tvTitle.setTextColor(Color.WHITE);
-      tvPublish.setTextColor(Color.WHITE);
+      int color = InteractionConfig.getInstance().getPublishTitleColor();
+      if (color != -1) {
+        tvTitle.setTextColor(ContextCompat.getColor(this, color));
+        tvPublish.setTextColor(ContextCompat.getColor(this, color));
+      } else {
+        if (ContextCompat.getColor(this, topColor) == Color.WHITE) {
+          tvTitle.setTextColor(Color.BLACK);
+          tvPublish.setTextColor(Color.BLACK);
+        } else {
+          tvTitle.setTextColor(Color.WHITE);
+          tvPublish.setTextColor(Color.WHITE);
+        }
+      }
     }
   }
 
@@ -106,64 +117,53 @@ public class InteractionPublishActivity extends InteractionCommonActivity
     mPresent.attachView(rvList);
   }
 
-  @Override
-  public void showProgressBar() {
+  @Override public void showProgressBar() {
     mProgress.show();
   }
 
-  @Override
-  public void hideProgressBar() {
+  @Override public void hideProgressBar() {
     mProgress.dismiss();
   }
 
-  @Override
-  protected void onStart() {
+  @Override protected void onStart() {
     super.onStart();
     mPresent.onStart();
   }
 
-  @Override
-  protected void onDestroy() {
+  @Override protected void onDestroy() {
     super.onDestroy();
     mPresent.onDestroy();
   }
 
-  @Override
-  public void showMsg(String msg) {
+  @Override public void showMsg(String msg) {
     showMessage(msg);
   }
 
-  @Override
-  public void close(String typeId) {
+  @Override public void close(String typeId) {
     EventBus.getDefault()
-        .post(new BaseEventData<Integer, Integer>(Event.INTERACTION_JUMP_PAGE, Integer.parseInt(typeId)));
+        .post(new BaseEventData<Integer, Integer>(Event.INTERACTION_JUMP_PAGE,
+            Integer.parseInt(typeId)));
     finish();
   }
 
-  @Override
-  public FragmentManager getManager() {
+  @Override public FragmentManager getManager() {
     return getSupportFragmentManager();
   }
 
-  @Override
-  public void selectImages(int num) {
+  @Override public void selectImages(int num) {
     BoxingConfig config = new BoxingConfig(Mode.MULTI_IMG).withMaxCount(num);
     Boxing.of(config).withIntent(this, BoxingActivity.class).start(this, REQUEST_CODE_BOXING);
   }
 
-  @Override
-  public void setTypeName(String name) {
+  @Override public void setTypeName(String name) {
     tvType.setText(name);
   }
 
-  @Override
-  public Activity getActivity() {
+  @Override public Activity getActivity() {
     return this;
   }
 
-
-  @Override
-  protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+  @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
     super.onActivityResult(requestCode, resultCode, data);
     if (requestCode == REQUEST_CODE_BOXING && resultCode == RESULT_OK) {
       final ArrayList<BaseMedia> medias = Boxing.getResult(data);
@@ -178,19 +178,16 @@ public class InteractionPublishActivity extends InteractionCommonActivity
     }
   }
 
-  @Override
-  public void onClick(View v) {
+  @Override public void onClick(View v) {
     int i = v.getId();
     if (i == tvType.getId()) {
       mPresent.selectModel();
     } else if (i == tvPublish.getId()) {
       AnimatorUtil.scale(v);
-      mPresent.publish(etTitle.getText().toString(),
-          etContent.getText().toString());
+      mPresent.publish(etTitle.getText().toString(), etContent.getText().toString());
     } else if (i == mBack.getId()) {
       AnimatorUtil.scale(v);
       onBackPressed();
     }
   }
-
 }

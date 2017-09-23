@@ -23,6 +23,7 @@ public class InteractionConfig implements InteractionConfigContract {
   private static int mBackDrawableResRes = -1;
   private static int mBusinessBrandRes = -1;
   private static int mTitleColor = -1;
+  private static int mPublishTitleColor = -1;
   private static boolean isNeedBusinessStore = false;
   private static boolean isNeedSetTitleHeight = false;
   private static boolean isNeedShowBusinessBrand = true;
@@ -90,6 +91,10 @@ public class InteractionConfig implements InteractionConfigContract {
     return mTitleColor;
   }
 
+  @Override public int getPublishTitleColor() {
+    return mPublishTitleColor;
+  }
+
   @Override public InteractionListener getListener() {
     return listener;
   }
@@ -149,7 +154,7 @@ public class InteractionConfig implements InteractionConfigContract {
     return this;
   }
 
-  public InteractionConfig setBackDrawableResRes(int mBackDrawableResRes) {
+  public InteractionConfig setBackDrawableRes(int mBackDrawableResRes) {
     InteractionConfig.mBackDrawableResRes = mBackDrawableResRes;
     return this;
   }
@@ -166,6 +171,11 @@ public class InteractionConfig implements InteractionConfigContract {
 
   public InteractionConfig setPraiseDrawableRes(int mPraiseDrawableRes) {
     InteractionConfig.mPraiseDrawableRes = mPraiseDrawableRes;
+    return this;
+  }
+
+  public InteractionConfig setPublishTitileColor(int color) {
+    InteractionConfig.mPublishTitleColor = color;
     return this;
   }
 
