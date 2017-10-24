@@ -1,6 +1,7 @@
 package com.baichang.android.circle.adapter;
 
 import android.animation.Animator;
+import android.content.Intent;
 import android.os.Build.VERSION_CODES;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.ViewHolder;
@@ -13,6 +14,8 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import com.baichang.android.circle.R;
 import com.baichang.android.circle.adapter.InteractionPublishAdapter9.Holder;
+import com.baichang.android.widget.photoGallery.PhotoGalleryActivity;
+import com.baichang.android.widget.photoGallery.PhotoGalleryData;
 import com.bilibili.boxing.BoxingMediaLoader;
 import com.bilibili.boxing.model.entity.BaseMedia;
 import com.bilibili.boxing.model.entity.impl.ImageMedia;
@@ -34,8 +37,7 @@ public class InteractionPublishAdapter9 extends RecyclerView.Adapter<Holder> {
     setSelectPhotoClickListener9(listener);
   }
 
-  @Override
-  public Holder onCreateViewHolder(ViewGroup parent, int viewType) {
+  @Override public Holder onCreateViewHolder(ViewGroup parent, int viewType) {
     View view;
     int type;
     if (viewType == NORMAL_VIEW) {
@@ -52,9 +54,13 @@ public class InteractionPublishAdapter9 extends RecyclerView.Adapter<Holder> {
     return new Holder(view, type);
   }
 
-  @Override
-  public void onBindViewHolder(Holder holder, int position) {
+  @Override public void onBindViewHolder(Holder holder, int position) {
     if (getItemViewType(position) == FOOT_VIEW) {
+      if (getItemCount() == 10) { // 9张之后不显示添加按钮
+        holder.itemView.setVisibility(View.GONE);
+      } else {
+        holder.itemView.setVisibility(View.VISIBLE);
+      }
       return;
     }
     BaseMedia media = mList.get(position);
@@ -68,8 +74,7 @@ public class InteractionPublishAdapter9 extends RecyclerView.Adapter<Holder> {
     holder.itemView.setTag(position);
   }
 
-  @Override
-  public int getItemViewType(int position) {
+  @Override public int getItemViewType(int position) {
     if (position == getItemCount() - 1) {
       return FOOT_VIEW;
     } else {
@@ -77,11 +82,9 @@ public class InteractionPublishAdapter9 extends RecyclerView.Adapter<Holder> {
     }
   }
 
-  @Override
-  public int getItemCount() {
+  @Override public int getItemCount() {
     return mList.size() + 1;
   }
-
 
   public void setData(ArrayList<BaseMedia> list) {
     if (list == null) {
@@ -97,6 +100,7 @@ public class InteractionPublishAdapter9 extends RecyclerView.Adapter<Holder> {
     }
     mList.add(media);
     notifyItemChanged(getItemCount() - 1);
+    notifyDataSetChanged();
   }
 
   public ArrayList<BaseMedia> getList() {
@@ -118,6 +122,7 @@ public class InteractionPublishAdapter9 extends RecyclerView.Adapter<Holder> {
   private void removeData(int position) {
     mList.remove(position);
     notifyItemRemoved(position);
+    notifyDataSetChanged();
   }
 
   private SelectPhotoClickListener9 selectPhotoClickListener;
@@ -145,12 +150,13 @@ public class InteractionPublishAdapter9 extends RecyclerView.Adapter<Holder> {
       } else {
         itemView.findViewById(R.id.item_interaction_publish_btn_add).setOnClickListener(this);
       }
+      itemView.setOnClickListener(this);
     }
 
-    @Override
-    public void onClick(View v) {
+    @Override public void onClick(View v) {
       int i = v.getId();
-      if (i == R.id.item_interaction_publish_btn_add) {// getInstance the center for the clipping circle
+      if (i
+          == R.id.item_interaction_publish_btn_add) {// getInstance the center for the clipping circle
         int cx = (v.getLeft() + v.getRight()) / 2;
         int cy = (v.getTop() + v.getBottom()) / 2;
         // getInstance the final radius for the clipping circle
@@ -168,6 +174,17 @@ public class InteractionPublishAdapter9 extends RecyclerView.Adapter<Holder> {
         }
       } else if (i == R.id.item_interaction_publish_btn_delete) {
         removeData(getLayoutPosition());
+      } else if (i == itemView.getId()) {
+        BaseMedia media = mList.get(getLayoutPosition());
+        if (media == null) return;
+        List<String> images = new ArrayList<>();
+        for (BaseMedia baseMedia : mList) {
+          images.add(baseMedia.getPath());
+        }
+        PhotoGalleryData data = new PhotoGalleryData(true, getLayoutPosition(), images);
+        Intent intent = new Intent(v.getContext(), PhotoGalleryActivity.class);
+        intent.putExtra(PhotoGalleryActivity.IMAGE_DATA, data);
+        v.getContext().startActivity(intent);
       }
     }
   }
