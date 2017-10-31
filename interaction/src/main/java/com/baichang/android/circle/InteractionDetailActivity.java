@@ -30,8 +30,8 @@ import com.baichang.android.circle.view.InteractionDetailView;
 import com.baichang.android.utils.BCToolsUtil;
 
 public class InteractionDetailActivity extends InteractionCommonActivity
-    implements InteractionDetailView, OnRefreshListener,
-    OnClickListener, OnTouchListener, OnLayoutChangeListener {
+    implements InteractionDetailView, OnRefreshListener, OnClickListener, OnTouchListener,
+    OnLayoutChangeListener {
 
   SwipeRefreshLayout mRefresh;
   RecyclerView rvList;
@@ -47,8 +47,7 @@ public class InteractionDetailActivity extends InteractionCommonActivity
   private int initHeight;
   private boolean isFirst = true;
 
-  @Override
-  protected void onCreate(Bundle savedInstanceState) {
+  @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.interaction_activity_detail);
     mRefresh = (SwipeRefreshLayout) findViewById(R.id.interaction_detail_refresh);
@@ -73,8 +72,8 @@ public class InteractionDetailActivity extends InteractionCommonActivity
   }
 
   private void init() {
-    View mHeaderView = getLayoutInflater().inflate(
-        R.layout.interaction_activity_detail_header_layout, null);
+    View mHeaderView =
+        getLayoutInflater().inflate(R.layout.interaction_activity_detail_header_layout, null);
     int id = getIntent().getIntExtra(InteractionFlag.ACTION_INTERACTION_ID, -1);
     int textColor = InteractionConfig.getInstance().getTextFontColor();
     if (textColor != -1) {
@@ -92,13 +91,16 @@ public class InteractionDetailActivity extends InteractionCommonActivity
   }
 
   private void setConfig() {
-    btnShare.setVisibility(InteractionConfig.getInstance().isNeedShare() ? View.VISIBLE : View.GONE);
+    btnShare.setVisibility(
+        InteractionConfig.getInstance().isNeedShare() ? View.VISIBLE : View.GONE);
     int topColor = InteractionConfig.getInstance().getTopBarColor();
     if (topColor != -1) {
       RelativeLayout title = (RelativeLayout) findViewById(R.id.title);
       title.setBackgroundResource(topColor);
       TextView tvTitle = (TextView) findViewById(R.id.interaction_top_tv_title);
-      tvTitle.setTextColor(Color.WHITE);
+      if (topColor != Color.WHITE) {
+        tvTitle.setTextColor(Color.WHITE);
+      }
     }
     int praiseDrawableRes = InteractionConfig.getInstance().getPraiseDrawableRes();
     if (praiseDrawableRes != -1) {
@@ -118,92 +120,75 @@ public class InteractionDetailActivity extends InteractionCommonActivity
     }
   }
 
-  @Override
-  public void showProgressBar() {
+  @Override public void showProgressBar() {
     mRefresh.setRefreshing(true);
   }
 
-  @Override
-  public void hideProgressBar() {
+  @Override public void hideProgressBar() {
     mRefresh.setRefreshing(false);
   }
 
-  @Override
-  public void showMsg(String msg) {
+  @Override public void showMsg(String msg) {
     showMessage(msg);
   }
 
-  @Override
-  protected void onStart() {
+  @Override protected void onStart() {
     super.onStart();
     mPresent.onStart();
   }
 
-  @Override
-  protected void onDestroy() {
+  @Override protected void onDestroy() {
     super.onDestroy();
     mPresent.onDestroy();
   }
 
-  @Override
-  public Context getContext() {
+  @Override public Context getContext() {
     return this;
   }
 
-  @Override
-  public Activity getActivity() {
+  @Override public Activity getActivity() {
     return this;
   }
 
-  @Override
-  public void setReportHint(String tips) {
+  @Override public void setReportHint(String tips) {
     etReport.setText("");
     etReport.setHint(tips);
   }
 
-  @Override
-  public void showInputKeyBord() {
+  @Override public void showInputKeyBord() {
     etReport.requestFocus();
     BCToolsUtil.openKeybord(etReport, this);
   }
 
-  @Override
-  public void hideInputKeyBord() {
+  @Override public void hideInputKeyBord() {
     etReport.clearFocus();
     BCToolsUtil.closeKeybord(etReport, this);
   }
 
-  @Override
-  public void scrollToPosition(int position) {
+  @Override public void scrollToPosition(int position) {
     rvList.smoothScrollToPosition(position);
   }
 
-  @Override
-  public void setCollectState(boolean isCollect) {
+  @Override public void setCollectState(boolean isCollect) {
     btnCollect.setSelected(isCollect);
   }
 
-  @Override
-  public void setPraiseState(boolean isPraise) {
+  @Override public void setPraiseState(boolean isPraise) {
     btnPraise.setSelected(isPraise);
   }
 
-  @Override
-  public void onRefresh() {
+  @Override public void onRefresh() {
     mPresent.refresh();
   }
 
-  @Override
-  public void onClick(View v) {
+  @Override public void onClick(View v) {
     int id = v.getId();
     if (id == btnCollect.getId()) {
-      AnimatorUtil.scale(v).addListener(
-          new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-              btnCollect.setSelected(!btnCollect.isSelected());
-            }
-          });
+      AnimatorUtil.scale(v).addListener(new AnimatorListenerAdapter() {
+        @Override public void onAnimationEnd(Animator animation) {
+          btnCollect.setSelected(!btnCollect.isSelected());
+        }
+      });
       mPresent.collect();
     } else if (id == btnShare.getId()) {
       AnimatorUtil.scale(v);
@@ -217,8 +202,7 @@ public class InteractionDetailActivity extends InteractionCommonActivity
     }
   }
 
-  @Override
-  public boolean onTouch(View v, MotionEvent event) {
+  @Override public boolean onTouch(View v, MotionEvent event) {
     switch (event.getAction()) {
       case MotionEvent.ACTION_MOVE:
         hideInputKeyBord();
@@ -228,14 +212,13 @@ public class InteractionDetailActivity extends InteractionCommonActivity
     return false;
   }
 
-  @Override
-  public void back(View view) {
+  @Override public void back(View view) {
     onBackPressed();
   }
 
   @Override
-  public void onLayoutChange(View v, int left, int top, int right, int bottom,
-      int oldLeft, int oldTop, int oldRight, int oldBottom) {
+  public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft,
+      int oldTop, int oldRight, int oldBottom) {
     if (isFirst) {
       mCommentLayout.getLocationOnScreen(locations);
       initHeight = locations[1];
