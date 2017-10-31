@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.support.v7.widget.RecyclerView;
@@ -98,7 +99,7 @@ public class InteractionDetailActivity extends InteractionCommonActivity
       RelativeLayout title = (RelativeLayout) findViewById(R.id.title);
       title.setBackgroundResource(topColor);
       TextView tvTitle = (TextView) findViewById(R.id.interaction_top_tv_title);
-      if (topColor != Color.WHITE) {
+      if (ContextCompat.getColor(this, topColor) != Color.WHITE) {
         tvTitle.setTextColor(Color.WHITE);
       }
     }
