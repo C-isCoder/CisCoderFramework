@@ -63,6 +63,7 @@ public class CommentTextView extends android.support.v7.widget.AppCompatTextView
     setLineSpacing(2, 1);
     setPadding(0, getPadding(getContext()), 0, getPadding(getContext()));
     setAutoLinkMask(Linkify.PHONE_NUMBERS);
+    setLinkTextColor(ContextCompat.getColor(getContext(), R.color.interaction_text_font));
     setGravity(Gravity.CENTER_VERTICAL);
     setMovementMethod(LinkMovementMethod.getInstance());
   }
@@ -77,30 +78,35 @@ public class CommentTextView extends android.support.v7.widget.AppCompatTextView
       // 楼主
       if (comment.commentType == 1) {
         // 内容
-        stringBuilder.append(comment.commentName).append(IMAGE_PLACEHOLDER).append(COLON)
+        stringBuilder.append(comment.commentName)
+            .append(IMAGE_PLACEHOLDER)
+            .append(COLON)
             .append(comment.replayContent);
         // 楼主图标
-        stringBuilder.setSpan(new CommentImageSpan(),
-            comment.commentName.length(), comment.commentName.length() + getPlaceHolderLength(),
+        stringBuilder.setSpan(new CommentImageSpan(), comment.commentName.length(),
+            comment.commentName.length() + getPlaceHolderLength(),
             Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         // 评论人点击
-        stringBuilder.setSpan(new CommentClickableSpan(COMMENT_CLICK, listener),
-            0, comment.commentName.length() + getPlaceHolderLength(),
+        stringBuilder.setSpan(new CommentClickableSpan(COMMENT_CLICK, listener), 0,
+            comment.commentName.length() + getPlaceHolderLength(),
             Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         // 内容点击
-        stringBuilder.setSpan(new CommentClickableSpan(CONTENT_CLICK, listener, R.color.cm_tv_black1),
+        stringBuilder.setSpan(
+            new CommentClickableSpan(CONTENT_CLICK, listener, R.color.cm_tv_black1),
             comment.commentName.length() + getPlaceHolderLength() + getColonLength(),
-            comment.commentName.length() + getPlaceHolderLength() + getColonLength() + comment.replayContent.length(),
-            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            comment.commentName.length()
+                + getPlaceHolderLength()
+                + getColonLength()
+                + comment.replayContent.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
       } else {
         // 非楼主
         stringBuilder.append(comment.commentName).append(COLON).append(comment.replayContent);
         // 评论人点击
-        stringBuilder.setSpan(new CommentClickableSpan(COMMENT_CLICK, listener),
-            0, comment.commentName.length() + getColonLength(),
-            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        stringBuilder.setSpan(new CommentClickableSpan(COMMENT_CLICK, listener), 0,
+            comment.commentName.length() + getColonLength(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         // 内容点击
-        stringBuilder.setSpan(new CommentClickableSpan(CONTENT_CLICK, listener, R.color.cm_tv_black1),
+        stringBuilder.setSpan(
+            new CommentClickableSpan(CONTENT_CLICK, listener, R.color.cm_tv_black1),
             comment.commentName.length() + getColonLength(),
             comment.commentName.length() + getColonLength() + comment.replayContent.length(),
             Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -109,75 +115,102 @@ public class CommentTextView extends android.support.v7.widget.AppCompatTextView
       if (comment.replayType == 1) {
         // 回复人是楼主
         // 内容
-        stringBuilder.append(comment.replayName).append(IMAGE_PLACEHOLDER).append(REPORT_FLAG_TEXT)
+        stringBuilder.append(comment.replayName)
+            .append(IMAGE_PLACEHOLDER)
+            .append(REPORT_FLAG_TEXT)
             .append(comment.commentName)
-            .append(COLON).append(comment.replayContent);
+            .append(COLON)
+            .append(comment.replayContent);
         // 楼主图标
-        stringBuilder.setSpan(new CommentImageSpan(),
-            comment.replayName.length(),
-            comment.replayName.length() + getPlaceHolderLength(),
-            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        stringBuilder.setSpan(new CommentImageSpan(), comment.replayName.length(),
+            comment.replayName.length() + getPlaceHolderLength(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         // 回复人点击
-        stringBuilder.setSpan(new CommentClickableSpan(REPORT_CLICK2, listener),
-            0, comment.replayName.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        stringBuilder.setSpan(new CommentClickableSpan(REPORT_CLICK2, listener), 0,
+            comment.replayName.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         // 被回复人点击
         stringBuilder.setSpan(new CommentClickableSpan(COMMENT_CLICK, listener),
             comment.replayName.length() + getPlaceHolderLength() + getReportLength(),
-            comment.replayName.length() + getPlaceHolderLength() + getReportLength()
-                + comment.commentName.length(),
-            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            comment.replayName.length()
+                + getPlaceHolderLength()
+                + getReportLength()
+                + comment.commentName.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         // 内容点击
-        stringBuilder.setSpan(new CommentClickableSpan(CONTENT_CLICK, listener, R.color.cm_tv_black1)
-            , comment.replayName.length() + getPlaceHolderLength() + getReportLength() + comment.commentName.length()
-                + getColonLength(),
-            comment.replayName.length() + getPlaceHolderLength() + getReportLength() + comment.commentName.length() +
-                getColonLength() + comment.replayContent.length(),
-            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        stringBuilder.setSpan(
+            new CommentClickableSpan(CONTENT_CLICK, listener, R.color.cm_tv_black1),
+            comment.replayName.length()
+                + getPlaceHolderLength()
+                + getReportLength()
+                + comment.commentName.length()
+                + getColonLength(), comment.replayName.length()
+                + getPlaceHolderLength()
+                + getReportLength()
+                + comment.commentName.length()
+                + getColonLength()
+                + comment.replayContent.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
       } else if (comment.commentType == 1) {
         // 被回复人是楼主
         // 内容
-        stringBuilder.append(comment.replayName).append(REPORT_FLAG_TEXT)
-            .append(comment.commentName).append(IMAGE_PLACEHOLDER)
-            .append(COLON).append(comment.replayContent);
+        stringBuilder.append(comment.replayName)
+            .append(REPORT_FLAG_TEXT)
+            .append(comment.commentName)
+            .append(IMAGE_PLACEHOLDER)
+            .append(COLON)
+            .append(comment.replayContent);
         // 楼主图标
         stringBuilder.setSpan(new CommentImageSpan(),
             comment.replayName.length() + getReportLength() + comment.commentName.length(),
-            comment.replayName.length() + getReportLength() + comment.commentName.length() + getPlaceHolderLength(),
-            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            comment.replayName.length()
+                + getReportLength()
+                + comment.commentName.length()
+                + getPlaceHolderLength(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         // 回复人点击
-        stringBuilder.setSpan(new CommentClickableSpan(REPORT_CLICK2, listener),
-            0, comment.replayName.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        stringBuilder.setSpan(new CommentClickableSpan(REPORT_CLICK2, listener), 0,
+            comment.replayName.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         // 被回复人点击
         stringBuilder.setSpan(new CommentClickableSpan(COMMENT_CLICK, listener),
             comment.replayName.length() + getReportLength(),
             comment.replayName.length() + getReportLength() + comment.commentName.length(),
             Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         // 内容点击
-        stringBuilder.setSpan(new CommentClickableSpan(CONTENT_CLICK, listener, R.color.cm_tv_black1)
-            , comment.replayName.length() + getReportLength() + comment.commentName.length() + getReportLength()
-                + getColonLength(),
-            comment.replayName.length() + getReportLength() + comment.commentName.length() + getReportLength()
-                + getColonLength() + comment.replayContent.length(),
-            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        stringBuilder.setSpan(
+            new CommentClickableSpan(CONTENT_CLICK, listener, R.color.cm_tv_black1),
+            comment.replayName.length()
+                + getReportLength()
+                + comment.commentName.length()
+                + getReportLength()
+                + getColonLength(), comment.replayName.length()
+                + getReportLength()
+                + comment.commentName.length()
+                + getReportLength()
+                + getColonLength()
+                + comment.replayContent.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
       } else {
         // 都不是楼主
         // 内容
-        stringBuilder.append(comment.replayName).append(REPORT_FLAG_TEXT)
-            .append(comment.commentName).append(COLON).append(comment.replayContent);
+        stringBuilder.append(comment.replayName)
+            .append(REPORT_FLAG_TEXT)
+            .append(comment.commentName)
+            .append(COLON)
+            .append(comment.replayContent);
         // 回复人点击
-        stringBuilder.setSpan(new CommentClickableSpan(REPORT_CLICK2, listener),
-            0, comment.replayName.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        stringBuilder.setSpan(new CommentClickableSpan(REPORT_CLICK2, listener), 0,
+            comment.replayName.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         // 被回复人点击
         stringBuilder.setSpan(new CommentClickableSpan(COMMENT_CLICK, listener),
             comment.replayName.length() + getReportLength(),
             comment.replayName.length() + getReportLength() + comment.commentName.length(),
             Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         // 内容点击
-        stringBuilder.setSpan(new CommentClickableSpan(CONTENT_CLICK, listener, R.color.cm_tv_black1)
-            , comment.replayName.length() + getReportLength() + comment.commentName.length() + getColonLength(),
-            comment.replayName.length() + getReportLength() + comment.commentName.length() + getColonLength()
-                + comment.replayContent.length(),
-            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        stringBuilder.setSpan(
+            new CommentClickableSpan(CONTENT_CLICK, listener, R.color.cm_tv_black1),
+            comment.replayName.length()
+                + getReportLength()
+                + comment.commentName.length()
+                + getColonLength(), comment.replayName.length()
+                + getReportLength()
+                + comment.commentName.length()
+                + getColonLength()
+                + comment.replayContent.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
       }
     }
     setText(stringBuilder);
@@ -198,7 +231,6 @@ public class CommentTextView extends android.support.v7.widget.AppCompatTextView
   private int getPlaceHolderLength() {
     return IMAGE_PLACEHOLDER.length();
   }
-
 
   public InteractionCommentReplyList getCommentData() {
     return (InteractionCommentReplyList) getTag();
@@ -230,15 +262,13 @@ public class CommentTextView extends android.support.v7.widget.AppCompatTextView
     }
 
     @Override
-    public void draw(@NonNull Canvas canvas, CharSequence text,
-        int start, int end, float x,
+    public void draw(@NonNull Canvas canvas, CharSequence text, int start, int end, float x,
         int top, int y, int bottom, @NonNull Paint paint) {
       // image to draw
       Drawable b = getCachedDrawable();
       // font metrics of text to be replaced
       Paint.FontMetricsInt fm = paint.getFontMetricsInt();
-      int transY = (y + fm.descent + y + fm.ascent) / 2
-          - b.getBounds().bottom / 2;
+      int transY = (y + fm.descent + y + fm.ascent) / 2 - b.getBounds().bottom / 2;
 
       canvas.save();
       canvas.translate(x, transY);
@@ -270,21 +300,18 @@ public class CommentTextView extends android.support.v7.widget.AppCompatTextView
     int type;
     int color = R.color.interaction_text_font;
 
-    CommentClickableSpan(int clickType,
-        CommentOnClickListener listener) {
+    CommentClickableSpan(int clickType, CommentOnClickListener listener) {
       this.listener = listener;
       type = clickType;
     }
 
-    CommentClickableSpan(int clickType,
-        CommentOnClickListener listener, int color) {
+    CommentClickableSpan(int clickType, CommentOnClickListener listener, int color) {
       this.listener = listener;
       type = clickType;
       this.color = color;
     }
 
-    @Override
-    public void onClick(View widget) {
+    @Override public void onClick(View widget) {
       if (listener == null) {
         return;
       }
@@ -304,8 +331,7 @@ public class CommentTextView extends android.support.v7.widget.AppCompatTextView
       }
     }
 
-    @Override
-    public void updateDrawState(TextPaint ds) {
+    @Override public void updateDrawState(TextPaint ds) {
       super.updateDrawState(ds);
       ds.setColor(ContextCompat.getColor(getContext(), color));
       ds.setUnderlineText(false);
