@@ -62,8 +62,8 @@ public class CommentTextView extends android.support.v7.widget.AppCompatTextView
     setTextColor(ContextCompat.getColor(getContext(), R.color.cm_tv_black1));
     setLineSpacing(2, 1);
     setPadding(0, getPadding(getContext()), 0, getPadding(getContext()));
-    setAutoLinkMask(Linkify.PHONE_NUMBERS);
-    setLinkTextColor(ContextCompat.getColor(getContext(), R.color.interaction_text_font));
+    //setAutoLinkMask(Linkify.PHONE_NUMBERS);
+    //setLinkTextColor(ContextCompat.getColor(getContext(), R.color.interaction_text_font));
     setGravity(Gravity.CENTER_VERTICAL);
     setMovementMethod(LinkMovementMethod.getInstance());
   }
