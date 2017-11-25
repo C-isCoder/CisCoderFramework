@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.TextView;
@@ -35,8 +36,8 @@ import com.baichang.android.circle.widget.photocontents.adapter.PhotoContentsBas
 import com.baichang.android.circle.widget.photopreview.ImageInfo;
 import com.baichang.android.circle.widget.photopreview.ImagePreviewActivity;
 import com.baichang.android.imageloader.ImageLoader;
-import com.baichang.android.utils.BCDensityUtil;
 import com.baichang.android.widget.circleImageView.CircleImageView;
+import com.bumptech.glide.Glide;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -56,17 +57,15 @@ public class InteractionContentAdapter extends Adapter<ViewHolder> {
     mType = type;
   }
 
-  @Override
-  public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+  @Override public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
     return new ViewHolder(LayoutInflater.from(parent.getContext())
         .inflate(R.layout.interaction_item_content_layout, parent, false));
   }
 
-  @Override
-  public void onBindViewHolder(ViewHolder holder, int position) {
+  @Override public void onBindViewHolder(ViewHolder holder, int position) {
     InteractionListData data = mList.get(position);
-    ImageLoader.loadImageError(holder.itemView.getContext(),
-        data.avatar, R.mipmap.interaction_icon_default, holder.ivAvatar);
+    ImageLoader.loadImageError(holder.itemView.getContext(), data.avatar,
+        R.mipmap.interaction_icon_default, holder.ivAvatar);
     holder.tvName.setText(data.name);
     holder.tvTime.setText(data.time);
     holder.tvTitle.setText(data.title);
@@ -76,8 +75,9 @@ public class InteractionContentAdapter extends Adapter<ViewHolder> {
 
     int textColor = InteractionConfig.getInstance().getTextFontColor();
     if (textColor != -1) {
-      ColorStateList stateList = ColorUtil.createdPressColorList(
-          holder.tvButton.getContext(), R.color.cm_tv_black2, textColor);
+      ColorStateList stateList =
+          ColorUtil.createdPressColorList(holder.tvButton.getContext(), R.color.cm_tv_black2,
+              textColor);
       holder.tvButton.setTextColor(stateList);
     }
     int businessBrandRes = InteractionConfig.getInstance().getBusinessBrandRes();
@@ -91,7 +91,7 @@ public class InteractionContentAdapter extends Adapter<ViewHolder> {
       } else {
         holder.ivBusinessBrand.setVisibility(View.GONE);
       }
-    }else {
+    } else {
       holder.ivBusinessBrand.setVisibility(View.GONE);
     }
     if (mType == InteractionInfoPresent.COLLECT) {
@@ -104,12 +104,16 @@ public class InteractionContentAdapter extends Adapter<ViewHolder> {
       holder.tvButton.setVisibility(View.GONE);
     }
     holder.tvPraise.setSelected(data.isPraise == 1);
-    if (data.images != null && !data.images.isEmpty()) {
+    if (!TextUtils.isEmpty(data.video)) {
+      ImageLoader.loadImageError(holder.ivVideo.getContext(), data.videoPic,
+          R.mipmap.interaction_place_image, holder.ivVideo);
+      holder.mPhotos.setVisibility(View.GONE);
+      holder.mVideo.setVisibility(View.VISIBLE);
+    } else if (data.images != null && !data.images.isEmpty()) {
       InteractionPhotoAdapter mAdapter = new InteractionPhotoAdapter(data.images);
       holder.mPhotos.setAdapter(mAdapter);
       holder.mPhotos.setVisibility(View.VISIBLE);
-    } else {
-      holder.mPhotos.setVisibility(View.GONE);
+      holder.mVideo.setVisibility(View.GONE);
     }
   }
 
@@ -119,31 +123,31 @@ public class InteractionContentAdapter extends Adapter<ViewHolder> {
       mList = list;
       notifyDataSetChanged();
     }
-//    if (list == null) {
-//      return;
-//    }
-//    if (mList == null) {
-//      mList = list;
-//      notifyDataSetChanged();
-//    } else if (list.size() > getItemCount()) {
-//      setDiffData(list, mList);
-//    }
+    //    if (list == null) {
+    //      return;
+    //    }
+    //    if (mList == null) {
+    //      mList = list;
+    //      notifyDataSetChanged();
+    //    } else if (list.size() > getItemCount()) {
+    //      setDiffData(list, mList);
+    //    }
   }
 
-//  private void setDiffData(List<InteractionListData> first,
-//      List<InteractionListData> two) {
-//    List<InteractionListData> list = new ArrayList<>();
-//    for (InteractionListData firstData : first) {
-//      if (two.contains(firstData)) {
-//        list.add(firstData);
-//      }
-//    }
-//    first.removeAll(list);
-//    for (InteractionListData data : first) {
-//      mList.add(0, data);
-//      notifyItemChanged(0);
-//    }
-//  }
+  //  private void setDiffData(List<InteractionListData> first,
+  //      List<InteractionListData> two) {
+  //    List<InteractionListData> list = new ArrayList<>();
+  //    for (InteractionListData firstData : first) {
+  //      if (two.contains(firstData)) {
+  //        list.add(firstData);
+  //      }
+  //    }
+  //    first.removeAll(list);
+  //    for (InteractionListData data : first) {
+  //      mList.add(0, data);
+  //      notifyItemChanged(0);
+  //    }
+  //  }
 
   public void addData(List<InteractionListData> list) {
     if (list != null) {
@@ -177,10 +181,11 @@ public class InteractionContentAdapter extends Adapter<ViewHolder> {
     void delete(InteractionListData data);
 
     void cancel(InteractionListData data);
+
+    void play(InteractionListData data);
   }
 
-  @Override
-  public int getItemCount() {
+  @Override public int getItemCount() {
     return mList == null ? 0 : mList.size();
   }
 
@@ -199,6 +204,9 @@ public class InteractionContentAdapter extends Adapter<ViewHolder> {
     CircleImageView ivAvatar;
     TextView tvButton;
     ImageView ivBusinessBrand;
+    FrameLayout mVideo;
+    ImageView ivPlay;
+    ImageView ivVideo;
 
     ViewHolder(View itemView) {
       super(itemView);
@@ -212,6 +220,10 @@ public class InteractionContentAdapter extends Adapter<ViewHolder> {
       ivAvatar = (CircleImageView) itemView.findViewById(R.id.item_interaction_content_iv_avatar);
       tvButton = (TextView) itemView.findViewById(R.id.item_interaction_content_tv_button);
       ivBusinessBrand = (ImageView) itemView.findViewById(R.id.item_interaction_content_iv_brand);
+      mVideo = (FrameLayout) itemView.findViewById(R.id.item_interaction_content_photo_video);
+      ivVideo = (ImageView) itemView.findViewById(R.id.item_interaction_content_photo_iv_video);
+      ivPlay = (ImageView) itemView.findViewById(R.id.item_interaction_content_photo_btn_play);
+
       initConfig();
       itemView.setOnTouchListener(this);
       mPhotos.setOnItemClickListener(this);
@@ -219,32 +231,36 @@ public class InteractionContentAdapter extends Adapter<ViewHolder> {
       //tvPraise.setOnClickListener(this);
       ivAvatar.setOnClickListener(this);
       tvButton.setOnClickListener(this);
+      ivPlay.setOnClickListener(this);
     }
 
     private void initConfig() {
       int praiseDrawableRes = InteractionConfig.getInstance().getPraiseDrawableRes();
       if (praiseDrawableRes != -1) {
-        Drawable praiseDrawable = ContextCompat.getDrawable(tvPraise.getContext(), praiseDrawableRes);
-        praiseDrawable.setBounds(0, 0, praiseDrawable.getMinimumWidth(), praiseDrawable.getMinimumHeight());
+        Drawable praiseDrawable =
+            ContextCompat.getDrawable(tvPraise.getContext(), praiseDrawableRes);
+        praiseDrawable.setBounds(0, 0, praiseDrawable.getMinimumWidth(),
+            praiseDrawable.getMinimumHeight());
         tvPraise.setCompoundDrawables(praiseDrawable, null, null, null);
       }
       int commentDrawableRes = InteractionConfig.getInstance().getCommentDrawableRes();
       if (commentDrawableRes != -1) {
-        Drawable commentDrawable = ContextCompat.getDrawable(tvComment.getContext(), commentDrawableRes);
-        commentDrawable.setBounds(0, 0, commentDrawable.getMinimumWidth(), commentDrawable.getMinimumHeight());
+        Drawable commentDrawable =
+            ContextCompat.getDrawable(tvComment.getContext(), commentDrawableRes);
+        commentDrawable.setBounds(0, 0, commentDrawable.getMinimumWidth(),
+            commentDrawable.getMinimumHeight());
         tvComment.setCompoundDrawables(commentDrawable, null, null, null);
       }
       int deleteDrawableRes = InteractionConfig.getInstance().getButtonDrawableRes();
       if (deleteDrawableRes != -1) {
         ColorStateList stateList = new ColorStateList(
-            new int[][]{new int[]{android.R.attr.state_pressed}, new int[]{0}},
-            new int[]{deleteDrawableRes, R.color.cm_tv_black1});
+            new int[][] { new int[] { android.R.attr.state_pressed }, new int[] { 0 } },
+            new int[] { deleteDrawableRes, R.color.cm_tv_black1 });
         tvButton.setTextColor(stateList);
       }
     }
 
-    @Override
-    public void onItemClick(PhotoContents photoContents, int position) {
+    @Override public void onItemClick(PhotoContents photoContents, int position) {
       InteractionListData data = mList.get(getAdapterPosition());
       List<ImageInfo> imageInfoList = new ArrayList<>();
       for (int i = 0; i < data.images.size(); i++) {
@@ -268,8 +284,7 @@ public class InteractionContentAdapter extends Adapter<ViewHolder> {
       ((Activity) photoContents.getContext()).overridePendingTransition(0, 0);
     }
 
-    @Override
-    public boolean onTouch(View v, MotionEvent event) {
+    @Override public boolean onTouch(View v, MotionEvent event) {
       long upTime;
       switch (event.getAction()) {
         case MotionEvent.ACTION_DOWN:
@@ -287,8 +302,7 @@ public class InteractionContentAdapter extends Adapter<ViewHolder> {
       return true;
     }
 
-    @Override
-    public void onClick(View v) {
+    @Override public void onClick(View v) {
       int i = v.getId();
       if (i == tvPraise.getId()) {
         if (interactionClickListener != null) {
@@ -306,9 +320,10 @@ public class InteractionContentAdapter extends Adapter<ViewHolder> {
         } else if (mType == InteractionInfoPresent.DYNAMIC) {
           interactionClickListener.delete(mList.get(getAdapterPosition()));
         }
+      } else if (i == ivPlay.getId()) {
+        interactionClickListener.play(mList.get(getAdapterPosition()));
       }
     }
-
   }
 
   private ItemOnClickListener listener;
@@ -331,8 +346,7 @@ public class InteractionContentAdapter extends Adapter<ViewHolder> {
       this.mImageList.addAll(list);
     }
 
-    @Override
-    public ImageView onCreateView(ImageView convertView, ViewGroup parent, int position) {
+    @Override public ImageView onCreateView(ImageView convertView, ViewGroup parent, int position) {
       if (convertView == null) {
         convertView = new ForceClickImageView(parent.getContext());
         convertView.setScaleType(ScaleType.CENTER_CROP);
@@ -343,14 +357,12 @@ public class InteractionContentAdapter extends Adapter<ViewHolder> {
       return convertView;
     }
 
-    @Override
-    public void onBindData(int position, @NonNull ImageView convertView) {
-      ImageLoader.loadImageError(convertView.getContext(),
-          mImageList.get(position), R.mipmap.interaction_place_image, convertView);
+    @Override public void onBindData(int position, @NonNull ImageView convertView) {
+      ImageLoader.loadImageError(convertView.getContext(), mImageList.get(position),
+          R.mipmap.interaction_place_image, convertView);
     }
 
-    @Override
-    public int getCount() {
+    @Override public int getCount() {
       return mImageList.size();
     }
 
@@ -361,5 +373,4 @@ public class InteractionContentAdapter extends Adapter<ViewHolder> {
       notifyDataChanged();
     }
   }
-
 }

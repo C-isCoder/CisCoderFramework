@@ -8,6 +8,7 @@ import com.baichang.android.circle.entity.InteractionReplyData;
 import com.baichang.android.circle.entity.InteractionShareData;
 import com.baichang.android.circle.entity.InteractionTypeData;
 import com.baichang.android.circle.entity.InteractionUserInfo;
+import com.baichang.android.circle.entity.InteractionVideoData;
 import com.baichang.android.request.HttpFactory;
 import java.util.List;
 import java.util.Map;
@@ -46,6 +47,10 @@ public class InteractionAPIWrapper implements InteractionAPI {
 
   @Override public Observable<List<String>> upload(@Part MultipartBody.Part file) {
     return HttpFactory.creatUpload(InteractionAPI.class).upload(file);
+  }
+
+  @Override public Observable<List<InteractionVideoData>> uploadVideo(@Part MultipartBody.Part file) {
+    return  HttpFactory.creatUpload(InteractionAPI.class).uploadVideo(file);
   }
 
   @Override public Observable<List<String>> uploads(@Part List<MultipartBody.Part> files) {

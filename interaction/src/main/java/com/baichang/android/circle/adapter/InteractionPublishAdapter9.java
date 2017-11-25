@@ -2,6 +2,7 @@ package com.baichang.android.circle.adapter;
 
 import android.animation.Animator;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build.VERSION_CODES;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.ViewHolder;
@@ -12,8 +13,10 @@ import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Toast;
 import com.baichang.android.circle.R;
 import com.baichang.android.circle.adapter.InteractionPublishAdapter9.Holder;
+import com.baichang.android.circle.ijkplayer.VideoActivity;
 import com.baichang.android.widget.photoGallery.PhotoGalleryActivity;
 import com.baichang.android.widget.photoGallery.PhotoGalleryData;
 import com.bilibili.boxing.BoxingMediaLoader;
@@ -30,7 +33,12 @@ public class InteractionPublishAdapter9 extends RecyclerView.Adapter<Holder> {
 
   private static final int NORMAL_VIEW = 0;
   private static final int FOOT_VIEW = 1;
+  public static final int PHOTO_MODEL = 10;
+  public static final int VIDEO_MODEL = 2;
+  private static int DEFAULT_MAX_NUMBER = 9;
+
   private ArrayList<BaseMedia> mList;
+  private int currentModel = -1;
 
   public InteractionPublishAdapter9(SelectPhotoClickListener9 listener) {
     mList = new ArrayList<>();
@@ -56,20 +64,20 @@ public class InteractionPublishAdapter9 extends RecyclerView.Adapter<Holder> {
 
   @Override public void onBindViewHolder(Holder holder, int position) {
     if (getItemViewType(position) == FOOT_VIEW) {
-      if (getItemCount() == 10) { // 9张之后不显示添加按钮
+      if (getItemCount() == getCurrentModel()) { // 1/9张之后不显示添加按钮
         holder.itemView.setVisibility(View.GONE);
       } else {
         holder.itemView.setVisibility(View.VISIBLE);
       }
       return;
     }
-    BaseMedia media = mList.get(position);
-    String path;
-    if (media instanceof ImageMedia) {
-      path = ((ImageMedia) media).getThumbnailPath();
+    if (currentModel == PHOTO_MODEL) {
+      holder.ivPlay.setVisibility(View.GONE);
     } else {
-      path = media.getPath();
+      holder.ivPlay.setVisibility(View.VISIBLE);
     }
+    BaseMedia media = mList.get(position);
+    String path = ((ImageMedia) media).getThumbnailPath();
     BoxingMediaLoader.getInstance().displayThumbnail(holder.ivImage, path, 400, 200);
     holder.itemView.setTag(position);
   }
@@ -80,6 +88,34 @@ public class InteractionPublishAdapter9 extends RecyclerView.Adapter<Holder> {
     } else {
       return NORMAL_VIEW;
     }
+  }
+
+  public BaseMedia getVideo() {
+    if (currentModel == PHOTO_MODEL) {
+      return null;
+    }
+    return mList.isEmpty() ? null : mList.get(0);
+  }
+
+  public int getCurrentModel() {
+    return currentModel;
+  }
+
+  public void setCurrentModel(int currentModel) {
+    this.currentModel = currentModel;
+    if (currentModel == PHOTO_MODEL) {
+      DEFAULT_MAX_NUMBER = 9;
+    } else if (currentModel == VIDEO_MODEL) {
+      DEFAULT_MAX_NUMBER = 1;
+    }
+  }
+
+  public boolean checkNumber() {
+    return getPathList().size() >= DEFAULT_MAX_NUMBER;
+  }
+
+  public int getMax() {
+    return DEFAULT_MAX_NUMBER - getPathList().size();
   }
 
   @Override public int getItemCount() {
@@ -110,11 +146,7 @@ public class InteractionPublishAdapter9 extends RecyclerView.Adapter<Holder> {
   public List<String> getPathList() {
     List<String> path = new ArrayList<>();
     for (BaseMedia media : mList) {
-      if (media instanceof ImageMedia) {
-        path.add(((ImageMedia) media).getThumbnailPath());
-      } else {
-        path.add(media.getPath());
-      }
+      path.add(((ImageMedia) media).getThumbnailPath());
     }
     return path;
   }
@@ -140,13 +172,16 @@ public class InteractionPublishAdapter9 extends RecyclerView.Adapter<Holder> {
 
     ImageButton btnDelete;
     ImageView ivImage;
+    ImageView ivPlay;
 
     Holder(View itemView, int type) {
       super(itemView);
       if (type == NORMAL_VIEW) {
         btnDelete = (ImageButton) itemView.findViewById(R.id.item_interaction_publish_btn_delete);
         ivImage = (ImageView) itemView.findViewById(R.id.item_interaction_publish_iv_image);
+        ivPlay = (ImageView) itemView.findViewById(R.id.item_interaction_publish_btn_play);
         btnDelete.setOnClickListener(this);
+        ivPlay.setOnClickListener(this);
       } else {
         itemView.findViewById(R.id.item_interaction_publish_btn_add).setOnClickListener(this);
       }
@@ -174,17 +209,22 @@ public class InteractionPublishAdapter9 extends RecyclerView.Adapter<Holder> {
         }
       } else if (i == R.id.item_interaction_publish_btn_delete) {
         removeData(getLayoutPosition());
-      } else if (i == itemView.getId()) {
-        BaseMedia media = mList.get(getLayoutPosition());
-        if (media == null) return;
-        List<String> images = new ArrayList<>();
-        for (BaseMedia baseMedia : mList) {
-          images.add(baseMedia.getPath());
+      } else if (i == ivPlay.getId()) {
+        if (currentModel == PHOTO_MODEL) {
+          BaseMedia media = mList.get(getLayoutPosition());
+          if (media == null) return;
+          List<String> images = new ArrayList<>();
+          for (BaseMedia baseMedia : mList) {
+            images.add(baseMedia.getPath());
+          }
+          PhotoGalleryData data = new PhotoGalleryData(true, getLayoutPosition(), images);
+          Intent intent = new Intent(v.getContext(), PhotoGalleryActivity.class);
+          intent.putExtra(PhotoGalleryActivity.IMAGE_DATA, data);
+          v.getContext().startActivity(intent);
+        } else {
+          BaseMedia media = mList.get(getLayoutPosition());
+          VideoActivity.intentTo(v.getContext(), media.getId());
         }
-        PhotoGalleryData data = new PhotoGalleryData(true, getLayoutPosition(), images);
-        Intent intent = new Intent(v.getContext(), PhotoGalleryActivity.class);
-        intent.putExtra(PhotoGalleryActivity.IMAGE_DATA, data);
-        v.getContext().startActivity(intent);
       }
     }
   }

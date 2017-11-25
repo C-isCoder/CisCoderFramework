@@ -23,4 +23,6 @@ public interface InteractionPublishView extends IBaseView {
   void setTypeName(String name);
 
   Activity getActivity();
+
+  void takeVideo();
 }

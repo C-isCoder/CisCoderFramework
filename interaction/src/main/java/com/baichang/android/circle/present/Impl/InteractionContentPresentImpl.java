@@ -8,6 +8,7 @@ import com.baichang.android.circle.R;
 import com.baichang.android.circle.common.InteractionConfig;
 import com.baichang.android.circle.common.InteractionFlag.Event;
 import com.baichang.android.circle.entity.InteractionUserData;
+import com.baichang.android.circle.ijkplayer.VideoActivity;
 import com.baichang.android.circle.model.Impl.InteractInteractionImpl;
 import com.baichang.android.circle.model.InteractInteraction;
 import com.baichang.android.circle.present.InteractionInfoPresent;
@@ -20,6 +21,7 @@ import com.baichang.android.circle.adapter.InteractionContentAdapter.ItemOnClick
 import com.baichang.android.circle.entity.InteractionListData;
 import com.baichang.android.circle.present.InteractionContentPresent;
 import com.baichang.android.circle.view.InteractionContentView;
+import com.baichang.android.config.ConfigurationImpl;
 import com.baichang.android.utils.BCDialogUtil;
 import com.baichang.android.widget.recycleView.RecyclerViewUtils;
 import java.util.List;
@@ -173,6 +175,13 @@ public class InteractionContentPresentImpl
             mInteraction.collect(data.id, cancelCollectListener);
           }
         }, null);
+  }
+
+  @Override public void play(InteractionListData data) {
+    String path = data.video;
+    if (!TextUtils.isEmpty(path)) {
+      VideoActivity.intentTo(mView.getContext(), ConfigurationImpl.get().getApiLoadImage() + path);
+    }
   }
 
   private BaseListener<Boolean> deleteListener = new BaseListener<Boolean>() {

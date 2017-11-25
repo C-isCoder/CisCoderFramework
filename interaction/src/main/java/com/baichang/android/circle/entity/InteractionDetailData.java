@@ -10,49 +10,30 @@ import java.util.List;
 
 public class InteractionDetailData {
 
-  @Expose
-  @SerializedName("trendsTitle")
-  public String title;
+  @Expose @SerializedName("trendsTitle") public String title;
 
-  @Expose
-  @SerializedName("trendsId")
-  public int id;
+  @Expose @SerializedName("trendsId") public int id;
 
-  @Expose
-  @SerializedName("hostName")
-  public String name;
+  @Expose @SerializedName("hostName") public String name;
 
-  @Expose
-  @SerializedName("hostIcon")
-  public String avatar;
+  @Expose @SerializedName("hostIcon") public String avatar;
 
-  @Expose
-  @SerializedName("releaseTime")
-  public String time;
+  @Expose @SerializedName("releaseTime") public String time;
 
-  @Expose
-  @SerializedName("trendsContent")
-  public String content;
+  @Expose @SerializedName("trendsContent") public String content;
 
-  @Expose
-  @SerializedName("trendsImages")
-  public List<String> images;
+  @Expose @SerializedName("trendsImages") public List<String> images;
 
-  @Expose
-  @SerializedName("praiseNum")
-  public int praiseCount;
+  @Expose @SerializedName("praiseNum") public int praiseCount;
 
-  @Expose
-  @SerializedName("commentNum")
-  public int commentCount;
+  @Expose @SerializedName("commentNum") public int commentCount;
 
-  @Expose
-  public int isPraise;
-  @Expose
-  public int isCollection;
+  @Expose @SerializedName("trendsVideo") public String video;
 
-  @Expose
-  public String hostUserId;
-  @Expose
-  public List<InteractionCommentList> commentList;
+  @Expose public String videoPic;
+  @Expose public int isPraise;
+  @Expose public int isCollection;
+
+  @Expose public String hostUserId;
+  @Expose public List<InteractionCommentList> commentList;
 }

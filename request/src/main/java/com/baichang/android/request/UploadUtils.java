@@ -24,8 +24,7 @@ public class UploadUtils {
         File file = new File(path);
         if (file.exists()) {
             RequestBody requestFile = RequestBody.create(MediaType.parse("application/octet-stream"), file);
-            MultipartBody.Part body = MultipartBody.Part.createFormData("file", file.getName(), requestFile);
-            return body;
+            return MultipartBody.Part.createFormData("file", file.getName(), requestFile);
         } else {
             throw new NullPointerException(FILE_NOT_NULL);
         }
@@ -34,8 +33,7 @@ public class UploadUtils {
     public static MultipartBody.Part getMultipartBody(File file) {
         if (file.exists()) {
             RequestBody requestFile = RequestBody.create(MediaType.parse("application/octet-stream"), file);
-            MultipartBody.Part body = MultipartBody.Part.createFormData("file", file.getName(), requestFile);
-            return body;
+            return MultipartBody.Part.createFormData("file", file.getName(), requestFile);
         } else {
             throw new NullPointerException(FILE_NOT_NULL);
         }

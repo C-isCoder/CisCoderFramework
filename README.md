@@ -1,6 +1,28 @@
 # Android框架文档说明
 
 ## 更新说明：
+
+ ### 2017-1125
+
+ * 互动新增发送小视频功能。
+
+ * 项目需要依赖以下3个：
+
+ 1. `com.baichang.android.library:interaction:0.0.2`
+
+ 2. `tv.danmaku.ijk.media:ijkplayer-java:0.8.4`
+
+ 3. `tv.danmaku.ijk.media:ijkplayer-armv7a:0.8.4`
+
+ * ndk 设置如下:
+
+ * ```ndk {
+                //选择要添加的对应cpu类型的.so库。
+                abiFilters 'armeabi', 'x86','armeabi-v7a'
+                // 还可以添加 'x86', 'x86_64', 'mips', 'mips64'
+            }```
+
+## 更新说明：
  ### 2017-07-06
  
  * 新增请求框架 request2 模块，升级 Retrofit 版本，切换到 RxJava2 ，替换 Json 解析为 Gson ，优化

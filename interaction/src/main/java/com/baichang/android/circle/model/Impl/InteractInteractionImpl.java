@@ -1,6 +1,7 @@
 package com.baichang.android.circle.model.Impl;
 
 import android.app.Application;
+import android.util.Log;
 import com.baichang.android.circle.common.InteractionAPI;
 import com.baichang.android.circle.common.InteractionAPIWrapper;
 import com.baichang.android.circle.common.InteractionConfig;
@@ -15,7 +16,10 @@ import com.baichang.android.circle.entity.InteractionShareData;
 import com.baichang.android.circle.entity.InteractionTypeData;
 import com.baichang.android.circle.entity.InteractionUserData;
 import com.baichang.android.circle.entity.InteractionUserInfo;
+import com.baichang.android.circle.entity.InteractionVideoData;
 import com.baichang.android.circle.model.InteractInteraction;
+import com.baichang.android.circle.video.util.FileUtils;
+import com.baichang.android.common.IBaseInteraction;
 import com.baichang.android.request.HttpErrorListener;
 import com.baichang.android.request.HttpSubscriber;
 import com.baichang.android.request.HttpSuccessListener;
@@ -23,10 +27,13 @@ import com.baichang.android.request.UploadUtils;
 import com.google.gson.Gson;
 import com.zxy.tiny.Tiny;
 import com.zxy.tiny.callback.FileBatchCallback;
+import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 import rx.Observable;
 import rx.functions.Func1;
 
@@ -36,36 +43,34 @@ import rx.functions.Func1;
 
 public class InteractInteractionImpl implements InteractInteraction {
 
-  @Override
-  public void cancel(int key) {
+  @Override public void cancel(int key) {
 
   }
 
   // 互动列表
-  @Override
-  public void getInteractionList(int typeId, int nowPage, final BaseListener<List<InteractionListData>> listener) {
+  @Override public void getInteractionList(int typeId, int nowPage,
+      final BaseListener<List<InteractionListData>> listener) {
     Map<String, String> map = new HashMap<>();
     map.put("typeId", String.valueOf(typeId));
     map.put("nowPage", String.valueOf(nowPage));
     map.put("userId", InteractionConfig.getInstance().getUser().id);
-    InteractionAPIWrapper.getInstance().getTrendsList(map)
+    InteractionAPIWrapper.getInstance()
+        .getTrendsList(map)
         .compose(HttpSubscriber.<List<InteractionListData>>applySchedulers())
         .subscribe(new HttpSubscriber<>(new HttpSuccessListener<List<InteractionListData>>() {
-          @Override
-          public void success(List<InteractionListData> interactionListData) {
+          @Override public void success(List<InteractionListData> interactionListData) {
             listener.success(interactionListData);
           }
         }, new HttpErrorListener() {
-          @Override
-          public void error(Throwable t) {
+          @Override public void error(Throwable t) {
             listener.error(t.getMessage());
           }
         }));
   }
 
   // 互动详情
-  @Override
-  public void getInteractionDetail(int id, final BaseListener<InteractionDetailData> listener) {
+  @Override public void getInteractionDetail(int id,
+      final BaseListener<InteractionDetailData> listener) {
     InteractionUserData userData = InteractionConfig.getInstance().getUser();
     Map<String, String> map = new HashMap<>();
     map.put("id", String.valueOf(id));
@@ -73,32 +78,31 @@ public class InteractInteractionImpl implements InteractInteraction {
     InteractionAPIWrapper.getInstance()
         .getTrendsDetail(map)
         .compose(HttpSubscriber.<InteractionDetailData>applySchedulers())
-        .subscribe(new HttpSubscriber<>(
-            new HttpSuccessListener<InteractionDetailData>() {
-              @Override
-              public void success(InteractionDetailData data) {
-                listener.success(data);
-              }
-            }, new HttpErrorListener() {
-          @Override
-          public void error(Throwable t) {
+        .subscribe(new HttpSubscriber<>(new HttpSuccessListener<InteractionDetailData>() {
+          @Override public void success(InteractionDetailData data) {
+            listener.success(data);
+          }
+        }, new HttpErrorListener() {
+          @Override public void error(Throwable t) {
             listener.error(t.getMessage());
           }
         }));
   }
 
   // 发表互动
-  @Override
-  public void publishImage(Application application, final String title, final String content,
-      final String modelId, final List<String> paths, final BaseListener<Boolean> listener) {
+  @Override public void publishImage(Application application, final String title,
+      final String content, final String modelId, final List<String> paths,
+      final BaseListener<Boolean> listener) {
     final InteractionUserData userData = InteractionConfig.getInstance().getUser();
     String[] imageArray = new String[paths.size()];
     Tiny.getInstance().init(application);
     Tiny.FileCompressOptions options = new Tiny.FileCompressOptions();
-    Tiny.getInstance().source(paths.toArray(imageArray)).batchAsFile().withOptions(options).batchCompress(
-        new FileBatchCallback() {
-          @Override
-          public void callback(boolean isSuccess, String[] outfile) {
+    Tiny.getInstance()
+        .source(paths.toArray(imageArray))
+        .batchAsFile()
+        .withOptions(options)
+        .batchCompress(new FileBatchCallback() {
+          @Override public void callback(boolean isSuccess, String[] outfile) {
             final Map<String, String> map = new HashMap<>();
             map.put("title", title);
             map.put("content", content);
@@ -111,21 +115,19 @@ public class InteractInteractionImpl implements InteractInteraction {
             api.uploads(UploadUtils.getMultipartBodysForPath(Arrays.asList(outfile)))
                 .compose(HttpSubscriber.<List<String>>applySchedulers())
                 .flatMap(new Func1<List<String>, Observable<Boolean>>() {
-                  @Override
-                  public Observable<Boolean> call(List<String> list) {
+                  @Override public Observable<Boolean> call(List<String> list) {
                     map.put("images", new Gson().toJson(list));
-                    return InteractionAPIWrapper.getInstance().publish(map)
+                    return InteractionAPIWrapper.getInstance()
+                        .publish(map)
                         .compose(HttpSubscriber.<Boolean>applySchedulers());
                   }
                 })
                 .subscribe(new HttpSubscriber<>(new HttpSuccessListener<Boolean>() {
-                  @Override
-                  public void success(Boolean aBoolean) {
+                  @Override public void success(Boolean aBoolean) {
                     listener.success(aBoolean);
                   }
                 }, new HttpErrorListener() {
-                  @Override
-                  public void error(Throwable t) {
+                  @Override public void error(Throwable t) {
                     listener.error(t.getMessage());
                   }
                 }));
@@ -133,9 +135,54 @@ public class InteractInteractionImpl implements InteractInteraction {
         });
   }
 
+  // 发表互动-视频
+  @Override public void publishVideo(Application application, String title, String content,
+      String modelId, final String videoPaths, final String videoPic,
+      final BaseListener<Boolean> listener) {
+    final InteractionUserData userData = InteractionConfig.getInstance().getUser();
+    final Map<String, String> map = new HashMap<>();
+    map.put("title", title);
+    map.put("content", content);
+    map.put("typeId", modelId);
+    map.put("hostName", userData.name);
+    map.put("hostIcon", userData.avatar);
+    map.put("address", userData.address);
+    map.put("userId", userData.id);
+    final InteractionAPI api = new InteractionAPIWrapper();
+    Log.d("VIDEO", "video:" + videoPaths);
+    Log.d("VIDEO", "videoSize:" + FileUtils.getAutoFileOrFilesSize(videoPaths));
+    Log.d("VIDEO", "videoPic:" + videoPic);
+    api.uploadVideo(UploadUtils.getMultipartBody(videoPaths))
+        .compose(HttpSubscriber.<List<InteractionVideoData>>applySchedulers())
+        .flatMap(new Func1<List<InteractionVideoData>, Observable<List<String>>>() {
+          @Override public Observable<List<String>> call(List<InteractionVideoData> videoDatas) {
+            map.put("video", videoDatas.get(0).path);
+            return api.upload(UploadUtils.getMultipartBody(videoPic))
+                .compose(HttpSubscriber.<List<String>>applySchedulers());
+          }
+        })
+        .flatMap(new Func1<List<String>, Observable<Boolean>>() {
+          @Override public Observable<Boolean> call(List<String> strings) {
+            map.put("videoPic", strings.get(0));
+            return InteractionAPIWrapper.getInstance()
+                .publish(map)
+                .compose(HttpSubscriber.<Boolean>applySchedulers());
+          }
+        })
+        .subscribe(new HttpSubscriber<>(new HttpSuccessListener<Boolean>() {
+          @Override public void success(Boolean aBoolean) {
+            listener.success(aBoolean);
+          }
+        }, new HttpErrorListener() {
+          @Override public void error(Throwable t) {
+            listener.error(t.getMessage());
+          }
+        }));
+  }
+
   // 发表互动 不带图片
-  @Override
-  public void publishNoImage(String title, String content, String modelId, final BaseListener<Boolean> listener) {
+  @Override public void publishNoImage(String title, String content, String modelId,
+      final BaseListener<Boolean> listener) {
     InteractionUserData userDat = InteractionConfig.getInstance().getUser();
     final Map<String, String> map = new HashMap<>();
     map.put("title", title);
@@ -149,21 +196,19 @@ public class InteractInteractionImpl implements InteractInteraction {
         .publish(map)
         .compose(HttpSubscriber.<Boolean>applySchedulers())
         .subscribe(new HttpSubscriber<>(new HttpSuccessListener<Boolean>() {
-          @Override
-          public void success(Boolean aBoolean) {
+          @Override public void success(Boolean aBoolean) {
             listener.success(aBoolean);
           }
         }, new HttpErrorListener() {
-          @Override
-          public void error(Throwable t) {
+          @Override public void error(Throwable t) {
             listener.error(t.getMessage());
           }
         }));
   }
 
   // 回复的互动
-  @Override
-  public void getReplay(int nowPage, String userId, final BaseListener<List<InteractionReplyData>> listener) {
+  @Override public void getReplay(int nowPage, String userId,
+      final BaseListener<List<InteractionReplyData>> listener) {
     Map<String, String> map = new HashMap<>();
     map.put("userId", userId);
     map.put("nowPage", String.valueOf(nowPage));
@@ -171,40 +216,35 @@ public class InteractInteractionImpl implements InteractInteraction {
         .getReply(map)
         .compose(HttpSubscriber.<List<InteractionReplyData>>applySchedulers())
         .subscribe(new HttpSubscriber<>(new HttpSuccessListener<List<InteractionReplyData>>() {
-          @Override
-          public void success(List<InteractionReplyData> list) {
+          @Override public void success(List<InteractionReplyData> list) {
             listener.success(list);
           }
         }, new HttpErrorListener() {
-          @Override
-          public void error(Throwable t) {
+          @Override public void error(Throwable t) {
             listener.error(t.getMessage());
           }
         }));
   }
 
   // 互动类别
-  @Override
-  public void getInteractionTypeList(final BaseListener<List<InteractionTypeData>> listener) {
+  @Override public void getInteractionTypeList(
+      final BaseListener<List<InteractionTypeData>> listener) {
     InteractionAPIWrapper.getInstance()
         .getTrendsType()
         .compose(HttpSubscriber.<List<InteractionTypeData>>applySchedulers())
         .subscribe(new HttpSubscriber<>(new HttpSuccessListener<List<InteractionTypeData>>() {
-          @Override
-          public void success(List<InteractionTypeData> list) {
+          @Override public void success(List<InteractionTypeData> list) {
             listener.success(list);
           }
         }, new HttpErrorListener() {
-          @Override
-          public void error(Throwable t) {
+          @Override public void error(Throwable t) {
             listener.error(t.getMessage());
           }
         }));
   }
 
   // 赞/取消赞
-  @Override
-  public void praise(int id, final BaseListener<Boolean> listener) {
+  @Override public void praise(int id, final BaseListener<Boolean> listener) {
     InteractionUserData userData = InteractionConfig.getInstance().getUser();
     Map<String, String> map = new HashMap<>();
     map.put("trendsId", String.valueOf(id));
@@ -213,21 +253,18 @@ public class InteractInteractionImpl implements InteractInteraction {
         .praise(map)
         .compose(HttpSubscriber.<Boolean>applySchedulers())
         .subscribe(new HttpSubscriber<>(new HttpSuccessListener<Boolean>() {
-          @Override
-          public void success(Boolean aBoolean) {
+          @Override public void success(Boolean aBoolean) {
             listener.success(aBoolean);
           }
         }, new HttpErrorListener() {
-          @Override
-          public void error(Throwable t) {
+          @Override public void error(Throwable t) {
             listener.error(t.getMessage());
           }
         }));
   }
 
   // 收藏/取消收藏
-  @Override
-  public void collect(int id, final BaseListener<Boolean> listener) {
+  @Override public void collect(int id, final BaseListener<Boolean> listener) {
     InteractionUserData userData = InteractionConfig.getInstance().getUser();
     Map<String, String> map = new HashMap<>();
     map.put("trendsId", String.valueOf(id));
@@ -236,21 +273,19 @@ public class InteractInteractionImpl implements InteractInteraction {
         .collect(map)
         .compose(HttpSubscriber.<Boolean>applySchedulers())
         .subscribe(new HttpSubscriber<>(new HttpSuccessListener<Boolean>() {
-          @Override
-          public void success(Boolean aBoolean) {
+          @Override public void success(Boolean aBoolean) {
             listener.success(aBoolean);
           }
         }, new HttpErrorListener() {
-          @Override
-          public void error(Throwable t) {
+          @Override public void error(Throwable t) {
             listener.error(t.getMessage());
           }
         }));
   }
 
   // 获取动态
-  @Override
-  public void getDynamics(String userId, int nowPage, final BaseListener<List<InteractionListData>> listener) {
+  @Override public void getDynamics(String userId, int nowPage,
+      final BaseListener<List<InteractionListData>> listener) {
     Map<String, String> map = new HashMap<>();
     map.put("userId", userId);
     map.put("nowPage", String.valueOf(nowPage));
@@ -258,13 +293,11 @@ public class InteractInteractionImpl implements InteractInteraction {
         .getDynamics(map)
         .compose(HttpSubscriber.<List<InteractionListData>>applySchedulers())
         .subscribe(new HttpSubscriber<>(new HttpSuccessListener<List<InteractionListData>>() {
-          @Override
-          public void success(List<InteractionListData> list) {
+          @Override public void success(List<InteractionListData> list) {
             listener.success(list);
           }
         }, new HttpErrorListener() {
-          @Override
-          public void error(Throwable t) {
+          @Override public void error(Throwable t) {
             listener.error(t.getMessage());
           }
         }));
@@ -280,63 +313,55 @@ public class InteractInteractionImpl implements InteractInteraction {
         .getCollect(map)
         .compose(HttpSubscriber.<List<InteractionListData>>applySchedulers())
         .subscribe(new HttpSubscriber<>(new HttpSuccessListener<List<InteractionListData>>() {
-          @Override
-          public void success(List<InteractionListData> list) {
+          @Override public void success(List<InteractionListData> list) {
             listener.success(list);
           }
         }, new HttpErrorListener() {
-          @Override
-          public void error(Throwable t) {
+          @Override public void error(Throwable t) {
             listener.error(t.getMessage());
           }
         }));
   }
 
   // 删除互动
-  @Override
-  public void delete(int id, final BaseListener<Boolean> listener) {
+  @Override public void delete(int id, final BaseListener<Boolean> listener) {
     Map<String, String> map = new HashMap<>();
     map.put("id", String.valueOf(id));
     InteractionAPIWrapper.getInstance()
         .delete(map)
         .compose(HttpSubscriber.<Boolean>applySchedulers())
         .subscribe(new HttpSubscriber<>(new HttpSuccessListener<Boolean>() {
-          @Override
-          public void success(Boolean aBoolean) {
+          @Override public void success(Boolean aBoolean) {
             listener.success(aBoolean);
           }
         }, new HttpErrorListener() {
-          @Override
-          public void error(Throwable t) {
+          @Override public void error(Throwable t) {
             listener.error(t.getMessage());
           }
         }));
   }
 
   // 动态、回复、收藏数量
-  @Override
-  public void getNumbers(String userId, final BaseListener<InteractionNumberData> listener) {
+  @Override public void getNumbers(String userId,
+      final BaseListener<InteractionNumberData> listener) {
     Map<String, String> map = new HashMap<>();
     map.put("userId", userId);
     InteractionAPIWrapper.getInstance()
         .getNumbers(map)
         .compose(HttpSubscriber.<InteractionNumberData>applySchedulers())
         .subscribe(new HttpSubscriber<>(new HttpSuccessListener<InteractionNumberData>() {
-          @Override
-          public void success(InteractionNumberData data) {
+          @Override public void success(InteractionNumberData data) {
             listener.success(data);
           }
         }, new HttpErrorListener() {
-          @Override
-          public void error(Throwable t) {
+          @Override public void error(Throwable t) {
             listener.error(t.getMessage());
           }
         }));
   }
 
   // 举报
-  @Override
-  public void report(int id, final BaseListener<Boolean> listener) {
+  @Override public void report(int id, final BaseListener<Boolean> listener) {
     InteractionUserData userDa = InteractionConfig.getInstance().getUser();
     Map<String, String> map = new HashMap<>();
     map.put("trendsId", String.valueOf(id));
@@ -345,21 +370,19 @@ public class InteractInteractionImpl implements InteractInteraction {
         .report(map)
         .compose(HttpSubscriber.<Boolean>applySchedulers())
         .subscribe(new HttpSubscriber<>(new HttpSuccessListener<Boolean>() {
-          @Override
-          public void success(Boolean aBoolean) {
+          @Override public void success(Boolean aBoolean) {
             listener.success(aBoolean);
           }
         }, new HttpErrorListener() {
-          @Override
-          public void error(Throwable t) {
+          @Override public void error(Throwable t) {
             listener.error(t.getMessage());
           }
         }));
   }
 
   // 互动评论
-  @Override
-  public void comment(int trendsId, InteractionCommentList commentData, final BaseListener<Boolean> listener) {
+  @Override public void comment(int trendsId, InteractionCommentList commentData,
+      final BaseListener<Boolean> listener) {
     Map<String, String> map = new HashMap<>();
     map.put("trendsId", String.valueOf(trendsId));
     map.put("commentUserId", commentData.userId);
@@ -370,21 +393,19 @@ public class InteractInteractionImpl implements InteractInteraction {
         .comment(map)
         .compose(HttpSubscriber.<Boolean>applySchedulers())
         .subscribe(new HttpSubscriber<>(new HttpSuccessListener<Boolean>() {
-          @Override
-          public void success(Boolean aBoolean) {
+          @Override public void success(Boolean aBoolean) {
             listener.success(aBoolean);
           }
         }, new HttpErrorListener() {
-          @Override
-          public void error(Throwable t) {
+          @Override public void error(Throwable t) {
             listener.error(t.getMessage());
           }
         }));
   }
 
   // 互动回复
-  @Override
-  public void reply(InteractionCommentReplyList replyData, final BaseListener<Boolean> listener) {
+  @Override public void reply(InteractionCommentReplyList replyData,
+      final BaseListener<Boolean> listener) {
     Map<String, String> map = new HashMap<>();
     map.put("trendsId", String.valueOf(replyData.trendsId));
     map.put("commentId", String.valueOf(replyData.commentId));
@@ -398,55 +419,48 @@ public class InteractInteractionImpl implements InteractInteraction {
         .reply(map)
         .compose(HttpSubscriber.<Boolean>applySchedulers())
         .subscribe(new HttpSubscriber<>(new HttpSuccessListener<Boolean>() {
-          @Override
-          public void success(Boolean aBoolean) {
+          @Override public void success(Boolean aBoolean) {
             listener.success(aBoolean);
           }
         }, new HttpErrorListener() {
-          @Override
-          public void error(Throwable t) {
+          @Override public void error(Throwable t) {
             listener.error(t.getMessage());
           }
         }));
   }
 
   // 获取用户信息
-  @Override
-  public void getUserInfo(String userId, final BaseListener<InteractionUserInfo> listener) {
+  @Override public void getUserInfo(String userId,
+      final BaseListener<InteractionUserInfo> listener) {
     Map<String, String> map = new HashMap<>();
     map.put("userId", userId);
     InteractionAPIWrapper.getInstance()
         .getUserInfo(map)
         .compose(HttpSubscriber.<InteractionUserInfo>applySchedulers())
         .subscribe(new HttpSubscriber<>(new HttpSuccessListener<InteractionUserInfo>() {
-          @Override
-          public void success(InteractionUserInfo info) {
+          @Override public void success(InteractionUserInfo info) {
             listener.success(info);
           }
         }, new HttpErrorListener() {
-          @Override
-          public void error(Throwable t) {
+          @Override public void error(Throwable t) {
             listener.error(t.getMessage());
           }
         }));
   }
 
   // 获取分享连接
-  @Override
-  public void getShareLink(String id, final BaseListener<String> listener) {
+  @Override public void getShareLink(String id, final BaseListener<String> listener) {
     Map<String, String> map = new HashMap<>();
     map.put("trendsId", id);
     InteractionAPIWrapper.getInstance()
         .getShareLink(map)
         .compose(HttpSubscriber.<InteractionShareData>applySchedulers())
         .subscribe(new HttpSubscriber<>(new HttpSuccessListener<InteractionShareData>() {
-          @Override
-          public void success(InteractionShareData interactionShareData) {
+          @Override public void success(InteractionShareData interactionShareData) {
             listener.success(interactionShareData.link);
           }
         }, new HttpErrorListener() {
-          @Override
-          public void error(Throwable t) {
+          @Override public void error(Throwable t) {
             listener.error(t.getMessage());
           }
         }));

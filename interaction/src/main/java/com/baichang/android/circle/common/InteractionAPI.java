@@ -7,6 +7,7 @@ import com.baichang.android.circle.entity.InteractionReplyData;
 import com.baichang.android.circle.entity.InteractionShareData;
 import com.baichang.android.circle.entity.InteractionTypeData;
 import com.baichang.android.circle.entity.InteractionUserInfo;
+import com.baichang.android.circle.entity.InteractionVideoData;
 import java.util.List;
 import java.util.Map;
 import okhttp3.MultipartBody;
@@ -32,6 +33,11 @@ public interface InteractionAPI {
   @Multipart
   @POST("file/uploadImages")
   Observable<List<String>> upload(@Part MultipartBody.Part file);
+
+  //上传文件
+  @Multipart
+  @POST("file/uploadVoice")
+  Observable<List<InteractionVideoData>> uploadVideo(@Part MultipartBody.Part file);
 
   //上传文件
   @Multipart

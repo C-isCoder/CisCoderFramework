@@ -21,5 +21,18 @@
       <attr format="float" name="layout_weight" />
       <attr name="android:layout_gravity" />
    </declare-styleable>
+   <!-- 圆环进度-->
+   <declare-styleable name="RoundTimeProgressBar">
+      <attr name="roundColor" format="color"/>
+      <attr name="roundProgressColor" format="color"/>
+      <attr name="roundWidth" format="dimension"/>
+      <attr name="timeTextColor" format="color" />
+      <attr name="timeTextSize" format="dimension" />
+      <attr name="maxTime" format="integer"/>
+      <attr name="roundStyle">
+         <enum name="STROKE" value="0"/>
+         <enum name="FILL" value="1"/>
+      </attr>
+   </declare-styleable>
 
 </resources>

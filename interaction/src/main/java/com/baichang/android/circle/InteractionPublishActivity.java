@@ -4,7 +4,9 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.Resources.Theme;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.media.CamcorderProfile;
 import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
@@ -12,12 +14,15 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 import com.baichang.android.circle.common.InteractionCommonActivity;
 import com.baichang.android.circle.common.InteractionConfig;
 import com.baichang.android.circle.common.InteractionFlag.Event;
@@ -25,6 +30,11 @@ import com.baichang.android.circle.present.Impl.InteractionPublishImpl;
 import com.baichang.android.circle.present.InteractionPublishPresent;
 import com.baichang.android.circle.utils.AnimatorUtil;
 import com.baichang.android.circle.utils.BoxingPicassoLoader;
+import com.baichang.android.circle.video.ERecorderActivityImpl;
+import com.baichang.android.circle.video.VideoConfig;
+import com.baichang.android.circle.video.exception.NullProfileException;
+import com.baichang.android.circle.video.exception.NullRecordTimeException;
+import com.baichang.android.circle.video.model.VideoInfo;
 import com.baichang.android.circle.view.InteractionPublishView;
 import com.baichang.android.common.BaseEventData;
 import com.baichang.android.utils.photo.BCPhotoUtil;
@@ -37,6 +47,8 @@ import com.bilibili.boxing.model.entity.BaseMedia;
 import com.bilibili.boxing.model.entity.impl.ImageMedia;
 import com.bilibili.boxing_impl.ui.BoxingActivity;
 import java.util.ArrayList;
+import java.util.logging.Logger;
+import mabeijianxi.camera.util.FileUtils;
 import org.greenrobot.eventbus.EventBus;
 
 public class InteractionPublishActivity extends InteractionCommonActivity
@@ -51,6 +63,7 @@ public class InteractionPublishActivity extends InteractionCommonActivity
   ProgressDialog mProgress;
 
   private InteractionPublishPresent mPresent;
+  private VideoConfig mVideoConfig;
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -64,6 +77,7 @@ public class InteractionPublishActivity extends InteractionCommonActivity
     mBack.setOnClickListener(this);
     initDialog();
     initConfig();
+    initVideo();
     init();
   }
 
@@ -163,6 +177,12 @@ public class InteractionPublishActivity extends InteractionCommonActivity
     return this;
   }
 
+  @Override public void takeVideo() {
+    if (mVideoConfig != null) {
+      mVideoConfig.start(this);
+    }
+  }
+
   @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
     super.onActivityResult(requestCode, resultCode, data);
     if (requestCode == REQUEST_CODE_BOXING && resultCode == RESULT_OK) {
@@ -175,6 +195,26 @@ public class InteractionPublishActivity extends InteractionCommonActivity
       BaseMedia media = new ImageMedia(BCPhotoUtil.getPhotoName(), BCPhotoUtil.getPhotoPath());
       mPresent.onBindImages(media);
       BCPhotoUtil.cleanActivity();
+    } else if (requestCode == VideoConfig.REQUESR_RECORD_MEDIA && resultCode == RESULT_OK) {
+      VideoInfo videoInfo = ERecorderActivityImpl.getVedioInfo(data);
+      if (videoInfo == null) {
+        Toast.makeText(getActivity(), "视频拍摄失败", Toast.LENGTH_SHORT).show();
+        return;
+      }
+
+      //压缩后视频地址
+      String mVideoPath = videoInfo.getVideoPath();
+      //视频截图
+      String mVideoPicPath = videoInfo.getPicPath();
+      //视频原地址
+      String mVideoOriginPath = videoInfo.getOriginVideoPath();
+      if (TextUtils.isEmpty(mVideoPath) || TextUtils.isEmpty(mVideoOriginPath)) {
+        Toast.makeText(getActivity(), "视频拍摄失败", Toast.LENGTH_SHORT).show();
+        return;
+      }
+      // 为了兼容Boxing
+      BaseMedia media = new ImageMedia(mVideoPath, mVideoPicPath);
+      mPresent.onBindImages(media);
     }
   }
 
@@ -188,6 +228,22 @@ public class InteractionPublishActivity extends InteractionCommonActivity
     } else if (i == mBack.getId()) {
       AnimatorUtil.scale(v);
       onBackPressed();
+    }
+  }
+
+  private void initVideo() {
+    VideoConfig.init(this, "");
+    try {
+      mVideoConfig = VideoConfig.get()
+          .setTime(10 * 1000)
+          .setProfile(CamcorderProfile.QUALITY_480P)
+          .setCompress(true)
+          .setCompressMode(VideoConfig.CompressMode.veryfast)
+          .check();
+    } catch (NullRecordTimeException e) {
+      mVideoConfig.setTime(10 * 1000);
+    } catch (NullProfileException e) {
+      mVideoConfig.setProfile(CamcorderProfile.QUALITY_480P);
     }
   }
 }

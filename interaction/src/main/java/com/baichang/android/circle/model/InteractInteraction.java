@@ -19,12 +19,16 @@ import java.util.List;
 
 public interface InteractInteraction extends IBaseInteraction {
 
-  void getInteractionList(int typeId, int nowPage, BaseListener<List<InteractionListData>> listener);
+  void getInteractionList(int typeId, int nowPage,
+      BaseListener<List<InteractionListData>> listener);
 
   void getInteractionDetail(int id, BaseListener<InteractionDetailData> listener);
 
-  void publishImage(Application application, String title, String content, String modelId, List<String> paths,
-      BaseListener<Boolean> listener);
+  void publishImage(Application application, String title, String content, String modelId,
+      List<String> paths, BaseListener<Boolean> listener);
+
+  void publishVideo(Application application, String title, String content, String modelId,
+      String videoPaths, String videoPic, BaseListener<Boolean> listener);
 
   void publishNoImage(String title, String content, String modelId, BaseListener<Boolean> listener);
 
@@ -53,5 +57,4 @@ public interface InteractInteraction extends IBaseInteraction {
   void getUserInfo(String userId, BaseListener<InteractionUserInfo> listener);
 
   void getShareLink(String id, BaseListener<String> listener);
-
 }

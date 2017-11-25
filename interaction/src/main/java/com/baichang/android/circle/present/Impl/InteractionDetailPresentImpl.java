@@ -1,5 +1,6 @@
 package com.baichang.android.circle.present.Impl;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -13,6 +14,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.TextView;
@@ -26,6 +28,7 @@ import com.baichang.android.circle.entity.InteractionCommentList;
 import com.baichang.android.circle.entity.InteractionCommentReplyList;
 import com.baichang.android.circle.entity.InteractionDetailData;
 import com.baichang.android.circle.entity.InteractionUserData;
+import com.baichang.android.circle.ijkplayer.VideoActivity;
 import com.baichang.android.circle.model.Impl.InteractInteractionImpl;
 import com.baichang.android.circle.model.InteractInteraction;
 import com.baichang.android.circle.present.InteractionDetailPresent;
@@ -40,6 +43,7 @@ import com.baichang.android.circle.widget.photopreview.ImageInfo;
 import com.baichang.android.circle.widget.photopreview.ImagePreviewActivity;
 import com.baichang.android.common.BaseEventData;
 import com.baichang.android.common.IBaseInteraction.BaseListener;
+import com.baichang.android.config.ConfigurationImpl;
 import com.baichang.android.imageloader.ImageLoader;
 import com.baichang.android.utils.BCDialogUtil;
 import com.baichang.android.utils.BCToolsUtil;
@@ -83,6 +87,10 @@ public class InteractionDetailPresentImpl
   private int mCommentCount;
   private String commentId;
 
+  private FrameLayout mVideoLayout;
+  private ImageView ivVideo;
+  private ImageView ivPlayer;
+
   public InteractionDetailPresentImpl(int id, InteractionDetailView view) {
     this.trendsId = id;
     mView = view;
@@ -112,7 +120,11 @@ public class InteractionDetailPresentImpl
     tvContent = (TextView) header.findViewById(R.id.interaction_detail_tv_content);
     tvCount = (TextView) header.findViewById(R.id.interaction_detail_tv_count);
     ivAvatar = (CircleImageView) header.findViewById(R.id.interaction_detail_iv_avatar);
+    ivVideo = (ImageView) header.findViewById(R.id.interaction_content_photo_iv_video);
+    ivPlayer = (ImageView) header.findViewById(R.id.interaction_content_photo_btn_play);
+    mVideoLayout = (FrameLayout) header.findViewById(R.id.interaction_content_photo_video);
 
+    ivPlayer.setOnClickListener(this);
     tvComment.setOnClickListener(this);
     header.findViewById(R.id.interaction_detail_tv_report).setOnClickListener(this);
     initConfig();
@@ -288,6 +300,12 @@ public class InteractionDetailPresentImpl
       mView.setReportHint(" 评论 ");
       mView.showInputKeyBord();
       currentType = THEM_TYPE;
+    } else if (id == ivPlayer.getId()) {
+      String path = (String) ivPlayer.getTag();
+      if (!TextUtils.isEmpty(path)) {
+        VideoActivity.intentTo(mView.getContext(),
+            ConfigurationImpl.get().getApiLoadImage() + path);
+      }
     }
   }
 
@@ -335,11 +353,22 @@ public class InteractionDetailPresentImpl
   private BaseListener<InteractionDetailData> detailListener =
       new BaseListener<InteractionDetailData>() {
 
-        @Override public void success(InteractionDetailData detail) {
+        @SuppressLint("SetTextI18n") @Override public void success(InteractionDetailData detail) {
           mView.hideProgressBar();
           if (detail.images != null && !detail.images.isEmpty()) {
             mPhotos.setAdapter(mPhotoAdapter);
             mPhotoAdapter.setData(detail.images);
+            mPhotos.setVisibility(View.VISIBLE);
+            mVideoLayout.setVisibility(View.GONE);
+          } else if (!TextUtils.isEmpty(detail.videoPic)) {
+            mPhotos.setVisibility(View.GONE);
+            ivPlayer.setTag(detail.video);
+            ImageLoader.loadImageError(mView.getContext(), detail.videoPic,
+                R.mipmap.interaction_place_image, ivVideo);
+            mVideoLayout.setVisibility(View.VISIBLE);
+          } else {
+            mPhotos.setVisibility(View.GONE);
+            mVideoLayout.setVisibility(View.GONE);
           }
           tvName.setText(detail.name);
           tvTime.setText(detail.time);
@@ -449,7 +478,8 @@ public class InteractionDetailPresentImpl
     }
   }
 
-  @Subscribe(threadMode = ThreadMode.MAIN) public void event(BaseEventData data) {
+  @SuppressLint("SetTextI18n") @Subscribe(threadMode = ThreadMode.MAIN)
+  public void event(BaseEventData data) {
     if (data.key == Event.INTERACTION_COMMENT_COUNT_ADD) {
       mCommentCount++;
       tvCount.setText("评论（" + mCommentCount + "）");
