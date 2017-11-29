@@ -80,7 +80,6 @@ public class ResponseConverterFactory extends Converter.Factory {
         if (TextUtils.isEmpty(strResponse)) {
           throw new HttpException(SERVICE_ERROR);
         }
-        //TODO 以后重构点，不用JSONObject解析，换成Gson。
         HttpResponse httpResponse = mGson.fromJson(strResponse, HttpResponse.class);
         int state = httpResponse.getState();
         // 服务器状态
