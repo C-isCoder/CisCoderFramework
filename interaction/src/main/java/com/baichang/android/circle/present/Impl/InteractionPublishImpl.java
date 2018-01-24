@@ -131,8 +131,13 @@ public class InteractionPublishImpl
           mAdapter9.setCurrentModel(InteractionPublishAdapter9.PHOTO_MODEL);
           BCPhotoUtil.choose(mView.getActivity(), result);
         } else if (result == 2) {
-          mAdapter9.setCurrentModel(InteractionPublishAdapter9.VIDEO_MODEL);
-          mView.takeVideo();
+          if (mAdapter9.getCurrentModel() == InteractionPublishAdapter9.PHOTO_MODEL
+              && mAdapter9.getItemCount() > 1) {
+            mView.showMsg("只能选择一种素材格式");
+          } else {
+            mAdapter9.setCurrentModel(InteractionPublishAdapter9.VIDEO_MODEL);
+            mView.takeVideo();
+          }
         }
       }
     });

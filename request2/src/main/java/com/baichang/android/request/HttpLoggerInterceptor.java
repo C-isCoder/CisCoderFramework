@@ -31,12 +31,10 @@ public class HttpLoggerInterceptor implements Interceptor {
     /**
      * 正常请求
      */
-    NORMAL,
-    /**
+    NORMAL, /**
      * 下载
      */
-    DOWNLOAD,
-    /**
+    DOWNLOAD, /**
      * 上传
      */
     UPLOAD,
@@ -52,8 +50,7 @@ public class HttpLoggerInterceptor implements Interceptor {
     this.mLevel = level;
   }
 
-  @Override
-  public Response intercept(Chain chain) throws IOException {
+  @Override public Response intercept(Chain chain) throws IOException {
 
     Request request = chain.request();
     Request newRequest = null;
@@ -69,21 +66,50 @@ public class HttpLoggerInterceptor implements Interceptor {
       String token = ConfigurationImpl.get().getToken();
       String md5 = ParameterUtils.MD5(parameter);
       newUrl.addQueryParameter("sign", md5).addQueryParameter("token", token);
-      Logger.i("RequestParams:\n" +
-          "param->[T_T] ：" + parameter + "\n" +
-          "url->[=_=]   ：" + url + "\n" +
-          "sign->[o_o]  ：" + md5 + "\n" +
-          "token->[$_$] ：" + token + "\n" +
-          "method->[^_^]：" + request.method());
-      Request.Builder requestBuilder = request.newBuilder()
-          .method(request.method(), request.body()).url(newUrl.build());
+      Logger.i("RequestParams:\n"
+          + "param->[T_T] ："
+          + parameter
+          + "\n"
+          + "url->[=_=]   ："
+          + url
+          + "\n"
+          + "sign->[o_o]  ："
+          + md5
+          + "\n"
+          + "token->[$_$] ："
+          + token
+          + "\n"
+          + "method->[^_^]："
+          + request.method());
+      Request.Builder requestBuilder =
+          request.newBuilder().method(request.method(), request.body()).url(newUrl.build());
+      newRequest = requestBuilder.build();
+    } else if (mLevel == Level.UPLOAD) {
+      HttpUrl url = request.url();
+      HttpUrl.Builder newUrl = url.newBuilder();
+      Buffer buffer = new Buffer();
+      requestBody.writeTo(buffer);
+      String parameter = buffer.readString(UTF8);
+      buffer.flush();
+      buffer.close();
+      Logger.i("RequestParams:\n"
+          + "param->[T_T] ："
+          + parameter
+          + "\n"
+          + "url->[=_=]   ："
+          + url
+          + "\n"
+          + "method->[^_^]："
+          + request.method());
+      Request.Builder requestBuilder =
+          request.newBuilder().method(request.method(), request.body()).url(newUrl.build());
       newRequest = requestBuilder.build();
     }
 
     long startNs = System.nanoTime();
     Response response;
     try {
-      if (mLevel == Level.NORMAL) {
+      if (mLevel == Level.NORMAL || mLevel == Level.UPLOAD) {
         response = chain.proceed(newRequest);
       } else {
         response = chain.proceed(request);

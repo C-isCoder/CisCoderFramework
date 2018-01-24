@@ -1,8 +1,19 @@
 # Android框架文档说明
 
-## 更新说明：
 
- ### 2017-1125
+## 更新说明：
+ ### 2018-01-24
+ 
+ * 升级 compileSdkVersion 版本至 26
+ * 升级 buildToolsVersion 版本至 "26.0.0"
+ * 升级 v7 版本至 "26.1.0"
+ * 升级 v4 版本至 "26.1.0"
+ * 升级 recyclerview 版本至 "26.1.0"
+ * 升级 design 版本至 "26.1.0"
+ 
+  
+## 更新说明：
+ ### 2017-11-25
 
  * 互动新增发送小视频功能。
 
@@ -16,11 +27,13 @@
 
  * ndk 设置如下:
 
- * ```ndk {
-                //选择要添加的对应cpu类型的.so库。
-                abiFilters 'armeabi', 'x86','armeabi-v7a'
-                // 还可以添加 'x86', 'x86_64', 'mips', 'mips64'
-            }```
+ * ```
+    ndk {
+           //选择要添加的对应cpu类型的.so库。
+           abiFilters 'armeabi', 'x86','armeabi-v7a'
+           // 还可以添加 'x86', 'x86_64', 'mips', 'mips64'
+        }
+   ```
 
 ## 更新说明：
  ### 2017-07-06
@@ -86,17 +99,17 @@ allprojects {
 }
 ```
 
-* 网络请求1 `compile 'com.baichang.android.library:request:1.0.1'`
-* 网络请求2  `compile 'com.baichang.android.library:request2:2.0.0'`
-* 图片加载 `compile 'com.baichang.android.library:imageLoader:1.0.1'`
-* 基础组件 `compile 'com.baichang.android.library:common:1.0.1'`
-* 控件集合 `compile 'com.baichang.android.library:widget:1.0.1'`
-* 工具集合 `compile 'com.baichang.android.library:utils:1.0.1'`
-* 二维码   `compile 'com.baichang.android.library:qrcode:1.0.1'`
-* 动态权限  `compile 'com.baichang.android.library:permission:1.0.0'`
-* 基础配置  `compile 'com.baichang.android.library:config:1.0.0'`
-* 佰昌互动  `compile 'com.baichang.android.module:interaction:0.0.1'`
-* 友盟分享  `compile 'com.baichang.android.library:umShare:2.0.0'`
+* 网络请求1 `compile 'com.baichang.android.library:request:1.0.2'`
+* 网络请求2  `compile 'com.baichang.android.library:request2:2.0.1'`
+* 图片加载 `compile 'com.baichang.android.library:imageLoader:1.0.2'`
+* 基础组件 `compile 'com.baichang.android.library:common:1.0.2'`
+* 控件集合 `compile 'com.baichang.android.library:widget:1.0.2'`
+* 工具集合 `compile 'com.baichang.android.library:utils:1.0.2'`
+* 二维码   `compile 'com.baichang.android.library:qrcode:1.0.2'`
+* 动态权限  `compile 'com.baichang.android.library:permission:1.0.1'`
+* 基础配置  `compile 'com.baichang.android.library:config:1.0.1'`
+* 佰昌互动  `compile 'com.baichang.android.module:interaction:0.0.2'`
+* 友盟分享  `compile 'com.baichang.android.library:umShare:2.0.1'`
 
 ## 项目初始化配置
 
