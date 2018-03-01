@@ -114,4 +114,10 @@ ext {
                  description: 'Interaction Model',
                  groupId    : maven.module,
                  artifacts  : 'interaction.aar',]
+  printer = [version    : '0.0.1',
+                 artifactId : 'printerKit',
+                 packaging  : 'aar',
+                 description: 'GP Printer Kit',
+                 groupId    : maven.library,
+                 artifacts  : 'printer.aar',]
 }

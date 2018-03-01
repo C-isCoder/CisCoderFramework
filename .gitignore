@@ -9,3 +9,5 @@
 .idea
 gradle.properties
 umShare/build/
+.gitignore
+src/main/res/
