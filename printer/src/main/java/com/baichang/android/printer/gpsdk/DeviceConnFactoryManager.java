@@ -311,7 +311,7 @@ public class DeviceConnFactoryManager {
         private Context context;
         private String serialPortPath;
         private int baudrate;
-        private int id = 0; //默认蓝牙即可
+        private int id = 0; //多设备用到。默认0
 
         public Build(Context context) {
             this.context = context;
