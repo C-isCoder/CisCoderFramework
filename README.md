@@ -15,7 +15,20 @@ style: candy
           android:name="android.support.v4.content.FileProvider"
           android:authorities="${applicationId}.fileprovider"
           android:exported="false"
-          android:grantUriPermissions="true"/>
+          android:grantUriPermissions="true">
+          <meta-data
+               android:name="android.support.FILE_PROVIDER_PATHS"
+               android:resource="@xml/file_paths" />
+       </provider>
+  ```
+  * 资源文件添加 res/xml/file_paths.xml
+  ```xml
+    <?xml version="1.0" encoding="utf-8"?>
+    <resources>
+        <paths>
+            <external-path path="" name="update"/>
+        </paths>
+    </resources>
   ```
   * 区分 bug 版本 checkUpdateInfo() 方法改名 update()
   ```java
