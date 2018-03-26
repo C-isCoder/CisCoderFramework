@@ -13,7 +13,7 @@ style: candy
    <!--app更新自动安装-->
       <provider
           android:name="android.support.v4.content.FileProvider"
-          android:authorities="${applicationId}.fileprovider"
+          android:authorities="${applicationId}.provider"
           android:exported="false"
           android:grantUriPermissions="true">
           <meta-data
