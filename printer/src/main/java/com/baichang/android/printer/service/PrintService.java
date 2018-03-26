@@ -112,9 +112,11 @@ public class PrintService extends Service {
                 mWIFIAddress = getIP();
             }
 
-            mPrintData = (Vector<Byte>) intent.getSerializableExtra(PRINT_DATA);
             if (intent.hasExtra(PRINT_MODEL)) {
                 model = (MODEL) intent.getSerializableExtra(PRINT_MODEL);
+            }
+            if (model != MODEL.TEST && intent.hasExtra(PRINT_DATA)) {
+                mPrintData = (Vector<Byte>) intent.getSerializableExtra(PRINT_DATA);
             }
         }
         if (type == TYPE.BLUE) {
