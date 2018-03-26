@@ -48,7 +48,7 @@ ext {
            repository: 'http://svn.weiidu.com:8081/nexus/content/repositories/android/',
            library   : 'com.baichang.android.library',
            module    : 'com.baichang.android.module',]
-  common = [version    : '1.0.2',
+  common = [version    : '1.0.3',
             artifactId : 'common',
             packaging  : 'aar',
             description: 'common library',

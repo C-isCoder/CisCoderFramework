@@ -1,7 +1,45 @@
+---
+style: candy
+---
 # Android框架文档说明
 
 ## 更新说明：
-
+  ### 2018-03-26
+  
+  * 修复 App 更新 bug（7.0+ 报解析包错误）
+  * 需要更新 基础库（common）到 1.0.3 版本`compile 'com.baichang.android.library:common:1.0.3'`
+  * AndroidManifest.xml <Application> 标签 添加 FileProvider。
+  ```xml
+   <!--app更新自动安装-->
+      <provider
+          android:name="android.support.v4.content.FileProvider"
+          android:authorities="${applicationId}.fileprovider"
+          android:exported="false"
+          android:grantUriPermissions="true"/>
+  ```
+  * 区分 bug 版本 checkUpdateInfo() 方法改名 update()
+  ```java
+   private void checkAppVersion() {
+           Map<String, String> map = new HashMap<>();
+           map.put("platform", "1");
+           map.put("version", BCToolsUtil.getVersionCode(this));
+           APIWrapper.getInstance()
+                   .checkAppVersion(map)
+                   .compose(HttpSubscriber.<CheckVersionData>applySchedulers(this))
+                   .subscribe(new HttpSubscriber<>(new HttpSuccessListener<CheckVersionData>() {
+                       @Override public void success(CheckVersionData checkVersionData) {
+                           new BCAppUpdateManager(getAty(), checkVersionData.url,
+                                   checkVersionData.updateInfo,
+                                   checkVersionData.isForce.equals("1")).update();
+                       }
+                   }, new HttpErrorListener() {
+                       @Override public void error(Throwable throwable) {
+   
+                       }
+                   }));
+       }
+  ```
+  
   ### 2018-03-12
   
    * 打印机新增 wifi 打印模式   
@@ -241,7 +279,7 @@
   * 网络请求1 `compile 'com.baichang.android.library:request:1.0.2'`
   * 网络请求2  `compile 'com.baichang.android.library:request2:2.0.1'`
   * 图片加载 `compile 'com.baichang.android.library:imageLoader:1.0.2'`
-  * 基础组件 `compile 'com.baichang.android.library:common:1.0.2'`
+  * 基础组件 `compile 'com.baichang.android.library:common:1.0.3'`
   * 控件集合 `compile 'com.baichang.android.library:widget:1.0.2'`
   * 工具集合 `compile 'com.baichang.android.library:utils:1.0.2'`
   * 二维码   `compile 'com.baichang.android.library:qrcode:1.0.2'`

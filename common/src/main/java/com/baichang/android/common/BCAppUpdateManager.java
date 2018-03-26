@@ -1,11 +1,7 @@
 package com.baichang.android.common;
 
-import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.DownloadManager;
-import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -15,10 +11,10 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
-import android.view.View;
-import android.widget.TextView;
+import android.support.v4.content.FileProvider;
+import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.widget.Toast;
-import com.baichang.android.config.ConfigurationImpl;
 import java.io.File;
 
 /**
@@ -27,22 +23,15 @@ import java.io.File;
  */
 
 public class BCAppUpdateManager {
-
+    private static final String TAG = BCAppUpdateManager.class.getSimpleName();
+    private String mFilePath;
     private Context mContext;
-
     //是否强制升级
     private boolean mCoerce;
-
     //提示语
     private String updateMsg = "检查到更新版本，是否更新？";
-
     //返回的安装包url
     private String apkUrl = "";
-
-    private AlertDialog noticeDialog;
-
-    private static String message = "";
-
     private DownloadManager mDownloadManager;
     private long downloadID;
     private boolean isDownloadSuccess = false;
@@ -52,8 +41,8 @@ public class BCAppUpdateManager {
         this.mContext = context;
         this.apkUrl = apkUrl;
         this.updateMsg = updateMsg;
-        message = updateMsg;
         this.mCoerce = false;
+        mFilePath = context.getExternalFilesDir("update").getAbsolutePath();
         registerReceiver();
     }
 
@@ -61,8 +50,8 @@ public class BCAppUpdateManager {
         this.mContext = context;
         this.apkUrl = apkUrl;
         this.updateMsg = updateMsg;
-        message = updateMsg;
         this.mCoerce = coerce;
+        mFilePath = context.getExternalFilesDir("update").getAbsolutePath();
         registerReceiver();
     }
 
@@ -81,84 +70,49 @@ public class BCAppUpdateManager {
     }
 
     //外部接口让主Activity调用
-    public void checkUpdateInfo(int colorRes) {
-        showNoticeDialog(colorRes);
-    }
-
-    //外部接口让主Activity调用
-    public void checkUpdateInfo() {
-        showNoticeDialog(ConfigurationImpl.get().getAppBarColor());
-    }
-
-    @SuppressLint("NewApi")
-    private void showNoticeDialog(int colorRes) {
-        AlertDialog.Builder builder = null;
-        if (Build.VERSION.SDK_INT >= 11) {
-            builder = new AlertDialog.Builder(mContext, AlertDialog.THEME_DEVICE_DEFAULT_LIGHT);
-        } else {
-            builder = new AlertDialog.Builder(mContext);
-        }
-
+    public void update() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
         builder.setTitle("提示");
         builder.setMessage(updateMsg);
         builder.setPositiveButton("是", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
+            @Override public void onClick(DialogInterface dialog, int which) {
+                //强制升级
+                if (mCoerce) {
+                    System.exit(0);
+                } else {
+                    dialog.dismiss();
+                }
                 downloadApk();
             }
         });
         builder.setNegativeButton("否", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
+            @Override public void onClick(DialogInterface dialog, int which) {
                 //强制升级
                 if (mCoerce) {
-                    BCAppManager.getAppManager().AppExit(mContext);
+                    System.exit(0);
                 } else {
                     dialog.dismiss();
                 }
             }
         });
-        noticeDialog = builder.create();
+        AlertDialog noticeDialog = builder.create();
         noticeDialog.show();
-        setDialogTitleColor(noticeDialog, colorRes);
-    }
-    /**
-     * 设置Dialog的颜色
-     *
-     * @param dialog Dialog
-     * @param color  颜色
-     */
-    private static void setDialogTitleColor(Dialog dialog, int color) {
-        try {
-            Context context = dialog.getContext();
-            int diverId = context.getResources().getIdentifier("android:id/titleDivider", null, null);
-            View divider = dialog.findViewById(diverId);
-            divider.setBackgroundColor(context.getResources().getColor(color));
-
-            int alertTitleId = context.getResources().getIdentifier("alertTitle", "id", "android");
-            TextView alertTitle = (TextView) dialog.findViewById(alertTitleId);
-            alertTitle.setTextColor(context.getResources().getColor(color));
-        } catch (Exception ignored) {
-
-        }
-    }
-
-    public void setMsg(String msg) {
-        message = msg;
     }
 
     /**
      * 下载apk
      */
 
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    private void downloadApk() {
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB) private void downloadApk() {
         mDownloadManager = (DownloadManager) mContext.getSystemService(Context.DOWNLOAD_SERVICE);
         DownloadManager.Request request = new DownloadManager.Request(Uri.parse(apkUrl));
-        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+        request.setNotificationVisibility(
+                DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
         request.setMimeType("application/vnd.android.package-archive");
-        File file = new File(mContext.getExternalCacheDir(), "update.apk");
+        File file = new File(mFilePath, "update.apk");
+        if (file.exists()) {
+            boolean b = file.delete();
+        }
         Uri uri = Uri.fromFile(file);
         request.setDestinationUri(uri);
         PackageManager manager = mContext.getPackageManager();
@@ -175,15 +129,28 @@ public class BCAppUpdateManager {
      * 安装apk
      */
     private void installApk() {
-        Uri uri = mDownloadManager.getUriForDownloadedFile(downloadID);
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setDataAndType(uri, "application/vnd.android.package-archive");
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         try {
-            mContext.startActivity(intent);
-        } catch (ActivityNotFoundException ex) {
+            if (Build.VERSION.SDK_INT >= 24) {//判读版本是否在7.0以上
+                Uri apkUri = FileProvider.getUriForFile(mContext,
+                        mContext.getPackageName() + ".fileprovider",
+                        new File(mFilePath, "update.apk"));
+                Intent install = new Intent(Intent.ACTION_VIEW);
+                install.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                install.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);//添加这一句表示对目标应用临时授权该Uri所代表的文件
+                install.setDataAndType(apkUri, "application/vnd.android.package-archive");
+                mContext.startActivity(install);
+            } else {
+                Intent install = new Intent(Intent.ACTION_VIEW);
+                Uri uri = mDownloadManager.getUriForDownloadedFile(downloadID);
+                install.setDataAndType(uri, "application/vnd.android.package-archive");
+                install.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                mContext.startActivity(install);
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "update error: " + e.toString());
+        } finally {
+            unregisterReceiver();
         }
-        unregisterReceiver();
     }
 
     /**
@@ -191,14 +158,14 @@ public class BCAppUpdateManager {
      */
     public class BCDownloadReceiver extends BroadcastReceiver {
 
-        @Override
-        public void onReceive(Context context, Intent intent) {
+        @Override public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             if (action.equals(DownloadManager.ACTION_DOWNLOAD_COMPLETE)) {
                 isDownloadSuccess = true;
-                Toast.makeText(mContext, "下载完成", Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, "下载完成，若没有自动安装，请点击通知栏，进行安装", Toast.LENGTH_LONG).show();
                 installApk();
-            } else if (isDownloadSuccess && action.equals(DownloadManager.ACTION_NOTIFICATION_CLICKED)) {
+            } else if (isDownloadSuccess && action.equals(
+                    DownloadManager.ACTION_NOTIFICATION_CLICKED)) {
                 installApk();
             }
         }
