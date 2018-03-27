@@ -4,6 +4,29 @@ style: candy
 # Android框架文档说明
 
 ## 更新说明：
+  
+  ### 2018-03-27 
+  
+* 修复打印机 bug，升级版本到 `compile 'com.baichang.android.library:printerKit:0.0.2'`
+* 使用方法
+```java 
+public void print(View view) {
+    HomeAllData data = new Gson().fromJson(json, HomeAllData.class);
+  // 构建 Intent 数据
+  Intent intent = new Intent(this, PrintService.class);
+  // 打印模式 PrintService.MODEL.NORMAL 正常打印模式（默认） PrintService.MODEL.TEST 测试打印机
+  intent.putExtra(PrintService.PRINT_MODEL, PrintService.MODEL.NORMAL);
+  // 连接模式 (PrintService.TYPE.WIFI wifi PrintService.TYPE.BLUE 蓝牙  默认是蓝牙)
+  intent.putExtra(PrintService.CONNECT_TYPE, PrintService.TYPE.WIFI);
+  // 蓝牙地址 蓝牙模式必须传(设置打印机的时候 存储到本地，如果没有 提示去设置打印机)
+ // Wifi 模式不需要传入地址，用户若没有连接到 wifi 会有提示，在调用 wifi 模式之前检查手机是否经连 wifi  
+  intent.putExtra(PrintService.BLUETOOTH_ADDRESS, "DC:0D:30:27:0A:64");
+  // Test 模式可以不传要打印的数据 * 正常模式必传。 （打印数据格式 为Vector<Byte>） 数据格式参考 官方DEMO
+  intent.putExtra(PrintService.PRINT_DATA, new PrintData(TestPrintText.sendReceipt(data)));
+  // 启动服务 自动打印。
+  startService(intent); }
+```
+  
   ### 2018-03-26
   
   * 修复 App 更新 bug（7.0+ 报解析包错误）
@@ -300,7 +323,7 @@ style: candy
   * 基础配置  `compile 'com.baichang.android.library:config:1.0.1'`
   * 佰昌互动  `compile 'com.baichang.android.module:interaction:0.0.2'`
   * 友盟分享  `compile 'com.baichang.android.library:umShare:2.0.1'`
-  * 打印机  `compile 'com.baichang.android.library:printerKit:0.0.1'`
+  * 打印机  `compile 'com.baichang.android.library:printerKit:0.0.2'`
 
   ## 项目初始化配置
 

@@ -10,11 +10,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.wifi.WifiManager;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
+import android.support.v4.content.res.TypedArrayUtils;
 import android.text.TextUtils;
+import android.util.Base64;
 import android.util.Log;
 import android.widget.Toast;
 import com.baichang.android.printer.gpsdk.DeviceConnFactoryManager;
@@ -69,7 +74,7 @@ public class PrintService extends Service {
      */
     public static final int CONN_STATE_DISCONN = 0x007;
     // 打印内容
-    private Vector<Byte> mPrintData;
+    private PrintData mPrintData;
     // 打印模式 默认正常
     private MODEL model = MODEL.NORMAL;
     // 打印机连接 模式(默认蓝牙)
@@ -116,13 +121,15 @@ public class PrintService extends Service {
                 model = (MODEL) intent.getSerializableExtra(PRINT_MODEL);
             }
             if (model != MODEL.TEST && intent.hasExtra(PRINT_DATA)) {
-                mPrintData = (Vector<Byte>) intent.getSerializableExtra(PRINT_DATA);
+                mPrintData = intent.getParcelableExtra(PRINT_DATA);
             }
         }
         if (type == TYPE.BLUE) {
             mBluetoothUtil.setListener(new BluetoothUtil.BluetoothUtlListener() {
                 @Override public void opened() {
-                    if (model != MODEL.TEST && (mPrintData == null || mPrintData.isEmpty())) {
+                    if (model != MODEL.TEST && (mPrintData == null
+                            || mPrintData.getDatas() == null
+                            || mPrintData.getDatas().isEmpty())) {
                         // 打印数据为空
                     } else {
                         // 构建打印蓝牙参数
@@ -150,7 +157,9 @@ public class PrintService extends Service {
         } else {
             if (TextUtils.isEmpty(mWIFIAddress)) {
                 Toast.makeText(getContext(), "获取WIfi地址失败，请连接Wifi重试", Toast.LENGTH_LONG).show();
-            } else if (model != MODEL.TEST && (mPrintData == null || mPrintData.isEmpty())) {
+            } else if (model != MODEL.TEST && (mPrintData == null
+                    || mPrintData.getDatas() == null
+                    || mPrintData.getDatas().isEmpty())) {
                 // 打印数据为空
             } else {
                 // 构建打印蓝牙参数
@@ -209,6 +218,8 @@ public class PrintService extends Service {
                     switch (state) {
                         case DeviceConnFactoryManager.CONN_STATE_DISCONNECT:
                             Log.i(TAG, "连接状态：未连接");
+                            Toast.makeText(getContext(), "打印机未连接，请检查打印机是否开启", Toast.LENGTH_LONG)
+                                    .show();
                             break;
                         case DeviceConnFactoryManager.CONN_STATE_CONNECTING:
                             Log.i(TAG, "连接中...");
@@ -220,6 +231,7 @@ public class PrintService extends Service {
                             break;
                         case CONN_STATE_FAILED:
                             Log.e(TAG, "连接失败！");
+                            Toast.makeText(getContext(), "打印机连接失败", Toast.LENGTH_LONG).show();
                             break;
                         default:
                             break;
@@ -250,7 +262,7 @@ public class PrintService extends Service {
                                 : WIFI_PORT].sendDataImmediately(getTestData());
                     } else {
                         mDeviceManagers[type == TYPE.BLUE ? BLUETOOTH_PORT
-                                : WIFI_PORT].sendDataImmediately(mPrintData);
+                                : WIFI_PORT].sendDataImmediately(mPrintData.getDatas());
                     }
                 } else {
                     mHandler.obtainMessage(PRINTER_COMMAND_ERROR).sendToTarget();
