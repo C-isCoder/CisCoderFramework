@@ -2,11 +2,17 @@
 
 ## 更新说明：
 
-#### 2018-04-02
+### 2018-04-02
 
 * 修复互动拍摄小视频不能使用非压缩模式。 （0.0.4 版本默认不压缩了）
 
 * 升级版本`compile 'com.baichang.android.module:interaction:0.0.4'`
+
+### 2018-03-30
+
+* 修复 app 升级版本 bug。
+
+* 升级版本： `compile 'com.baichang.android.library:common:1.0.4'`
 
 ### 2018-03-27 
   
@@ -357,7 +363,7 @@ BCUmUtil.setShareMedia(SHARE_MEDIA[] displayList //要分享的 )
 
 * 图片加载 `compile 'com.baichang.android.library:imageLoader:1.0.2'`
 
-* 基础组件 `compile 'com.baichang.android.library:common:1.0.3'`
+* 基础组件 `compile 'com.baichang.android.library:common:1.0.4'`
 
 * 控件集合 `compile 'com.baichang.android.library:widget:1.0.2'`
 
