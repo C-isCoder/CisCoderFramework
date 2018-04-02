@@ -9,7 +9,6 @@ import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import com.baichang.android.circle.R;
@@ -169,8 +168,6 @@ public class TimeRoundProgressBar extends View {
         }
 
         float percent = (float) progress / (float) max;
-        Log.e("xxxxx", progress + "");
-        Log.e("xxxxx", (int) (360 * percent) + "");
 
         switch (style) {
             case STROKE:

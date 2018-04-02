@@ -1,7 +1,13 @@
 # Android框架文档说明
 
 ## 更新说明：
-  
+
+#### 2018-04-02
+
+* 修复互动拍摄小视频不能使用非压缩模式。 （0.0.4 版本默认不压缩了）
+
+* 升级版本`compile 'com.baichang.android.module:interaction:0.0.4'`
+
 ### 2018-03-27 
   
 * 修复打印机 bug，升级版本到 
@@ -363,7 +369,9 @@ BCUmUtil.setShareMedia(SHARE_MEDIA[] displayList //要分享的 )
 
 * 基础配置  `compile 'com.baichang.android.library:config:1.0.1'`
 
-* 佰昌互动  `compile 'com.baichang.android.module:interaction:0.0.2'`
+* 佰昌互动  `compile 'com.baichang.android.module:interaction:0.0.4'`**可发小视频**
+
+* 佰昌互动  `compile 'com.baichang.android.module:interaction:0.0.1'`**无小视频**
 
 * 友盟分享  `compile 'com.baichang.android.library:umShare:2.0.1'`
 

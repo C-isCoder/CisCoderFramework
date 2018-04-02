@@ -108,7 +108,7 @@ ext {
             description: 'widget library',
             groupId    : maven.library,
             artifacts  : 'widget.aar',]
-  interaction = [version    : '0.0.3',
+  interaction = [version    : '0.0.4',
                  artifactId : 'interaction',
                  packaging  : 'aar',
                  description: 'Interaction Model',

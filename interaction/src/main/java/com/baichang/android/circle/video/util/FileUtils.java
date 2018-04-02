@@ -94,7 +94,8 @@ public class FileUtils {
      * @param deleteOldFile 是否删除旧文件
      * @throws Exception 文件读写出错，不会删除源文件
      */
-    public static void copyFile(String oldPath, String newPath, boolean deleteOldFile) throws Exception {
+    public static void copyFile(String oldPath, String newPath, boolean deleteOldFile) throws
+            Exception {
         int olderIndex = oldPath.lastIndexOf("/");
         File olderPath = new File(oldPath.substring(0, olderIndex));
         if (!olderPath.exists()) {
@@ -118,7 +119,8 @@ public class FileUtils {
      * @param deleteOldFile 是否删除旧文件
      * @throws IOException 文件读写出错，不会删除源文件
      */
-    public static synchronized void copyFile(File oldFile, File newFile, boolean deleteOldFile) throws IOException {
+    public static synchronized void copyFile(File oldFile, File newFile, boolean deleteOldFile) throws
+            IOException {
         int byteSum = 0;
         int byteRead;
         if (oldFile.exists()) { //文件存在时
