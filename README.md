@@ -2,6 +2,26 @@
 
 ## 更新说明：
 
+### 2018-04-09
+
+* 升级 logger 框架到最新版本。
+
+* 使用方式：删除本地 gradle 缓存的 request 包，重新导入，在 Application 中初始化。
+
+```java
+private void initLogger() {
+    FormatStrategy formatStrategy = PrettyFormatStrategy.newBuilder()
+            .showThreadInfo(false)
+            .methodCount(0)
+            .methodOffset(7)
+            .tag("REQUEST") // 自定义标签
+  .build();
+  Logger.addLogAdapter(new AndroidLogAdapter(formatStrategy) {
+        @Override public boolean isLoggable(int priority, @Nullable String tag) {
+            return BuildConfig.DEBUG;
+  }
+    }); }
+```
 ### 2018-04-02
 
 * 修复互动拍摄小视频不能使用非压缩模式。 （0.0.4 版本默认不压缩了）

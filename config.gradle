@@ -24,7 +24,7 @@ ext {
             urlconnection        : 'com.squareup.okhttp3:okhttp-urlconnection:3.2.0',
             rxjavaadapter        : 'com.squareup.retrofit2:adapter-rxjava:2.1.0',
             gsonconverter        : 'com.squareup.retrofit2:converter-gson:2.1.0',
-            logger               : 'com.orhanobut:logger:1.15',
+            logger               : 'com.orhanobut:logger:2.2.0',
             gson                 : 'com.google.code.gson:gson:2.7',
             banner               : 'com.youth.banner:banner:1.4.5',
             eventbus             : 'org.greenrobot:eventbus:3.0.0',
