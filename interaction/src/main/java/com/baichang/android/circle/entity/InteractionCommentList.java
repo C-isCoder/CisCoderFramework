@@ -11,35 +11,25 @@ import java.util.List;
 
 public class InteractionCommentList {
 
-  @Expose
-  public String userId;
-  @Expose
-  @SerializedName("commentIcon")
-  public String avatar;
-  @Expose
-  @SerializedName("commentName")
-  public String name;
-  @Expose
-  @SerializedName("commentTime")
-  public String time;
-  @Expose
-  @SerializedName("commentContent")
-  public String content;
-  @Expose
-  @SerializedName("commentList")
-  public List<InteractionCommentReplyList> comments = new ArrayList<>();
+    @Expose public String userId;
+    @Expose @SerializedName("commentIcon") public String avatar;
+    @Expose @SerializedName("commentName") public String name;
+    @Expose
+    //@SerializedName("commentTime")
+    @SerializedName("created") public String time;
+    @Expose @SerializedName("commentContent") public String content;
+    @Expose @SerializedName("commentList") public List<InteractionCommentReplyList> comments =
+            new ArrayList<>();
 
-  public boolean isNullComment() {
-    return comments == null || comments.isEmpty();
-  }
+    public boolean isNullComment() {
+        return comments == null || comments.isEmpty();
+    }
 
-  public boolean isShowMore() {
-    return comments != null && comments.size() > 2;
-  }
+    public boolean isShowMore() {
+        return comments != null && comments.size() > 2;
+    }
 
-  @Expose
-  public int trendsId;
+    @Expose public int trendsId;
 
-  @Expose
-  public String id;
+    @Expose public String id;
 }
