@@ -115,9 +115,15 @@ ext {
                  groupId    : maven.module,
                  artifacts  : 'interaction.aar',]
   printer = [version    : '0.0.2',
-                 artifactId : 'printerKit',
-                 packaging  : 'aar',
-                 description: 'GP Printer Kit',
-                 groupId    : maven.library,
-                 artifacts  : 'printer.aar',]
+             artifactId : 'printerKit',
+             packaging  : 'aar',
+             description: 'GP Printer Kit',
+             groupId    : maven.library,
+             artifacts  : 'printer.aar',]
+  interaction_no_video = [version    : '0.0.1',
+                          artifactId : 'interaction',
+                          packaging  : 'aar',
+                          description: 'Interaction Model no small video',
+                          groupId    : maven.module,
+                          artifacts  : 'interaction_no_video.aar',]
 }

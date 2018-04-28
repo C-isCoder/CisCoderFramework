@@ -1,0 +1,4 @@
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+   <item android:drawable="@mipmap/interaction_icon_comment_pressed" android:state_pressed="true" />
+   <item android:drawable="@mipmap/interaction_icon_comment_default" android:state_pressed="false" />
+</selector>

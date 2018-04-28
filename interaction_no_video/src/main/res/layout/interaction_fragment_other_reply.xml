@@ -1,0 +1,61 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+   xmlns:app="http://schemas.android.com/apk/res-auto"
+   xmlns:tools="http://schemas.android.com/tools"
+   android:layout_width="match_parent"
+   android:layout_height="match_parent"
+   tools:context="com.baichang.android.circle.InteractionReplyFragment">
+
+   <android.support.v4.widget.SwipeRefreshLayout
+      android:id="@+id/interaction_me_reply_refresh"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content">
+
+      <android.support.v7.widget.RecyclerView
+         android:id="@+id/interaction_me_reply_rv_list"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         app:layoutManager="LinearLayoutManager" />
+   </android.support.v4.widget.SwipeRefreshLayout>
+
+   <!--<LinearLayout
+      android:id="@+id/interaction_me_reply_layout"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_alignParentBottom="true"
+      android:paddingTop="10dp"
+      android:paddingBottom="10dp"
+      android:background="@drawable/interaction_detail_report_layout_bg"
+      android:gravity="center_vertical"
+      android:orientation="horizontal"
+      android:visibility="gone"
+      tools:visibility="visible">
+
+      <EditText
+         android:id="@+id/interaction_me_reply_et_report"
+         android:layout_width="0dp"
+         android:layout_height="28dp"
+         android:layout_weight="1"
+         android:layout_marginLeft="10dp"
+         android:layout_marginRight="10dp"
+         android:paddingLeft="10dp"
+         android:paddingRight="10dp"
+         android:background="@drawable/interaction_detail_report_btn_bg"
+         android:hint="@string/tips_report"
+         android:textCursorDrawable="@drawable/interaction_edit_cursor_color"
+         android:textSize="@dimen/cm_tv_size_body12" />
+
+      <TextView
+         android:id="@+id/interaction_me_reply_tv_send"
+         android:layout_width="wrap_content"
+         android:layout_height="28dp"
+         android:layout_marginLeft="10dp"
+         android:layout_marginRight="10dp"
+         android:paddingLeft="10dp"
+         android:paddingRight="10dp"
+         android:background="@drawable/interaction_detail_report_btn_bg"
+         android:gravity="center"
+         android:text="@string/btn_send"
+         android:textColor="@color/cm_tv_black2"
+         android:textSize="@dimen/cm_tv_size_body12" />
+   </LinearLayout>-->
+</RelativeLayout>

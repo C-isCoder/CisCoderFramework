@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+   <!-- 中间题目样式-->
+   <style name="interaction_top_bar_title">
+      <item name="android:layout_width">wrap_content</item>
+      <item name="android:layout_height">match_parent</item>
+      <item name="android:layout_centerHorizontal">true</item>
+      <item name="android:textColor">@color/topBar_title</item>
+      <item name="android:textSize">@dimen/cm_tv_size_body16</item>
+      <item name="android:gravity">center</item>
+   </style>
+
+   <!--标题TextView样式-->
+   <style name="interaction_top_bar_tv_right">
+      <item name="android:layout_width">wrap_content</item>
+      <item name="android:layout_height">match_parent</item>
+      <item name="android:paddingLeft">@dimen/topBar_left_padding</item>
+      <item name="android:paddingRight">@dimen/topBar_left_padding</item>
+      <item name="android:textColor">@android:color/white</item>
+      <item name="android:textSize">@dimen/cm_tv_size_body14</item>
+      <item name="android:layout_alignParentRight">true</item>
+      <item name="android:gravity">center</item>
+   </style>
+</resources>

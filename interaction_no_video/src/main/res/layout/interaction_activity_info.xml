@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+   xmlns:app="http://schemas.android.com/apk/res-auto"
+   xmlns:tools="http://schemas.android.com/tools"
+   android:layout_width="match_parent"
+   android:layout_height="match_parent"
+   android:fitsSystemWindows="true"
+   tools:context="com.baichang.android.circle.InteractionInfoActivity">
+
+   <android.support.design.widget.AppBarLayout
+      android:id="@+id/interaction_info_barLayout"
+      android:layout_width="match_parent"
+      android:layout_height="200dp"
+      android:background="@null"
+      android:fitsSystemWindows="true"
+      android:orientation="vertical">
+
+      <android.support.design.widget.CollapsingToolbarLayout
+         android:layout_width="match_parent"
+         android:layout_height="match_parent"
+         android:background="@drawable/interaction_info_blur_shade"
+         android:fitsSystemWindows="true"
+         app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+         <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/interaction_info_blur_shade"
+            android:orientation="vertical"
+            app:layout_collapseMode="pin"
+            app:layout_collapseParallaxMultiplier="0.7">
+
+            <com.baichang.android.widget.circleImageView.CircleImageView
+               android:id="@+id/interaction_info_iv_avatar"
+               android:layout_width="60dp"
+               android:layout_height="60dp"
+               android:layout_centerInParent="true"
+               app:civ_border_overlay="true" />
+
+            <TextView
+               android:id="@+id/interaction_info_tv_name"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_marginTop="5dp"
+               android:layout_below="@id/interaction_info_iv_avatar"
+               android:layout_centerHorizontal="true"
+               android:textColor="@color/cm_tv_black1"
+               android:textSize="@dimen/cm_tv_size_body2"
+               tools:text="阿拉蕾" />
+
+            <TextView
+               android:id="@+id/interaction_other_tv_business"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_marginTop="5dp"
+               android:layout_below="@id/interaction_info_tv_name"
+               android:layout_centerHorizontal="true"
+               android:background="@drawable/interaction_business_btn_bg"
+               android:text="@string/str_interaction_business"
+               android:textColor="@color/interaction_text_font"
+               android:textSize="@dimen/cm_tv_size_body12"
+               android:visibility="gone"
+               tools:visibility="visible" />
+         </RelativeLayout>
+
+      </android.support.design.widget.CollapsingToolbarLayout>
+
+   </android.support.design.widget.AppBarLayout>
+
+   <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="vertical"
+      app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+      <android.support.v4.widget.ContentLoadingProgressBar
+         android:id="@+id/interaction_info_progress"
+         style="?android:progressBarStyle"
+         android:layout_width="wrap_content"
+         android:layout_height="match_parent"
+         android:layout_gravity="center"
+         android:visibility="gone" />
+
+      <com.baichang.android.widget.magicIndicator.MagicIndicator
+         android:id="@+id/interaction_info_indicator"
+         android:layout_width="match_parent"
+         android:layout_height="32dp"
+         android:background="@color/cm_white" />
+
+      <View style="@style/cm_line_horizontal" />
+
+      <android.support.v4.view.ViewPager
+         android:id="@+id/interaction_info_viewPager"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+   </LinearLayout>
+
+</android.support.design.widget.CoordinatorLayout>
