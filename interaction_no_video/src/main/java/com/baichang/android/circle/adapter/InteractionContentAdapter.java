@@ -60,23 +60,28 @@ public class InteractionContentAdapter extends Adapter<ViewHolder> {
 
     @Override public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         return new ViewHolder(LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.interaction_item_content_layout, parent, false));
+            .inflate(R.layout.interaction_item_content_layout, parent, false));
     }
 
     @Override public void onBindViewHolder(final ViewHolder holder, final int position) {
         final InteractionListData data = mList.get(position);
         ImageLoader.loadImageError(holder.itemView.getContext(), data.avatar,
-                R.mipmap.interaction_icon_default, holder.ivAvatar);
+            R.mipmap.interaction_icon_default, holder.ivAvatar);
         holder.tvName.setText(data.name);
         holder.tvTime.setText(data.time);
         holder.tvTitle.setText(data.title);
+        if (InteractionConfig.getInstance().isPublishNoTitle()) {
+            holder.tvTitle.setVisibility(View.GONE);
+        } else {
+            holder.tvTitle.setVisibility(View.VISIBLE);
+        }
 
         if (InteractionConfig.getInstance().isNeedWeChatCircleDisplayMax6()) {
             if (data.isMax6()) {
                 holder.tvAll.setVisibility(View.VISIBLE);
                 holder.tvContent.setText(
-                        data.isShowAll ? data.content.substring(0, data.getDisplayNumber())
-                                : data.content);
+                    data.isShowAll ? data.content.substring(0, data.getDisplayNumber())
+                        : data.content);
                 holder.tvAll.setText(data.isShowAll ? "全部" : "收起");
             } else {
                 holder.tvContent.setText(data.content);
@@ -98,7 +103,7 @@ public class InteractionContentAdapter extends Adapter<ViewHolder> {
         int textColor = InteractionConfig.getInstance().getTextFontColor();
         if (textColor != -1) {
             ColorStateList stateList = ColorUtil.createdPressColorList(holder.tvButton.getContext(),
-                    R.color.cm_tv_black2, textColor);
+                R.color.cm_tv_black2, textColor);
             holder.tvButton.setTextColor(stateList);
         }
         int businessBrandRes = InteractionConfig.getInstance().getBusinessBrandRes();
@@ -107,7 +112,7 @@ public class InteractionContentAdapter extends Adapter<ViewHolder> {
         }
         if (!TextUtils.isEmpty(data.type)) {
             if (!"1".equals(data.type) && InteractionConfig.
-                    getInstance().isNeedShowBusinessBrand()) {
+                getInstance().isNeedShowBusinessBrand()) {
                 holder.ivBusinessBrand.setVisibility(View.VISIBLE);
             } else {
                 holder.ivBusinessBrand.setVisibility(View.GONE);
@@ -173,6 +178,17 @@ public class InteractionContentAdapter extends Adapter<ViewHolder> {
         }
     }
 
+    // 更新点赞状态
+    public void updatePraise(int id, boolean isSuccess) {
+        for (InteractionListData data : mList) {
+            if (data.id == id) {
+                data.isPraise = isSuccess ? 1 : 0;
+                if (isSuccess) data.praiseCount++;
+                notifyItemChanged(mList.indexOf(data));
+            }
+        }
+    }
+
     private int getIndex(InteractionListData data) {
         return mList.indexOf(data);
     }
@@ -205,7 +221,7 @@ public class InteractionContentAdapter extends Adapter<ViewHolder> {
     }
 
     class ViewHolder extends RecyclerView.ViewHolder
-            implements OnItemClickListener, OnTouchListener, OnClickListener {
+        implements OnItemClickListener, OnTouchListener, OnClickListener {
 
         private long pressTime = 0;
 
@@ -231,17 +247,17 @@ public class InteractionContentAdapter extends Adapter<ViewHolder> {
             tvComment = (TextView) itemView.findViewById(R.id.item_interaction_content_tv_comment);
             tvPraise = (TextView) itemView.findViewById(R.id.item_interaction_content_tv_praise);
             mPhotos = (PhotoContents) itemView.findViewById(
-                    R.id.item_interaction_content_photo_content);
+                R.id.item_interaction_content_photo_content);
             ivAvatar = (CircleImageView) itemView.findViewById(
-                    R.id.item_interaction_content_iv_avatar);
+                R.id.item_interaction_content_iv_avatar);
             tvButton = (TextView) itemView.findViewById(R.id.item_interaction_content_tv_button);
             ivBusinessBrand =
-                    (ImageView) itemView.findViewById(R.id.item_interaction_content_iv_brand);
+                (ImageView) itemView.findViewById(R.id.item_interaction_content_iv_brand);
             initConfig();
             itemView.setOnTouchListener(this);
             mPhotos.setOnItemClickListener(this);
             // 列表不能点赞
-            //tvPraise.setOnClickListener(this);
+            tvPraise.setOnClickListener(this);
             ivAvatar.setOnClickListener(this);
             tvButton.setOnClickListener(this);
         }
@@ -250,24 +266,24 @@ public class InteractionContentAdapter extends Adapter<ViewHolder> {
             int praiseDrawableRes = InteractionConfig.getInstance().getPraiseDrawableRes();
             if (praiseDrawableRes != -1) {
                 Drawable praiseDrawable =
-                        ContextCompat.getDrawable(tvPraise.getContext(), praiseDrawableRes);
+                    ContextCompat.getDrawable(tvPraise.getContext(), praiseDrawableRes);
                 praiseDrawable.setBounds(0, 0, praiseDrawable.getMinimumWidth(),
-                        praiseDrawable.getMinimumHeight());
+                    praiseDrawable.getMinimumHeight());
                 tvPraise.setCompoundDrawables(praiseDrawable, null, null, null);
             }
             int commentDrawableRes = InteractionConfig.getInstance().getCommentDrawableRes();
             if (commentDrawableRes != -1) {
                 Drawable commentDrawable =
-                        ContextCompat.getDrawable(tvComment.getContext(), commentDrawableRes);
+                    ContextCompat.getDrawable(tvComment.getContext(), commentDrawableRes);
                 commentDrawable.setBounds(0, 0, commentDrawable.getMinimumWidth(),
-                        commentDrawable.getMinimumHeight());
+                    commentDrawable.getMinimumHeight());
                 tvComment.setCompoundDrawables(commentDrawable, null, null, null);
             }
             int deleteDrawableRes = InteractionConfig.getInstance().getButtonDrawableRes();
             if (deleteDrawableRes != -1) {
                 ColorStateList stateList = new ColorStateList(
-                        new int[][] { new int[] { android.R.attr.state_pressed }, new int[] { 0 } },
-                        new int[] { deleteDrawableRes, R.color.cm_tv_black1 });
+                    new int[][] { new int[] { android.R.attr.state_pressed }, new int[] { 0 } },
+                    new int[] { deleteDrawableRes, R.color.cm_tv_black1 });
                 tvButton.setTextColor(stateList);
             }
         }
@@ -370,7 +386,7 @@ public class InteractionContentAdapter extends Adapter<ViewHolder> {
 
         @Override public void onBindData(int position, @NonNull ImageView convertView) {
             ImageLoader.loadImageError(convertView.getContext(), mImageList.get(position),
-                    R.mipmap.interaction_place_image, convertView);
+                R.mipmap.interaction_place_image, convertView);
         }
 
         @Override public int getCount() {

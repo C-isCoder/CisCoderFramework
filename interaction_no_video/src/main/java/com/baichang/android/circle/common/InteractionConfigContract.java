@@ -51,6 +51,8 @@ public interface InteractionConfigContract {
 
     boolean isNeedWeChatCircleDisplayMax6();
 
+    boolean isPublishNoTitle();
+
     void share(Activity activity, String title, String summary, String url);
 
     void businessStore(String id);

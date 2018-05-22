@@ -6,6 +6,7 @@ import com.baichang.android.circle.adapter.InteractionDialogAdapter.OnDialogItem
 import com.baichang.android.circle.adapter.InteractionPublishAdapter.SelectPhotoClickListener;
 import com.baichang.android.circle.adapter.InteractionPublishAdapter9;
 import com.baichang.android.circle.adapter.InteractionPublishAdapter9.SelectPhotoClickListener9;
+import com.baichang.android.circle.common.InteractionConfig;
 import com.baichang.android.circle.dialog.InteractionDialogFragment;
 import com.baichang.android.circle.entity.InteractionTypeData;
 import com.baichang.android.circle.model.Impl.InteractInteractionImpl;
@@ -27,8 +28,8 @@ import java.util.List;
  */
 
 public class InteractionPublishImpl
-        implements InteractionPublishPresent, BaseListener<Boolean>, SelectPhotoClickListener,
-        SelectPhotoClickListener9, OnDialogItemClickListener {
+    implements InteractionPublishPresent, BaseListener<Boolean>, SelectPhotoClickListener,
+    SelectPhotoClickListener9, OnDialogItemClickListener {
 
     private static final int DEFAULT_MAX_NUMBER = 9;
     private InteractionPublishView mView;
@@ -61,7 +62,7 @@ public class InteractionPublishImpl
     }
 
     @Override public void publish(String title, String content) {
-        if (TextUtils.isEmpty(title)) {
+        if (TextUtils.isEmpty(title) && !InteractionConfig.getInstance().isPublishNoTitle()) {
             mView.showMsg("请输入标题");
         } else if (TextUtils.isEmpty(content)) {
             mView.showMsg("请说点互动内容");
@@ -74,7 +75,7 @@ public class InteractionPublishImpl
                 mInteraction.publishNoImage(title, content, typeId, this);
             } else {
                 mInteraction.publishImage(mView.getActivity().getApplication(), title, content,
-                        typeId, images, this);
+                    typeId, images, this);
             }
         }
     }

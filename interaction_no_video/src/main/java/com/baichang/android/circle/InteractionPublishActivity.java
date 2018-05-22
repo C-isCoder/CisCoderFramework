@@ -40,7 +40,7 @@ import java.util.ArrayList;
 import org.greenrobot.eventbus.EventBus;
 
 public class InteractionPublishActivity extends InteractionCommonActivity
-        implements InteractionPublishView, OnClickListener {
+    implements InteractionPublishView, OnClickListener {
 
     EditText etTitle;
     EditText etContent;
@@ -85,7 +85,11 @@ public class InteractionPublishActivity extends InteractionCommonActivity
         if (drawableRes != -1) {
             mBack.setImageResource(drawableRes);
         }
-
+        if (InteractionConfig.getInstance().isPublishNoTitle()) {
+            etTitle.setVisibility(View.GONE);
+        } else {
+            etTitle.setVisibility(View.VISIBLE);
+        }
         int topColor = InteractionConfig.getInstance().getTopBarColor();
         if (topColor != -1) {
             RelativeLayout titleLayout = (RelativeLayout) findViewById(R.id.title);
@@ -141,8 +145,8 @@ public class InteractionPublishActivity extends InteractionCommonActivity
 
     @Override public void close(String typeId) {
         EventBus.getDefault()
-                .post(new BaseEventData<Integer, Integer>(Event.INTERACTION_JUMP_PAGE,
-                        Integer.parseInt(typeId)));
+            .post(new BaseEventData<Integer, Integer>(Event.INTERACTION_JUMP_PAGE,
+                Integer.parseInt(typeId)));
         finish();
     }
 
@@ -177,7 +181,7 @@ public class InteractionPublishActivity extends InteractionCommonActivity
         } else if (requestCode == REQUEST_CODE_CROP && resultCode == RESULT_OK) {
             // 为了兼容Boxing
             BaseMedia media =
-                    new ImageMedia(BCPhotoUtil.getPhotoName(), BCPhotoUtil.getPhotoPath());
+                new ImageMedia(BCPhotoUtil.getPhotoName(), BCPhotoUtil.getPhotoPath());
             mPresent.onBindImages(media);
             BCPhotoUtil.cleanActivity();
         }

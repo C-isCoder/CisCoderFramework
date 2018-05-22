@@ -35,6 +35,7 @@ public class InteractionConfig implements InteractionConfigContract {
     private static String mInteractionUrl;
     private static int mDisplayWidth;
     private static boolean isNeedWeChatCircleDisplayMax6 = false;
+    private static boolean isPublishNoTitle = false;
 
     private InteractionConfig() {
     }
@@ -130,6 +131,10 @@ public class InteractionConfig implements InteractionConfigContract {
         return isNeedWeChatCircleDisplayMax6;
     }
 
+    @Override public boolean isPublishNoTitle() {
+        return isPublishNoTitle;
+    }
+
     @Override public void share(Activity activity, String title, String summary, String url) {
         if (listener != null) {
             listener.share(activity, title, summary, url);
@@ -206,6 +211,11 @@ public class InteractionConfig implements InteractionConfigContract {
 
     public InteractionConfig setIsNeedBusinessStore(boolean isNeedBusinessStore) {
         InteractionConfig.isNeedBusinessStore = isNeedBusinessStore;
+        return this;
+    }
+
+    public InteractionConfig setIsPublishNoTitle(boolean isPublishNoTitle) {
+        InteractionConfig.isPublishNoTitle = isNeedBusinessStore;
         return this;
     }
 

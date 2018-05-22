@@ -64,16 +64,16 @@ uploadArchives {
                         password: rootProject.ext.maven.password)
             }
             pom.project {
-                version rootProject.ext.interaction.version
-                artifactId rootProject.ext.interaction.artifactId
-                groupId rootProject.ext.interaction.groupId
-                packaging rootProject.ext.interaction.packaging
-                description rootProject.ext.interaction.description
+                version rootProject.ext.interaction_no_video.version
+                artifactId rootProject.ext.interaction_no_video.artifactId
+                groupId rootProject.ext.interaction_no_video.groupId
+                packaging rootProject.ext.interaction_no_video.packaging
+                description rootProject.ext.interaction_no_video.description
             }
         }
     }
 }
 
 artifacts {
-    archives file(rootProject.ext.interaction.artifacts)
+    archives file(rootProject.ext.interaction_no_video.artifacts)
 }

@@ -121,7 +121,7 @@ ext {
              groupId    : maven.library,
              artifacts  : 'printer.aar',]
   interaction_no_video = [version    : '0.0.1',
-                          artifactId : 'interaction',
+                          artifactId : 'interaction_no_video',
                           packaging  : 'aar',
                           description: 'Interaction Model no small video',
                           groupId    : maven.module,

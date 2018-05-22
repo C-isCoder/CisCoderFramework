@@ -2,6 +2,15 @@
 
 ## 更新说明：
 
+### 2018-05-22
+
+* 新增一个没有小视频的互动 `com.baichang.android.module:interaction_no_video:0.0.1`
+
+* no video 可设置不显示互动的标题 `setIsPublishNoTitle(true)`
+
+* no videw 列表可以直接点赞
+
+
 ### 2018-04-09
 
 * 升级 logger 框架到最新版本。
