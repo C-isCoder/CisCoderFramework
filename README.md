@@ -2,6 +2,12 @@
 
 ## 更新说明：
 
+### 2018-05-23
+
+* common 升级到 1.0.5 `compile 'com.baichang.android.library:common:1.0.5'`
+
+* 修复，小米市场 Acache 空指针，被拒。
+
 ### 2018-05-22
 
 * 新增一个没有小视频的互动 `com.baichang.android.module:interaction_no_video:0.0.1`
