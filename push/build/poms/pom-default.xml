@@ -7,4 +7,36 @@
   <version>0.0.1</version>
   <packaging>aar</packaging>
   <description>Push Sdk</description>
+  <dependencies>
+    <dependency>
+      <groupId>com.umeng.sdk</groupId>
+      <artifactId>common</artifactId>
+      <version>1.5.3</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.umeng.sdk</groupId>
+      <artifactId>utdid</artifactId>
+      <version>1.1.5.3</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.umeng.sdk</groupId>
+      <artifactId>push</artifactId>
+      <version>4.2.0</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.umeng.sdk</groupId>
+      <artifactId>push-xiaomi</artifactId>
+      <version>1.0.0</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.umeng.sdk</groupId>
+      <artifactId>push-huawei</artifactId>
+      <version>1.0.0</version>
+      <scope>compile</scope>
+    </dependency>
+  </dependencies>
 </project>

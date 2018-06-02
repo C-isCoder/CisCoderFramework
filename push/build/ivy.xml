@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ivy-module version="2.0" xmlns:m="http://ant.apache.org/ivy/maven">
-  <info organisation="CisCoderFramework" module="push" revision="unspecified" status="integration" publication="20180602112618">
+  <info organisation="CisCoderFramework" module="push" revision="unspecified" status="integration" publication="20180602140507">
     <description/>
   </info>
   <configurations>
@@ -64,4 +64,11 @@
   <publications>
     <artifact name="push" type="aar" ext="aar" conf="archives,archives,default"/>
   </publications>
+  <dependencies>
+    <dependency org="com.umeng.sdk" name="common" rev="1.5.3" conf="compile-&gt;default"/>
+    <dependency org="com.umeng.sdk" name="utdid" rev="1.1.5.3" conf="compile-&gt;default"/>
+    <dependency org="com.umeng.sdk" name="push" rev="4.2.0" conf="compile-&gt;default"/>
+    <dependency org="com.umeng.sdk" name="push-xiaomi" rev="1.0.0" conf="compile-&gt;default"/>
+    <dependency org="com.umeng.sdk" name="push-huawei" rev="1.0.0" conf="compile-&gt;default"/>
+  </dependencies>
 </ivy-module>
