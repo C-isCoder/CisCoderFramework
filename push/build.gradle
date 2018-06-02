@@ -1,0 +1,71 @@
+apply plugin: 'maven'
+apply plugin: 'com.android.library' // 仓库
+//apply plugin: 'com.android.application'    // 测试
+
+android {
+    compileSdkVersion rootProject.ext.android.compileSdkVersion
+    buildToolsVersion rootProject.ext.android.buildToolsVersion
+    defaultConfig {
+        minSdkVersion rootProject.ext.android.minSdkVersion
+        targetSdkVersion rootProject.ext.android.targetSdkVersion
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    sourceSets {
+        main {
+            manifest.srcFile 'AndroidManifest.xml'
+            java.srcDirs = ['src']
+            resources.srcDirs = ['src']
+            aidl.srcDirs = ['src']
+            renderscript.srcDirs = ['src']
+            res.srcDirs = ['res']
+            assets.srcDirs = ['assets']
+            jniLibs.srcDirs = ['libs']
+        }
+
+        debug.setRoot('build-types/debug')
+        release.setRoot('build-types/release')
+    }
+
+    android {
+        lintOptions {
+            abortOnError false
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile files('libs/umeng-common-1.5.3.jar')
+    compile files('libs/umeng-push-4.0.0x.jar')
+}
+uploadArchives {
+    configuration = configurations.archives
+    repositories {
+        mavenDeployer {
+            snapshotRepository(url: rootProject.ext.maven.snapshot) {
+                authentication(userName: rootProject.ext.maven.name,
+                    password: rootProject.ext.maven.password)
+            }
+            repository(url: rootProject.ext.maven.repository) {
+                authentication(userName: rootProject.ext.maven.name,
+                    password: rootProject.ext.maven.password)
+            }
+            pom.project {
+                version rootProject.ext.push.version
+                artifactId rootProject.ext.push.artifactId
+                groupId rootProject.ext.push.groupId
+                packaging rootProject.ext.push.packaging
+                description rootProject.ext.push.description
+            }
+        }
+    }
+}
+
+artifacts {
+    archives file(rootProject.ext.push.artifacts)
+}

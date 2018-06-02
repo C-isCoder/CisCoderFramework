@@ -126,4 +126,10 @@ ext {
                           description: 'Interaction Model no small video',
                           groupId    : maven.module,
                           artifacts  : 'interaction_no_video.aar',]
+  push = [version    : '0.0.1',
+      artifactId : 'push',
+      packaging  : 'aar',
+      description: 'Push Sdk',
+      groupId    : maven.library,
+      artifacts  : 'push.aar',]
 }

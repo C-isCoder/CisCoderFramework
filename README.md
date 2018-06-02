@@ -2,6 +2,118 @@
 
 ## 更新说明：
 
+### 2018-06-02
+
+* 新增友盟推送聚合版，`compile 'com.baichang.android.library:push:0.0.1'` 
+```java
+ //UMConfigure.setLogEnabled(true);
+    UMConfigure.init(this, "5a1bbaedf29d98279600014d", "Umeng", UMConfigure./DEVICE_TYPE_PHONE/,
+        "dff89f7d4349f50f241df52a91b7ffd4");
+    // miui
+    //MiPushRegister.register(this, "2882303761517371822", "5781737196822");
+    // huawei
+    //HuaWeiRegister.register(this);
+
+    final PushAgent mPushAgent = PushAgent.getInstance(this);
+    //sdk开启通知声音
+    mPushAgent.setNotificationPlaySound(MsgConstant./NOTIFICATION_PLAY_SDK_ENABLE/);
+    // sdk关闭通知声音
+    // mPushAgent.setNotificationPlaySound(MsgConstant.NOTIFICATION_PLAY_SDK_DISABLE);
+    // 通知声音由服务端控制
+     mPushAgent.setNotificationPlaySound(MsgConstant./NOTIFICATION_PLAY_SERVER/);
+    handler = new Handler(getMainLooper());
+
+    // 通知点击事件
+    UmengNotificationClickHandler notificationClickHandler =
+        new UmengNotificationClickHandler() {
+            @Override public void dealWithCustomAction(Context context, UMessage msg) {
+                Intent intent = new Intent(context, SmsDetailActivity.class);
+                intent.putExtra(Flag./SMS_CONTACTS_PHONE/, msg.title);
+                context.startActivity(intent);
+                Logger.d(/TAG/, "UmengNotificationClickHandler");
+            }
+        };
+    mPushAgent.setNotificationClickHandler(notificationClickHandler);
+
+    // 自定义消息
+    UmengMessageHandler customMessageHandler = new UmengMessageHandler() {
+        @Override public Notification getNotification(Context context, UMessage msg) {
+            Logger.i(/TAG/, "UMessage: " + msg.getRaw());
+            String sender = msg.title;
+            String content = msg.text;
+            long time = System.currentTimeMillis();
+            if (mSmsManager == null) {
+                mSmsManager = new SmsManager(getApplication());
+            }
+            // 插入数据库
+            mSmsManager.insertReceiverSms(sender, content, time);
+            sendBroadcast(new Intent(BroadcastFlag./HAVE_A_NEW_MESSAGE/));
+            // 返回默认
+            return super.getNotification(context, msg);
+        }
+
+        @Override public void dealWithCustomMessage(final Context context, final UMessage msg) {
+            handler.post(new Runnable() {
+                @Override public void run() {
+                    Logger.i(/TAG/, "Custom UMessage: " + msg.getRaw());
+                    if (TextUtils.equals("下线通知", msg.title)) {
+                        Logger.r(/TAG/, "被挤下线...");
+                        Intent accApp = new Intent(BroadcastFlag./EXIT_EVENT/);
+                        accApp.putExtra(Flag./IS_OFFLINE_EXIT/, true);
+                        context.sendBroadcast(accApp);
+                    } else {
+                        try {
+                            JSONObject json = new JSONObject(msg.extra.get("data"));
+                            String type = json.getString("type");
+                            final int id = json.getInt("id");
+                            if (TextUtils.equals("错误报告", type)) {
+                                Logger.r(/TAG/, "\"错误报告\",指令下发。" + msg.getRaw());
+                                uploadLogFile(id, false);
+                            } else if (TextUtils.equals("信令", type)) {
+                                Logger.r(/TAG/, "\"信令\",指令下发。" + msg.getRaw());
+                                String command = json.getString("command");
+                                if (TextUtils.equals(command, "开启")) {
+                                    long time = json.getLong("time");
+                                    new CountDownTimer(time * 1000, 1000) {
+                                        @Override public void onTick(long millisUntilFinished) {
+                                            Logger.setWriteSipSwitch(true);
+                                        }
+
+                                        @Override public void onFinish() {
+                                            Logger.setWriteSipSwitch(false);
+                                            uploadLogFile(id, true);
+                                        }
+                                    }.start();
+                                } else {
+                                    Logger.setWriteSipSwitch(false);
+                                    uploadLogFile(id, true);
+                                }
+                            }
+                        } catch (JSONException e) {
+                            Logger.r(/TAG/, "push json exception: " + e.getMessage());
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            });
+        }
+    };
+    mPushAgent.setMessageHandler(customMessageHandler);
+    //注册推送服务 每次调用register都会回调该接口
+    mPushAgent.register(new IUmengRegisterCallback() {
+        @Override public void onSuccess(String deviceToken) {
+            Logger.r(/TAG/, "umeng register success: " + deviceToken);
+            sendBroadcast(new Intent(BroadcastFlag./UMENG_PUSH_LOAD_SUCCESS/));
+        }
+
+        @Override public void onFailure(String s, String s1) {
+            Logger.r(/TAG/, "umeng register failed: " + s + " " + s1);
+        }
+    });
+}
+
+```
+
 ### 2018-05-23
 
 * common 升级到 1.0.5 `compile 'com.baichang.android.library:common:1.0.5'`
