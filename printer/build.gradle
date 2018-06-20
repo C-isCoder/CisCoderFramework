@@ -1,51 +1,50 @@
 apply plugin: 'maven'
 apply plugin: 'com.android.library' // 仓库
-//apply plugin: 'com.android.application'    // 测试
+apply from: '../maven-config.gradle'
+apply from: '../depend-config.gradle'
 
 android {
-    compileSdkVersion rootProject.ext.android.compileSdkVersion
-    buildToolsVersion rootProject.ext.android.buildToolsVersion
-    defaultConfig {
-        minSdkVersion rootProject.ext.android.minSdkVersion
-        targetSdkVersion rootProject.ext.android.targetSdkVersion
+  compileSdkVersion android.cSdkVersion
+  buildToolsVersion android.bToolsVersion
+  defaultConfig {
+    minSdkVersion android.mSdkVersion
+    targetSdkVersion android.tSdkVersion
+  }
+  buildTypes {
+    release {
+      minifyEnabled false
+      proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
     }
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-    }
+  }
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile rootProject.ext.depend.v7
-    compile files('libs/gprintersdkv1.jar')
+  compile fileTree(include: ['*.jar'], dir: 'libs')
+  compile depend.v7
+  compile files('libs/gprintersdkv1.jar')
 }
 
 uploadArchives {
-    configuration = configurations.archives
-    repositories {
-        mavenDeployer {
-            snapshotRepository(url: rootProject.ext.maven.snapshot) {
-                authentication(userName: rootProject.ext.maven.name,
-                    password: rootProject.ext.maven.password)
-            }
-            repository(url: rootProject.ext.maven.repository) {
-                authentication(userName: rootProject.ext.maven.name,
-                    password: rootProject.ext.maven.password)
-            }
-            pom.project {
-                version rootProject.ext.printer.version
-                artifactId rootProject.ext.printer.artifactId
-                groupId rootProject.ext.printer.groupId
-                packaging rootProject.ext.printer.packaging
-                description rootProject.ext.printer.description
-            }
-        }
+  configuration = configurations.archives
+  repositories {
+    mavenDeployer {
+      snapshotRepository(url: maven.snapshot) {
+        authentication(userName: maven.name, password: maven.password)
+      }
+      repository(url: maven.repository) {
+        authentication(userName: maven.name, password: maven.password)
+      }
+      pom.project {
+        version printer.version
+        artifactId printer.artifactId
+        groupId printer.groupId
+        packaging printer.packaging
+        description printer.description
+      }
     }
+  }
 }
 
 artifacts {
-    archives file(rootProject.ext.printer.artifacts)
+  archives file(printer.artifacts)
 }

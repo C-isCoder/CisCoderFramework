@@ -1,69 +1,70 @@
 apply plugin: 'com.android.library'
 apply plugin: 'maven'
-android {
-    compileSdkVersion rootProject.ext.android.compileSdkVersion
-    buildToolsVersion rootProject.ext.android.buildToolsVersion
+apply from: '../maven-config.gradle'
+apply from: '../depend-config.gradle'
 
-    defaultConfig {
-        minSdkVersion rootProject.ext.android.minSdkVersion
-        targetSdkVersion rootProject.ext.android.targetSdkVersion
+android {
+  compileSdkVersion android.cSdkVersion
+  buildToolsVersion android.bToolsVersion
+
+  defaultConfig {
+    minSdkVersion android.mSdkVersion
+    targetSdkVersion android.tSdkVersion
+  }
+  buildTypes {
+    release {
+      minifyEnabled false
+      proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
     }
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
+  }
+  sourceSets {
+    main {
+      manifest.srcFile 'AndroidManifest.xml'
+      java.srcDirs = ['src']
+      res.srcDirs = ['res']
+      assets.srcDirs = ['assets']
+      jniLibs.srcDirs = ['libs']
     }
-    sourceSets {
-        main {
-            manifest.srcFile 'AndroidManifest.xml'
-            java.srcDirs = ['src']
-            res.srcDirs = ['res']
-            assets.srcDirs = ['assets']
-            jniLibs.srcDirs =  ['libs']
-        }
-    }
+  }
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    provided rootProject.ext.depend.v4
-    compile files('libs/SocialSDK_sms.jar')
-    compile files('libs/SocialSDK_WeChat_Simplify.jar')
-    compile files('libs/umeng_shareboard_widget.jar')
-    compile files('libs/umeng_social_api.jar')
-    compile files('libs/umeng_social_net.jar')
-    compile files('libs/umeng_social_shareboard.jar')
-    compile files('libs/umeng_social_tool.jar')
-    compile files('libs/open_sdk_r5781.jar')
-    compile files('libs/SocialSDK_QQ_Full.jar')
-    compile files('libs/SocialSDK_Sina_Full.jar')
-    compile files('libs/weiboSDKCore_3.1.4.jar')
+  compile fileTree(include: ['*.jar'], dir: 'libs')
+  provided depend.v4
+  compile files('libs/SocialSDK_sms.jar')
+  compile files('libs/SocialSDK_WeChat_Simplify.jar')
+  compile files('libs/umeng_shareboard_widget.jar')
+  compile files('libs/umeng_social_api.jar')
+  compile files('libs/umeng_social_net.jar')
+  compile files('libs/umeng_social_shareboard.jar')
+  compile files('libs/umeng_social_tool.jar')
+  compile files('libs/open_sdk_r5781.jar')
+  compile files('libs/SocialSDK_QQ_Full.jar')
+  compile files('libs/SocialSDK_Sina_Full.jar')
+  compile files('libs/weiboSDKCore_3.1.4.jar')
 }
 uploadArchives {
-    configuration = configurations.archives
-    repositories {
-        mavenDeployer {
-            snapshotRepository(url: rootProject.ext.maven.snapshot) {
-                authentication(userName: rootProject.ext.maven.name,
-                        password: rootProject.ext.maven.password)
-            }
-            repository(url: rootProject.ext.maven.repository) {
-                authentication(userName: rootProject.ext.maven.name,
-                        password: rootProject.ext.maven.password)
-            }
-            pom.project {
-                version rootProject.ext.umShare.version
-                artifactId rootProject.ext.umShare.artifactId
-                groupId rootProject.ext.umShare.groupId
-                packaging rootProject.ext.umShare.packaging
-                description rootProject.ext.umShare.description
-            }
-        }
+  configuration = configurations.archives
+  repositories {
+    mavenDeployer {
+      snapshotRepository(url: maven.snapshot) {
+        authentication(userName: maven.name, password: maven.password)
+      }
+      repository(url: maven.repository) {
+        authentication(userName: maven.name, password: maven.password)
+      }
+      pom.project {
+        version umShare.version
+        artifactId umShare.artifactId
+        groupId umShare.groupId
+        packaging umShare.packaging
+        description umShare.description
+      }
     }
+  }
 }
 
 artifacts {
-    archives file(rootProject.ext.umShare.artifacts)
+  archives file(umShare.artifacts)
 }
 

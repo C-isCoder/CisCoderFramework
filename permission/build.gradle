@@ -1,49 +1,50 @@
 apply plugin: 'com.android.library'
 apply plugin: 'maven'
-android {
-    compileSdkVersion rootProject.ext.android.compileSdkVersion
-    buildToolsVersion rootProject.ext.android.buildToolsVersion
+apply from: '../maven-config.gradle'
+apply from: '../depend-config.gradle'
 
-    defaultConfig {
-        minSdkVersion rootProject.ext.android.minSdkVersion
-        targetSdkVersion rootProject.ext.android.targetSdkVersion
+android {
+  compileSdkVersion android.cSdkVersion
+  buildToolsVersion android.bToolsVersion
+
+  defaultConfig {
+    minSdkVersion android.mSdkVersion
+    targetSdkVersion android.tSdkVersion
+  }
+  buildTypes {
+    release {
+      minifyEnabled false
+      proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
     }
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-    }
+  }
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile rootProject.ext.depend.rxpermissions
-    provided rootProject.ext.depend.rxandroid
+  compile fileTree(dir: 'libs', include: ['*.jar'])
+  compile depend.rxpermissions
+  provided depend.rxandroid
 }
 uploadArchives {
-    configuration = configurations.archives
-    repositories {
-        mavenDeployer {
-            snapshotRepository(url: rootProject.ext.maven.snapshot) {
-                authentication(userName: rootProject.ext.maven.name,
-                        password: rootProject.ext.maven.password)
-            }
-            repository(url: rootProject.ext.maven.repository) {
-                authentication(userName: rootProject.ext.maven.name,
-                        password: rootProject.ext.maven.password)
-            }
-            pom.project {
-                version rootProject.ext.permission.version
-                artifactId rootProject.ext.permission.artifactId
-                groupId rootProject.ext.permission.groupId
-                packaging rootProject.ext.permission.packaging
-                description rootProject.ext.permission.description
-            }
-        }
+  configuration = configurations.archives
+  repositories {
+    mavenDeployer {
+      snapshotRepository(url: maven.snapshot) {
+        authentication(userName: maven.name, password: maven.password)
+      }
+      repository(url: maven.repository) {
+        authentication(userName: maven.name, password: maven.password)
+      }
+      pom.project {
+        version permission.version
+        artifactId permission.artifactId
+        groupId permission.groupId
+        packaging permission.packaging
+        description permission.description
+      }
     }
+  }
 }
 
 artifacts {
-    archives file(rootProject.ext.permission.artifacts)
+  archives file(permission.artifacts)
 }

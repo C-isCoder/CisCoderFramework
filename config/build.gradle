@@ -1,48 +1,48 @@
 apply plugin: 'com.android.library'
 apply plugin: 'maven'
+apply from: '../maven-config.gradle'
+apply from: '../depend-config.gradle'
 
 android {
-    compileSdkVersion rootProject.ext.android.compileSdkVersion
-    buildToolsVersion rootProject.ext.android.buildToolsVersion
+  compileSdkVersion android.cSdkVersion
+  buildToolsVersion android.bToolsVersion
 
-    defaultConfig {
-        minSdkVersion rootProject.ext.android.minSdkVersion
-        targetSdkVersion rootProject.ext.android.targetSdkVersion
+  defaultConfig {
+    minSdkVersion android.mSdkVersion
+    targetSdkVersion android.tSdkVersion
+  }
+  buildTypes {
+    release {
+      minifyEnabled false
+      proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
     }
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-    }
+  }
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
+  compile fileTree(include: ['*.jar'], dir: 'libs')
 }
 uploadArchives {
-    configuration = configurations.archives
-    repositories {
-        mavenDeployer {
-            snapshotRepository(url: rootProject.ext.maven.snapshot) {
-                authentication(userName: rootProject.ext.maven.name,
-                        password: rootProject.ext.maven.password)
-            }
-            repository(url: rootProject.ext.maven.repository) {
-                authentication(userName: rootProject.ext.maven.name,
-                        password: rootProject.ext.maven.password)
-            }
-            pom.project {
-                version rootProject.ext.config.version
-                artifactId rootProject.ext.config.artifactId
-                groupId rootProject.ext.config.groupId
-                packaging rootProject.ext.config.packaging
-                description rootProject.ext.config.description
-            }
-        }
+  configuration = configurations.archives
+  repositories {
+    mavenDeployer {
+      snapshotRepository(url: maven.snapshot) {
+        authentication(userName: maven.name, password: maven.password)
+      }
+      repository(url: maven.repository) {
+        authentication(userName: maven.name, password: maven.password)
+      }
+      pom.project {
+        version config.version
+        artifactId config.artifactId
+        groupId config.groupId
+        packaging config.packaging
+        description config.description
+      }
     }
+  }
 }
 
 artifacts {
-    archives file(rootProject.ext.config.artifacts)
+  archives file(config.artifacts)
 }

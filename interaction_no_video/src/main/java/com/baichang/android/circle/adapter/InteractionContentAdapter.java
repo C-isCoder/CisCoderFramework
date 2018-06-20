@@ -12,7 +12,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.Adapter;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -36,12 +35,10 @@ import com.baichang.android.circle.widget.photocontents.adapter.PhotoContentsBas
 import com.baichang.android.circle.widget.photopreview.ImageInfo;
 import com.baichang.android.circle.widget.photopreview.ImagePreviewActivity;
 import com.baichang.android.imageloader.ImageLoader;
-import com.baichang.android.utils.BCDensityUtil;
 import com.baichang.android.widget.circleImageView.CircleImageView;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 
 /**
  * Created by iCong on 2017/3/20.
@@ -181,9 +178,14 @@ public class InteractionContentAdapter extends Adapter<ViewHolder> {
     // 更新点赞状态
     public void updatePraise(int id, boolean isSuccess) {
         for (InteractionListData data : mList) {
-            if (data.id == id) {
-                data.isPraise = isSuccess ? 1 : 0;
-                if (isSuccess) data.praiseCount++;
+            if (data.id == id && isSuccess) {
+                if (data.isPraise == 1) {
+                    data.isPraise = 0;
+                    data.praiseCount--;
+                } else {
+                    data.isPraise = 1;
+                    data.praiseCount++;
+                }
                 notifyItemChanged(mList.indexOf(data));
             }
         }

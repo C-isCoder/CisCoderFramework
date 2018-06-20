@@ -1,0 +1,145 @@
+ext {
+  maven = [
+      name: 'admin',
+      password: 'bcadmin',
+      snapshot: 'http://svn.weiidu.com:8081/nexus/content/repositories/snapshots/',
+      repository: 'http://svn.weiidu.com:8081/nexus/content/repositories/android/',
+      library: 'com.baichang.android.library',
+      module: 'com.baichang.android.module'
+  ]
+
+  common = [
+      version: '1.0.5',
+      artifactId: 'common',
+      packaging: 'aar',
+      description: 'common library',
+      groupId: maven.library,
+      artifacts: 'common.aar'
+  ]
+
+  config = [
+      version: '1.0.1',
+      artifactId: 'config',
+      packaging: 'aar',
+      description: 'cofnig library',
+      groupId: maven.library,
+      artifacts: 'config.aar'
+  ]
+
+  imageloader = [
+      version: '1.0.2',
+      artifactId: 'imageLoader',
+      packaging: 'aar',
+      description: 'imageLloader library',
+      groupId: maven.library,
+      artifacts: 'imageloader.aar'
+  ]
+
+  permission = [
+      version: '1.0.1',
+      artifactId: 'permission',
+      packaging: 'aar',
+      description: 'permission library',
+      groupId: maven.library,
+      artifacts: 'permission.aar'
+  ]
+
+  qrcode = [
+      version: '1.0.2',
+      artifactId: 'qrcode',
+      packaging: 'aar',
+      description: 'qrcode library',
+      groupId: maven.library,
+      artifacts: 'qrcode.aar'
+  ]
+
+  request = [
+      version: '1.0.2',
+      artifactId: 'request',
+      packaging: 'aar',
+      description: 'request library',
+      groupId: maven.library,
+      artifacts: 'request.aar'
+  ]
+
+  request2 = [
+      version: '2.0.1',
+      artifactId: 'request2',
+      packaging: 'aar',
+      description: 'request2 library',
+      groupId: maven.library,
+      artifacts: 'request2.aar'
+  ]
+
+  umShare = [
+      version: '2.0.1',
+      artifactId: 'umShare',
+      packaging: 'aar',
+      description: 'umShare library',
+      groupId: maven.library,
+      artifacts: 'umShare.aar'
+  ]
+
+  utils = [
+      version: '1.0.2',
+      artifactId: 'utils',
+      packaging: 'aar',
+      description: 'utils library',
+      groupId: maven.library,
+      artifacts: 'utils.aar'
+  ]
+
+  widget = [
+      version: '1.0.2',
+      artifactId: 'widget',
+      packaging: 'aar',
+      description: 'widget library',
+      groupId: maven.library,
+      artifacts: 'widget.aar'
+  ]
+
+  interaction = [
+      version: '0.0.4',
+      artifactId: 'interaction',
+      packaging: 'aar',
+      description: 'Interaction Model',
+      groupId: maven.module,
+      artifacts: 'interaction.aar'
+  ]
+
+  printer = [
+      version: '0.0.2',
+      artifactId: 'printerKit',
+      packaging: 'aar',
+      description: 'GP Printer Kit',
+      groupId: maven.library,
+      artifacts: 'printer.aar'
+  ]
+
+  interaction_no_video = [
+      version: '0.0.1',
+      artifactId: 'interaction_no_video',
+      packaging: 'aar',
+      description: 'Interaction Model no small video',
+      groupId: maven.module,
+      artifacts: 'interaction_no_video.aar'
+  ]
+
+  push = [
+      version: '0.0.1',
+      artifactId: 'push',
+      packaging: 'aar',
+      description: 'Push Sdk',
+      groupId: maven.library,
+      artifacts: 'push.aar'
+  ]
+
+  kotlin_common = [
+      version: '0.0.1-alpha',
+      artifactId: 'kt-common',
+      packaging: 'aar',
+      description: 'kotlin library',
+      groupId: maven.library,
+      artifacts: 'kotlin.aar'
+  ]
+}

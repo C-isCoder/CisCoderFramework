@@ -1,15 +1,15 @@
 apply plugin: 'maven'
 apply plugin: 'com.android.library' // 仓库
-//apply plugin: 'com.android.application'    // 测试
+apply from: '../maven-config.gradle'
+apply from: '../depend-config.gradle'
 
 android {
-  compileSdkVersion rootProject.ext.android.compileSdkVersion
-  buildToolsVersion rootProject.ext.android.buildToolsVersion
+  compileSdkVersion android.cSdkVersion
+  buildToolsVersion android.bToolsVersion
 
   defaultConfig {
-    minSdkVersion rootProject.ext.android.minSdkVersion
-    //targetSdkVersion rootProject.ext.android.targetSdkVersion
-    targetSdkVersion 22
+    minSdkVersion android.mSdkVersion
+    targetSdkVersion android.tSdkVersion
   }
   buildTypes {
     release {
@@ -22,14 +22,13 @@ android {
 dependencies {
   compile fileTree(include: ['*.jar'], dir: 'libs')
 
-  compile 'com.android.support.constraint:constraint-layout:1.0.2'
   provided project(':config')
   provided project(':request')
   compile 'com.baichang.android.library:widget:1.0.1'
   provided project(':imageloader')
   provided project(':common')
   provided project(':utils')
-  provided rootProject.ext.depend.v4
+  provided depend.v4
 
   //测试
   //    compile project(':config')
@@ -38,43 +37,41 @@ dependencies {
   //    compile project(':imageloader')
   //    compile project(':common')
   //    compile project(':utils')
-  //    compile rootProject.ext.depend.v4
+  //    compile depend.v4
 
-  compile rootProject.ext.depend.design
-  compile rootProject.ext.depend.recyclerview
-  compile rootProject.ext.depend.glide_transformations
-  compile rootProject.ext.depend.glide_gpuimage
-  compile rootProject.ext.depend.boxing
-  compile rootProject.ext.depend.picasso
-  compile rootProject.ext.depend.eventbus
-  compile rootProject.ext.depend.imageCompressed
-  compile rootProject.ext.depend.smallvideorecord
-  compile rootProject.ext.depend.ijkplayerjava
-  compile rootProject.ext.depend.ijkplayerarmv7a
+  compile depend.design
+  compile depend.recyclerview
+  compile depend.glide_transformations
+  compile depend.glide_gpuimage
+  compile depend.boxing
+  compile depend.picasso
+  compile depend.eventbus
+  compile depend.imageCompressed
+  compile depend.smallvideorecord
+  compile depend.ijkplayerjava
+  compile depend.ijkplayerarmv7a
 }
 uploadArchives {
   configuration = configurations.archives
   repositories {
     mavenDeployer {
-      snapshotRepository(url: rootProject.ext.maven.snapshot) {
-        authentication(userName: rootProject.ext.maven.name,
-            password: rootProject.ext.maven.password)
+      snapshotRepository(url: maven.snapshot) {
+        authentication(userName: maven.name, password: maven.password)
       }
-      repository(url: rootProject.ext.maven.repository) {
-        authentication(userName: rootProject.ext.maven.name,
-            password: rootProject.ext.maven.password)
+      repository(url: maven.repository) {
+        authentication(userName: maven.name, password: maven.password)
       }
       pom.project {
-        version rootProject.ext.interaction.version
-        artifactId rootProject.ext.interaction.artifactId
-        groupId rootProject.ext.interaction.groupId
-        packaging rootProject.ext.interaction.packaging
-        description rootProject.ext.interaction.description
+        version interaction.version
+        artifactId interaction.artifactId
+        groupId interaction.groupId
+        packaging interaction.packaging
+        description interaction.description
       }
     }
   }
 }
 
 artifacts {
-  archives file(rootProject.ext.interaction.artifacts)
+  archives file(interaction.artifacts)
 }

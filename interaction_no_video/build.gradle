@@ -1,79 +1,68 @@
 apply plugin: 'maven'
-apply plugin: 'com.android.library'        // 仓库
-//apply plugin: 'com.android.application'    // 测试
+apply plugin: 'com.android.library' // 仓库
+apply from: '../maven-config.gradle'
+apply from: '../depend-config.gradle'
 
 android {
-    compileSdkVersion rootProject.ext.android.compileSdkVersion
-    buildToolsVersion rootProject.ext.android.buildToolsVersion
+  compileSdkVersion android.cSdkVersion
+  buildToolsVersion android.bToolsVersion
 
-    defaultConfig {
-        minSdkVersion rootProject.ext.android.minSdkVersion
-        //targetSdkVersion rootProject.ext.android.targetSdkVersion
-        targetSdkVersion 22
-        ndk {
-            abiFilters 'armeabi-v7a', 'x86', 'armeabi', 'arm64-v8a'//or armeabi、arm64-v8a、x86
-        }
+  defaultConfig {
+    minSdkVersion android.mSdkVersion
+    targetSdkVersion android.tSdkVersion
+    ndk {
+      abiFilters 'armeabi-v7a', 'x86', 'armeabi', 'arm64-v8a' //or armeabi、arm64-v8a、x86
     }
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
+  }
+  buildTypes {
+    release {
+      minifyEnabled false
+      proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
     }
+  }
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
+  compile fileTree(include: ['*.jar'], dir: 'libs')
 
-    provided project(':config')
-    provided project(':request')
-    compile 'com.baichang.android.library:widget:1.0.1'
-    provided project(':imageloader')
-    provided project(':common')
-    provided project(':utils')
-    provided rootProject.ext.depend.v4
+  provided project(':config')
+  provided project(':request')
+  compile 'com.baichang.android.library:widget:1.0.1'
+  provided project(':imageloader')
+  provided project(':common')
+  provided project(':utils')
+  provided depend.v4
 
-    //测试
-//    compile project(':config')
-//    compile project(':request')
-//    compile project(':widget')
-//    compile project(':imageloader')
-//    compile project(':common')
-//    compile project(':utils')
-//    compile rootProject.ext.depend.v4
-
-    compile rootProject.ext.depend.design
-    compile rootProject.ext.depend.recyclerview
-    compile rootProject.ext.depend.glide_transformations
-    compile rootProject.ext.depend.glide_gpuimage
-    compile rootProject.ext.depend.boxing
-    compile rootProject.ext.depend.picasso
-    compile rootProject.ext.depend.eventbus
-    compile rootProject.ext.depend.imageCompressed
+  compile depend.design
+  compile depend.recyclerview
+  compile depend.glide_transformations
+  compile depend.glide_gpuimage
+  compile depend.boxing
+  compile depend.picasso
+  compile depend.eventbus
+  compile depend.imageCompressed
 }
 uploadArchives {
-    configuration = configurations.archives
-    repositories {
-        mavenDeployer {
-            snapshotRepository(url: rootProject.ext.maven.snapshot) {
-                authentication(userName: rootProject.ext.maven.name,
-                        password: rootProject.ext.maven.password)
-            }
-            repository(url: rootProject.ext.maven.repository) {
-                authentication(userName: rootProject.ext.maven.name,
-                        password: rootProject.ext.maven.password)
-            }
-            pom.project {
-                version rootProject.ext.interaction_no_video.version
-                artifactId rootProject.ext.interaction_no_video.artifactId
-                groupId rootProject.ext.interaction_no_video.groupId
-                packaging rootProject.ext.interaction_no_video.packaging
-                description rootProject.ext.interaction_no_video.description
-            }
-        }
+  configuration = configurations.archives
+  repositories {
+    mavenDeployer {
+      snapshotRepository(url: maven.snapshot) {
+        authentication(userName: maven.name, password: maven.password)
+      }
+      repository(url: maven.repository) {
+        authentication(userName: maven.name, password: maven.password)
+      }
+      pom.project {
+        version interaction_no_video.version
+        artifactId interaction_no_video.artifactId
+        groupId interaction_no_video.groupId
+        packaging interaction_no_video.packaging
+        description interaction_no_video.description
+      }
     }
+  }
 }
 
 artifacts {
-    archives file(rootProject.ext.interaction_no_video.artifacts)
+  archives file(interaction_no_video.artifacts)
 }
