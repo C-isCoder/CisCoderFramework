@@ -21,7 +21,7 @@ ext {
       version: '1.0.1',
       artifactId: 'config',
       packaging: 'aar',
-      description: 'cofnig library',
+      description: 'config library',
       groupId: maven.library,
       artifacts: 'config.aar'
   ]
