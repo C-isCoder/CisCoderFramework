@@ -4,7 +4,7 @@ ext {
       bToolsVersion: "26.0.0",
 
       mSdkVersion: 16,
-      tSdkVersion: 23,
+      tSdkVersion: 22,
   ]
 
   depend = [

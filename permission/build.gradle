@@ -9,7 +9,8 @@ android {
 
   defaultConfig {
     minSdkVersion android.mSdkVersion
-    targetSdkVersion android.tSdkVersion
+//    targetSdkVersion android.tSdkVersion
+    targetSdkVersion 23
   }
   buildTypes {
     release {
