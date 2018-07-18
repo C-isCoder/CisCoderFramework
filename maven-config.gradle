@@ -126,7 +126,7 @@ ext {
   ]
 
   push = [
-      version: '0.0.1',
+      version: '0.0.2',
       artifactId: 'push',
       packaging: 'aar',
       description: 'Push Sdk',
