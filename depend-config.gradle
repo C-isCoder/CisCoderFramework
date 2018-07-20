@@ -47,8 +47,8 @@ ext {
 
       umeng_common: 'com.umeng.sdk:common:1.5.3',
       umeng_utdid: 'com.umeng.sdk:utdid:1.1.5.3',
-      umeng_push: 'com.umeng.sdk:push:4.2.0',
-      umeng_push_xiaomi: 'com.umeng.sdk:push-xiaomi:1.0.0',
-      umeng_push_huawei: 'com.umeng.sdk:push-huawei:1.0.0',
+      umeng_push: 'com.umeng.sdk:push:4.2.0@aar',
+      umeng_push_xiaomi: 'com.umeng.sdk:push-xiaomi:1.0.0@aar',
+      umeng_push_huawei: 'com.umeng.sdk:push-huawei:1.0.0@aar',
   ]
 }
