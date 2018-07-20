@@ -15,14 +15,13 @@
  *******************************************************************************/
 package com.baichang.android.widget.photoView;
 
-import android.annotation.TargetApi;
-import android.view.View;
+interface OnGestureListener {
 
-@TargetApi(16)
-public class SDK16 {
+    void onDrag(float dx, float dy);
 
-	public static void postOnAnimation(View view, Runnable r) {
-		view.postOnAnimation(r);
-	}
-	
+    void onFling(float startX, float startY, float velocityX,
+        float velocityY);
+
+    void onScale(float scaleFactor, float focusX, float focusY);
+
 }
