@@ -2,6 +2,10 @@
 
 ## 更新说明：
 
+### 2018-08-14
+
+* config 添加 isDebug() 接口，`compile 'com.baichang.android.library:config:1.0.2'` 
+
 ### 2018-06-02
 
 * 新增友盟推送聚合版，`compile 'com.baichang.android.library:push:0.0.1'` 
