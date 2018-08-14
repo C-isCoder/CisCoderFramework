@@ -25,7 +25,6 @@ public class ConfigurationImpl implements Configuration {
         sConfig = config;
     }
 
-
     @Override
     public String getApiDefaultHost() {
         return sConfig.getApiDefaultHost();
@@ -76,4 +75,7 @@ public class ConfigurationImpl implements Configuration {
         return sConfig.getAppBarColor();
     }
 
+    @Override public boolean isDebug() {
+        return sConfig.isDebug();
+    }
 }
