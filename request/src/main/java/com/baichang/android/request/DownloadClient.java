@@ -1,10 +1,7 @@
 package com.baichang.android.request;
 
-
-
 import com.baichang.android.config.ConfigurationImpl;
 import java.util.concurrent.TimeUnit;
-
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
@@ -24,8 +21,7 @@ public class DownloadClient {
 
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
         //官方请求拦截器
-        HttpLoggerInterceptor loggingInterceptor = new HttpLoggerInterceptor(HttpLoggerInterceptor.Level.DOWNLOAD);
-        builder.addInterceptor(loggingInterceptor);
+        builder.addInterceptor(new HttpLoggerInterceptor());
         //设置超时
         builder.connectTimeout(30, TimeUnit.SECONDS);
         builder.readTimeout(1, TimeUnit.MINUTES);
@@ -34,17 +30,15 @@ public class DownloadClient {
         builder.retryOnConnectionFailure(false);
         OkHttpClient client = builder.build();
         retrofit = new Retrofit.Builder()
-                .baseUrl(BaseUrl)
-                .addConverterFactory(ResponseConverterFactory.create(GsonConverterFactory.create()))
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .client(client)
-                .build();
+            .baseUrl(BaseUrl)
+            .addConverterFactory(ResponseConverterFactory.create(GsonConverterFactory.create()))
+            .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+            .client(client)
+            .build();
     }
 
     /**
      * 默认的BaseUrl = APIConstant.BASE_URL
-     *
-     * @return
      */
     public static DownloadClient getInstance() {
         if (INSTANCE == null) {
@@ -65,8 +59,6 @@ public class DownloadClient {
      * 自定义Service
      *
      * @param service 传入自定义的Service
-     * @param <T>
-     * @return
      */
     public <T> T create(Class<T> service) {
         return retrofit.create(service);

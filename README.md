@@ -2,6 +2,14 @@
 
 ## 更新说明：
 
+### 2018-08-15
+
+* request、request2 移除返回值 json 格式化，新增 debug 模式（此模式下才打印请求）
+
+* request `compile 'com.baichang.android.library:request:1.0.3''`
+
+* request2 `compile 'com.baichang.android.library:request2:2.0.2''`
+
 ### 2018-08-14
 
 * config 添加 isDebug() 接口，`compile 'com.baichang.android.library:config:1.0.2'` 
