@@ -5,7 +5,7 @@ import android.content.res.Resources;
 import android.util.DisplayMetrics;
 import com.baichang.android.common.cache.ACache;
 
-public class BCApplication extends Application {
+public abstract class BCApplication extends Application {
 
     private static BCApplication instance;
     //本地缓存
@@ -31,9 +31,7 @@ public class BCApplication extends Application {
         screenHeight = display.heightPixels;
     }
 
-    private void initACache() {
-        aCache = ACache.get(this, "acache");
-    }
+    protected abstract void initACache();
 
     public static BCApplication getInstance() {
         return instance;

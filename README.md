@@ -2,6 +2,12 @@
 
 ## 更新说明：
 
+### 2018-08-24
+
+* common 包移除对 acache 缓存目录的设置，移到继承类里面实现
+
+* `compile 'com.baichang.android.library:common:1.1.5''`
+
 ### 2018-08-15
 
 * request、request2 移除返回值 json 格式化，新增 debug 模式（此模式下才打印请求）

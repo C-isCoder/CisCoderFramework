@@ -9,7 +9,7 @@ ext {
   ]
 
   common = [
-      version: '1.0.5',
+      version: '1.1.5',
       artifactId: 'common',
       packaging: 'aar',
       description: 'common library',
