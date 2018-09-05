@@ -1,18 +1,14 @@
 package com.baichang.android.request;
 
-
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.Log;
 import android.widget.Toast;
-
 import com.baichang.android.config.ConfigurationImpl;
-import com.orhanobut.logger.Logger;
-
 import java.lang.ref.WeakReference;
 import java.net.ConnectException;
 import java.net.SocketTimeoutException;
-
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
@@ -42,16 +38,20 @@ public class HttpSubscriber1<T> extends Subscriber<T> {
     }
 
     public HttpSubscriber1(HttpSuccessListener<T> successListener) {
-        if (successListener == null)
+        if (successListener == null) {
             throw new NullPointerException("HttpSuccessListener not null");
+        }
         mSuccessListener = successListener;
     }
 
-    public HttpSubscriber1(HttpSuccessListener<T> successListener, HttpErrorListener errorListener) {
-        if (successListener == null)
+    public HttpSubscriber1(HttpSuccessListener<T> successListener,
+        HttpErrorListener errorListener) {
+        if (successListener == null) {
             throw new NullPointerException("HttpSuccessListener not null");
-        if (errorListener == null)
+        }
+        if (errorListener == null) {
             throw new NullPointerException("HttpErrorListener not null");
+        }
         mSuccessListener = successListener;
         mErrorListener = errorListener;
     }
@@ -85,14 +85,16 @@ public class HttpSubscriber1<T> extends Subscriber<T> {
         } else {
             if (e instanceof SocketTimeoutException) {
                 Toast.makeText(ConfigurationImpl.get().getAppContext(),
-                        R.string.net_request_time_out, Toast.LENGTH_SHORT).show();
+                    R.string.net_request_time_out, Toast.LENGTH_SHORT).show();
             } else if (e instanceof ConnectException) {
                 Toast.makeText(ConfigurationImpl.get().getAppContext(),
-                        R.string.net_error_tips, Toast.LENGTH_SHORT).show();
+                    R.string.net_error_tips, Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(ConfigurationImpl.get().getAppContext(),
-                        e.getMessage(), Toast.LENGTH_SHORT).show();
-                Logger.e(e, e.getMessage());
+                    e.getMessage(), Toast.LENGTH_SHORT).show();
+                if (ConfigurationImpl.get().isDebug()) {
+                    Log.e(TAG, e.getMessage());
+                }
             }
         }
     }
@@ -129,21 +131,21 @@ public class HttpSubscriber1<T> extends Subscriber<T> {
             @Override
             public Object call(Object observable) {
                 return ((Observable) observable)
-                        .subscribeOn(Schedulers.newThread())
-                        .unsubscribeOn(Schedulers.newThread())
-                        .doOnSubscribe(new Action0() {
-                            @Override
-                            public void call() {
-                                if (!NetWorkStateUtils.isNetworkConnected()) {
-                                    Toast.makeText(ConfigurationImpl.get().getAppContext(),
-                                            R.string.net_error_tips, Toast.LENGTH_SHORT).show();
-                                } else if (sContext != null) {
-                                    RequestDialogUtils.show(sContext);
-                                }
+                    .subscribeOn(Schedulers.newThread())
+                    .unsubscribeOn(Schedulers.newThread())
+                    .doOnSubscribe(new Action0() {
+                        @Override
+                        public void call() {
+                            if (!NetWorkStateUtils.isNetworkConnected()) {
+                                Toast.makeText(ConfigurationImpl.get().getAppContext(),
+                                    R.string.net_error_tips, Toast.LENGTH_SHORT).show();
+                            } else if (sContext != null) {
+                                RequestDialogUtils.show(sContext);
                             }
-                        })
-                        .subscribeOn(AndroidSchedulers.mainThread())
-                        .observeOn(AndroidSchedulers.mainThread());
+                        }
+                    })
+                    .subscribeOn(AndroidSchedulers.mainThread())
+                    .observeOn(AndroidSchedulers.mainThread());
             }
         };
     }
@@ -156,21 +158,21 @@ public class HttpSubscriber1<T> extends Subscriber<T> {
             @Override
             public Object call(Object observable) {
                 return ((Observable) observable)
-                        .subscribeOn(Schedulers.newThread())
-                        .unsubscribeOn(Schedulers.newThread())
-                        .doOnSubscribe(new Action0() {
-                            @Override
-                            public void call() {
-                                if (!NetWorkStateUtils.isNetworkConnected()) {
-                                    Toast.makeText(ConfigurationImpl.get().getAppContext(),
-                                            R.string.net_error_tips, Toast.LENGTH_SHORT).show();
-                                } else if (sDialog != null) {
-                                    sDialog.show();
-                                }
+                    .subscribeOn(Schedulers.newThread())
+                    .unsubscribeOn(Schedulers.newThread())
+                    .doOnSubscribe(new Action0() {
+                        @Override
+                        public void call() {
+                            if (!NetWorkStateUtils.isNetworkConnected()) {
+                                Toast.makeText(ConfigurationImpl.get().getAppContext(),
+                                    R.string.net_error_tips, Toast.LENGTH_SHORT).show();
+                            } else if (sDialog != null) {
+                                sDialog.show();
                             }
-                        })
-                        .subscribeOn(AndroidSchedulers.mainThread())
-                        .observeOn(AndroidSchedulers.mainThread());
+                        }
+                    })
+                    .subscribeOn(AndroidSchedulers.mainThread())
+                    .observeOn(AndroidSchedulers.mainThread());
             }
         };
     }
@@ -183,21 +185,21 @@ public class HttpSubscriber1<T> extends Subscriber<T> {
             @Override
             public Object call(Object observable) {
                 return ((Observable) observable)
-                        .subscribeOn(Schedulers.newThread())
-                        .unsubscribeOn(Schedulers.newThread())
-                        .doOnSubscribe(new Action0() {
-                            @Override
-                            public void call() {
-                                if (!NetWorkStateUtils.isNetworkConnected()) {
-                                    Toast.makeText(ConfigurationImpl.get().getAppContext(),
-                                            R.string.net_error_tips, Toast.LENGTH_SHORT).show();
-                                } else if (sRefresh != null) {
-                                    sRefresh.setRefreshing(true);
-                                }
+                    .subscribeOn(Schedulers.newThread())
+                    .unsubscribeOn(Schedulers.newThread())
+                    .doOnSubscribe(new Action0() {
+                        @Override
+                        public void call() {
+                            if (!NetWorkStateUtils.isNetworkConnected()) {
+                                Toast.makeText(ConfigurationImpl.get().getAppContext(),
+                                    R.string.net_error_tips, Toast.LENGTH_SHORT).show();
+                            } else if (sRefresh != null) {
+                                sRefresh.setRefreshing(true);
                             }
-                        })
-                        .subscribeOn(AndroidSchedulers.mainThread())
-                        .observeOn(AndroidSchedulers.mainThread());
+                        }
+                    })
+                    .subscribeOn(AndroidSchedulers.mainThread())
+                    .observeOn(AndroidSchedulers.mainThread());
             }
         };
     }
@@ -208,8 +210,8 @@ public class HttpSubscriber1<T> extends Subscriber<T> {
             @Override
             public Object call(Object observable) {
                 return ((Observable) observable)
-                        .subscribeOn(Schedulers.newThread())
-                        .observeOn(AndroidSchedulers.mainThread());
+                    .subscribeOn(Schedulers.newThread())
+                    .observeOn(AndroidSchedulers.mainThread());
             }
         };
     }
@@ -218,7 +220,8 @@ public class HttpSubscriber1<T> extends Subscriber<T> {
     public static <T> Observable.Transformer<T, T> downSchedulers() {
         return new Observable.Transformer() {
             public Object call(Object observable) {
-                return ((Observable) observable).subscribeOn(Schedulers.newThread()).observeOn(Schedulers.io());
+                return ((Observable) observable).subscribeOn(Schedulers.newThread())
+                    .observeOn(Schedulers.io());
             }
         };
     }

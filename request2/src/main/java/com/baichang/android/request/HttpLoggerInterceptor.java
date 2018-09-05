@@ -1,7 +1,7 @@
 package com.baichang.android.request;
 
+import android.util.Log;
 import com.baichang.android.config.ConfigurationImpl;
-import com.orhanobut.logger.Logger;
 import java.io.EOFException;
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -26,6 +26,7 @@ public class HttpLoggerInterceptor implements Interceptor {
 
     private static final Charset UTF8 = Charset.forName("UTF-8");
     private static final String error_msg = "请检查网络连接是否畅通";
+    private static final String TAG = "HTTP";
 
     public HttpLoggerInterceptor() {
     }
@@ -45,7 +46,7 @@ public class HttpLoggerInterceptor implements Interceptor {
         String md5 = ParameterUtils.MD5(parameter);
         newUrl.addQueryParameter("sign", md5).addQueryParameter("token", token);
         if (ConfigurationImpl.get().isDebug()) {
-            Logger.i("REQUEST:\n"
+            Log.i(TAG, "REQUEST:\n"
                 + "param->[T_T] ："
                 + parameter
                 + "\n"
@@ -70,7 +71,9 @@ public class HttpLoggerInterceptor implements Interceptor {
             try {
                 response = chain.proceed(newRequest);
             } catch (Exception e) {
-                Logger.e(error_msg + ": " + e.getMessage());
+                if (ConfigurationImpl.get().isDebug()) {
+                    Log.e(TAG, error_msg + ": " + e.getMessage());
+                }
                 throw new HttpException(error_msg);
             }
             long tookMs = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - startNs);
@@ -91,8 +94,8 @@ public class HttpLoggerInterceptor implements Interceptor {
             if (!isPlaintext(responseBuffer)) {
                 return response;
             }
-            if (contentLength != 0) {
-                Logger.d("RESPONSE:\n"
+            if (contentLength != 0 && ConfigurationImpl.get().isDebug()) {
+                Log.d(TAG, "RESPONSE:\n"
                     + "url:"
                     + response.request().url()
                     + "\n"

@@ -25,7 +25,6 @@ android {
     compile depend.rxjavaadapter2
     compile depend.rxandroid2
     compile depend.v7
-    compile depend.logger
     provided project(':config')
     provided project(':widget')
   }

@@ -2,6 +2,15 @@
 
 ## 更新说明：
 
+### 2018-09-05
+
+* request、request2 移除 Logger 模块
+
+* `compile 'com.baichang.android.library:request:1.0.4''`
+
+* `compile 'com.baichang.android.library:request2:2.0.3''`
+
+
 ### 2018-08-24
 
 * common 包移除对 acache 缓存目录的设置，移到继承类里面实现
