@@ -2,6 +2,12 @@
 
 ## 更新说明：
 
+### 2018-09-14
+
+* request 修改请求拦截，Header 添加 jwt
+
+* `compile 'com.baichang.android.library:request:1.0.6''`
+
 ### 2018-09-05
 
 * request、request2 移除 Logger 模块

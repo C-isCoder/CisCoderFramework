@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.UnsupportedCharsetException;
 import java.util.concurrent.TimeUnit;
-import okhttp3.Headers;
 import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
 import okhttp3.MediaType;
@@ -37,11 +36,14 @@ public class HttpLoggerInterceptor implements Interceptor {
         RequestBody requestBody = request.body();
         HttpUrl url = request.url();
         HttpUrl.Builder newUrl = url.newBuilder();
-        Buffer buffer = new Buffer();
-        requestBody.writeTo(buffer);
-        String parameter = buffer.readString(UTF8);
-        buffer.flush();
-        buffer.close();
+        String parameter = "";
+        if (requestBody != null && requestBody.contentLength() != 0) {
+            Buffer buffer = new Buffer();
+            requestBody.writeTo(buffer);
+            parameter = buffer.readString(UTF8);
+            buffer.flush();
+            buffer.close();
+        }
         String token = ConfigurationImpl.get().getToken();
         String md5 = ParameterUtils.MD5(parameter);
         newUrl.addQueryParameter("sign", md5).addQueryParameter("token", token);
@@ -62,8 +64,10 @@ public class HttpLoggerInterceptor implements Interceptor {
                 + "method->[^_^]："
                 + request.method());
         }
-        Request.Builder requestBuilder =
-            request.newBuilder().method(request.method(), request.body()).url(newUrl.build());
+        Request.Builder requestBuilder = request.newBuilder()
+            .method(request.method(), request.body())
+            .url(newUrl.build())
+            .addHeader("Authorization", token);
         newRequest = requestBuilder.build();
         if (ConfigurationImpl.get().isDebug()) {
             long startNs = System.nanoTime();
@@ -114,7 +118,7 @@ public class HttpLoggerInterceptor implements Interceptor {
      * Returns true if the body in question probably contains human readable text. Uses a small sample
      * of code points to detect unicode control characters commonly used in binary file signatures.
      */
-    static boolean isPlaintext(Buffer buffer) {
+    private static boolean isPlaintext(Buffer buffer) {
         try {
             Buffer prefix = new Buffer();
             long byteCount = buffer.size() < 64 ? buffer.size() : 64;
@@ -132,11 +136,6 @@ public class HttpLoggerInterceptor implements Interceptor {
         } catch (EOFException e) {
             return false; // Truncated UTF-8 sequence.
         }
-    }
-
-    private boolean bodyEncoded(Headers headers) {
-        String contentEncoding = headers.get("Content-Encoding");
-        return contentEncoding != null && !contentEncoding.equalsIgnoreCase("identity");
     }
 }
 
