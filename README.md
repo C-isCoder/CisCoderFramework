@@ -6,7 +6,7 @@
 
 * widget 修复城市选择 popupwindow 弹窗显示异常。
 
-* `compile 'com.baichang.android.library:widget:1.0.4'`
+* `compile 'com.baichang.android.library:widget:1.0.5'`
 
 ### 2018-09-14
 
@@ -551,7 +551,7 @@ BCUmUtil.setShareMedia(SHARE_MEDIA[] displayList //要分享的 )
 
 * 基础组件 `compile 'com.baichang.android.library:common:1.0.4'`
 
-* 控件集合 `compile 'com.baichang.android.library:widget:1.0.4'`
+* 控件集合 `compile 'com.baichang.android.library:widget:1.0.5'`
 
 * 工具集合 `compile 'com.baichang.android.library:utils:1.0.2'`
 

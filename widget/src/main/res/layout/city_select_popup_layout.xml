@@ -1,55 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    >
 
-    <LinearLayout
-        android:id="@+id/city_select_ly_status"
+  <LinearLayout
+      android:id="@+id/city_select_ly_status"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_centerInParent="true"
+      android:layout_marginLeft="10dp"
+      android:layout_marginRight="10dp"
+      android:background="@android:color/white"
+      android:orientation="vertical"
+      >
+
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:background="@android:color/white"
-        android:orientation="vertical">
+        android:paddingBottom="10dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingTop="13dp"
+        >
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingBottom="10dp"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            android:paddingTop="13dp">
+      <TextView
+          android:id="@+id/city_select_tv_title"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_centerVertical="true"
+          android:text="请选择"
+          android:textSize="@dimen/button_text_size"
+          />
 
-            <TextView
-                android:id="@+id/city_select_tv_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:text="请选择"
-                android:textSize="@dimen/button_text_size" />
+      <TextView
+          android:id="@+id/city_select_tv_confirm"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_alignParentRight="true"
+          android:layout_centerVertical="true"
+          android:padding="4dp"
+          android:text="确定"
+          android:textSize="@dimen/button_text_size"
+          />
+    </RelativeLayout>
 
-            <TextView
-                android:id="@+id/city_select_tv_confirm"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:padding="4dp"
-                android:text="确定"
-                android:textSize="@dimen/button_text_size" />
-        </RelativeLayout>
+    <View
+        android:id="@+id/city_select_line_view"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="#EDEDED"
+        />
 
-        <View
-            android:id="@+id/city_select_line_view"
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:background="#EDEDED" />
-
-        <com.baichang.android.widget.cityPop.CityPicker
-            android:id="@+id/city_picker"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center" />
-    </LinearLayout>
+    <com.baichang.android.widget.cityPop.CityPicker
+        android:id="@+id/city_picker"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:gravity="center"
+        />
+  </LinearLayout>
 </RelativeLayout>

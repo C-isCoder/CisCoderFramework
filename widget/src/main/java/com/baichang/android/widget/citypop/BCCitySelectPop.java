@@ -25,7 +25,7 @@ public class BCCitySelectPop extends PopupWindow {
 
     public BCCitySelectPop(Context context) {
         super(LayoutInflater.from(context).inflate(R.layout.city_select_popup_layout, null),
-            ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+            ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         mCityPicker = getContentView().findViewById(R.id.city_picker);
         TextView tvConfirm = getContentView().findViewById(R.id.city_select_tv_confirm);
         TextView tvTitle = getContentView().findViewById(R.id.city_select_tv_title);

@@ -11,12 +11,10 @@ import android.graphics.Shader.TileMode;
 import android.os.Handler;
 import android.os.Message;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-
-
 import com.baichang.android.widget.R;
-
 import java.util.ArrayList;
 
 /**
@@ -123,8 +121,7 @@ public class ScrollerNumberPicker extends View {
      */
     private boolean isClearing = false;
 
-    public ScrollerNumberPicker(Context context, AttributeSet attrs,
-                                int defStyle) {
+    public ScrollerNumberPicker(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         init(context, attrs);
         initData();
@@ -143,9 +140,9 @@ public class ScrollerNumberPicker extends View {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-
-        if (!isEnable)
+        if (!isEnable) {
             return true;
+        }
         int y = (int) event.getY();
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
@@ -158,13 +155,12 @@ public class ScrollerNumberPicker extends View {
                 onSelectListener();
                 break;
             case MotionEvent.ACTION_UP:
-
                 // 移动距离的绝对值
                 int move = (y - downY);
                 move = move > 0 ? move : move * (-1);
                 // 判断段时间移动的距离
                 if (System.currentTimeMillis() - downTime < goonTime
-                        && move > goonDistence) {
+                    && move > goonDistence) {
                     goonMove(y - downY);
                 } else {
                     actionUp(y - downY);
@@ -188,38 +184,35 @@ public class ScrollerNumberPicker extends View {
     }
 
     private synchronized void drawList(Canvas canvas) {
-        if (isClearing)
+        if (isClearing) {
             return;
+        }
         try {
             for (ItemObject itemObject : itemList) {
                 itemObject.drawSelf(canvas);
             }
         } catch (Exception ignored) {
         }
-
     }
 
     @Override
     protected void onLayout(boolean changed, int left, int top, int right,
-                            int bottom) {
+        int bottom) {
         super.onLayout(changed, left, top, right, bottom);
     }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        controlWidth = getWidth();
+        controlWidth = getMeasuredWidth();
         if (controlWidth != 0) {
-            setMeasuredDimension(getWidth(), itemNumber * unitHeight);
-            controlWidth = getWidth();
+            setMeasuredDimension(getMeasuredWidth(), itemNumber * unitHeight);
+            controlWidth = getMeasuredWidth();
         }
-
     }
 
     /**
      * 设置线的颜色
-     *
-     * @param colorRes
      */
     public void setLineColor(int colorRes) {
         lineColor = getResources().getColor(colorRes);
@@ -243,7 +236,6 @@ public class ScrollerNumberPicker extends View {
                     }
                     actionThreadMove(move > 0 ? distence : distence * (-1));
                     distence += 10;
-
                 }
                 actionUp(move > 0 ? distence - 10 : distence * (-1) + 10);
                 noEmpty();
@@ -255,23 +247,26 @@ public class ScrollerNumberPicker extends View {
      * 不能为空，必须有选项
      */
     private void noEmpty() {
-        if (!noEmpty)
+        if (!noEmpty) {
             return;
+        }
         for (ItemObject item : itemList) {
-            if (item.isSelected())
+            if (item.isSelected()) {
                 return;
+            }
         }
         int move = (int) itemList.get(0).moveToSelected();
         if (move < 0) {
             defaultMove(move);
         } else {
             defaultMove((int) itemList.get(itemList.size() - 1)
-                    .moveToSelected());
+                .moveToSelected());
         }
         for (ItemObject item : itemList) {
             if (item.isSelected()) {
-                if (onSelectListener != null)
+                if (onSelectListener != null) {
                     onSelectListener.endSelect(item.id, item.itemText);
+                }
                 break;
             }
         }
@@ -292,13 +287,10 @@ public class ScrollerNumberPicker extends View {
             itemList.add(itmItemObject);
         }
         isClearing = false;
-
     }
 
     /**
      * 移动的时候
-     *
-     * @param move
      */
     private void actionMove(int move) {
         for (ItemObject item : itemList) {
@@ -309,8 +301,6 @@ public class ScrollerNumberPicker extends View {
 
     /**
      * 移动，线程中调用
-     *
-     * @param move
      */
     private void actionThreadMove(int move) {
         for (ItemObject item : itemList) {
@@ -323,8 +313,6 @@ public class ScrollerNumberPicker extends View {
 
     /**
      * 松开的时候
-     *
-     * @param move
      */
     private void actionUp(int move) {
         int newMove = 0;
@@ -332,9 +320,10 @@ public class ScrollerNumberPicker extends View {
             for (int i = 0; i < itemList.size(); i++) {
                 if (itemList.get(i).isSelected()) {
                     newMove = (int) itemList.get(i).moveToSelected();
-                    if (onSelectListener != null)
+                    if (onSelectListener != null) {
                         onSelectListener.endSelect(itemList.get(i).id,
-                                itemList.get(i).itemText);
+                            itemList.get(i).itemText);
+                    }
                     break;
                 }
             }
@@ -342,9 +331,10 @@ public class ScrollerNumberPicker extends View {
             for (int i = itemList.size() - 1; i >= 0; i--) {
                 if (itemList.get(i).isSelected()) {
                     newMove = (int) itemList.get(i).moveToSelected();
-                    if (onSelectListener != null)
+                    if (onSelectListener != null) {
                         onSelectListener.endSelect(itemList.get(i).id,
-                                itemList.get(i).itemText);
+                            itemList.get(i).itemText);
+                    }
                     break;
                 }
             }
@@ -356,13 +346,10 @@ public class ScrollerNumberPicker extends View {
         Message rMessage = new Message();
         rMessage.what = REFRESH_VIEW;
         handler.sendMessage(rMessage);
-
     }
 
     /**
      * 缓慢移动
-     *
-     * @param move
      */
     private synchronized void slowMove(final int move) {
         new Thread(new Runnable() {
@@ -404,20 +391,18 @@ public class ScrollerNumberPicker extends View {
                 }
                 for (ItemObject item : itemList) {
                     if (item.isSelected()) {
-                        if (onSelectListener != null)
+                        if (onSelectListener != null) {
                             onSelectListener.endSelect(item.id, item.itemText);
+                        }
                         break;
                     }
                 }
-
             }
         }).start();
     }
 
     /**
      * 移动到默认位置
-     *
-     * @param move
      */
     private void defaultMove(int move) {
         for (ItemObject item : itemList) {
@@ -432,8 +417,9 @@ public class ScrollerNumberPicker extends View {
      * 滑动监听
      */
     private void onSelectListener() {
-        if (onSelectListener == null)
+        if (onSelectListener == null) {
             return;
+        }
         for (ItemObject item : itemList) {
             if (item.isSelected()) {
                 onSelectListener.selecting(item.id, item.itemText);
@@ -443,8 +429,6 @@ public class ScrollerNumberPicker extends View {
 
     /**
      * 绘制线条
-     *
-     * @param canvas
      */
     private void drawLine(Canvas canvas) {
 
@@ -456,70 +440,61 @@ public class ScrollerNumberPicker extends View {
         }
 
         canvas.drawLine(0, controlHeight / 2 - unitHeight / 2 + 2,
-                controlWidth, controlHeight / 2 - unitHeight / 2 + 2, linePaint);
+            controlWidth, controlHeight / 2 - unitHeight / 2 + 2, linePaint);
         canvas.drawLine(0, controlHeight / 2 + unitHeight / 2 - 2,
-                controlWidth, controlHeight / 2 + unitHeight / 2 - 2, linePaint);
+            controlWidth, controlHeight / 2 + unitHeight / 2 - 2, linePaint);
     }
 
     /**
      * 绘制遮盖板
-     *
-     * @param canvas
      */
     private void drawMask(Canvas canvas) {
         LinearGradient lg = new LinearGradient(0, 0, 0, maskHight, 0x00f2f2f2,
-                0x00f2f2f2, TileMode.MIRROR);
+            0x00f2f2f2, TileMode.MIRROR);
         Paint paint = new Paint();
         paint.setShader(lg);
         canvas.drawRect(0, 0, controlWidth, maskHight, paint);
 
         LinearGradient lg2 = new LinearGradient(0, controlHeight - maskHight,
-                0, controlHeight, 0x00f2f2f2, 0x00f2f2f2, TileMode.MIRROR);
+            0, controlHeight, 0x00f2f2f2, 0x00f2f2f2, TileMode.MIRROR);
         Paint paint2 = new Paint();
         paint2.setShader(lg2);
         canvas.drawRect(0, controlHeight - maskHight, controlWidth,
-                controlHeight, paint2);
-
+            controlHeight, paint2);
     }
 
     /**
      * 初始化，获取设置的属性
-     *
-     * @param context
-     * @param attrs
      */
     private void init(Context context, AttributeSet attrs) {
         TypedArray attribute = context.obtainStyledAttributes(attrs,
-                R.styleable.NumberPicker);
+            R.styleable.NumberPicker);
         unitHeight = (int) attribute.getDimension(
-                R.styleable.NumberPicker_unitHight, 32);
+            R.styleable.NumberPicker_unitHight, 32);
         normalFont = attribute.getDimension(
-                R.styleable.NumberPicker_normalTextSize, 14.0f);
+            R.styleable.NumberPicker_normalTextSize, 14.0f);
         selectedFont = attribute.getDimension(
-                R.styleable.NumberPicker_selecredTextSize, 22.0f);
+            R.styleable.NumberPicker_selecredTextSize, 22.0f);
         itemNumber = attribute.getInt(R.styleable.NumberPicker_itemNumber, 7);
         normalColor = attribute.getColor(
-                R.styleable.NumberPicker_normalTextColor, 0xff000000);
+            R.styleable.NumberPicker_normalTextColor, 0xff000000);
         selectedColor = attribute.getColor(
-                R.styleable.NumberPicker_selecredTextColor, 0xffff0000);
+            R.styleable.NumberPicker_selecredTextColor, 0xffff0000);
         lineColor = attribute.getColor(R.styleable.NumberPicker_lineColor,
-                0xff000000);
+            0xff000000);
         maskHight = attribute.getDimension(
-                R.styleable.NumberPicker_maskHight, 48.0f);
+            R.styleable.NumberPicker_maskHight, 48.0f);
         noEmpty = attribute.getBoolean(R.styleable.NumberPicker_noEmpty,
-                false);
+            false);
         isEnable = attribute.getBoolean(R.styleable.NumberPicker_isEnable,
-                true);
+            true);
         attribute.recycle();
 
         controlHeight = itemNumber * unitHeight;
-
     }
 
     /**
      * 设置数据
-     *
-     * @param data
      */
     public void setData(ArrayList<String> data) {
         this.dataList = data;
@@ -528,34 +503,30 @@ public class ScrollerNumberPicker extends View {
 
     /**
      * 获取返回项
-     *
-     * @return
      */
     public int getSelected() {
         for (ItemObject item : itemList) {
-            if (item.isSelected())
+            if (item.isSelected()) {
                 return item.id;
+            }
         }
         return -1;
     }
 
     /**
      * 获取返回的内容
-     *
-     * @return
      */
     public String getSelectedText() {
         for (ItemObject item : itemList) {
-            if (item.isSelected())
+            if (item.isSelected()) {
                 return item.itemText;
+            }
         }
         return "";
     }
 
     /**
      * 是否正在滑动
-     *
-     * @return
      */
     public boolean isScrolling() {
         return isScrolling;
@@ -563,8 +534,6 @@ public class ScrollerNumberPicker extends View {
 
     /**
      * 是否可用
-     *
-     * @return
      */
     public boolean isEnable() {
         return isEnable;
@@ -572,8 +541,6 @@ public class ScrollerNumberPicker extends View {
 
     /**
      * 设置是否可用
-     *
-     * @param isEnable
      */
     public void setEnable(boolean isEnable) {
         this.isEnable = isEnable;
@@ -581,8 +548,6 @@ public class ScrollerNumberPicker extends View {
 
     /**
      * 设置默认选项
-     *
-     * @param index
      */
     public void setDefault(int index) {
         float move = itemList.get(index).moveToSelected();
@@ -591,31 +556,26 @@ public class ScrollerNumberPicker extends View {
 
     /**
      * 获取列表大小
-     *
-     * @return
      */
     public int getListSize() {
-        if (itemList == null)
+        if (itemList == null) {
             return 0;
+        }
         return itemList.size();
     }
 
     /**
      * 获取某项的内容
-     *
-     * @param index
-     * @return
      */
     public String getItemText(int index) {
-        if (itemList == null)
+        if (itemList == null) {
             return "";
+        }
         return itemList.get(index).itemText;
     }
 
     /**
      * 监听
-     *
-     * @param onSelectListener
      */
     public void setOnSelectListener(OnSelectListener onSelectListener) {
         this.onSelectListener = onSelectListener;
@@ -635,7 +595,6 @@ public class ScrollerNumberPicker extends View {
                     break;
             }
         }
-
     };
 
     /**
@@ -679,8 +638,6 @@ public class ScrollerNumberPicker extends View {
 
         /**
          * 绘制自身
-         *
-         * @param canvas
          */
         public void drawSelf(Canvas canvas) {
 
@@ -689,8 +646,9 @@ public class ScrollerNumberPicker extends View {
                 textPaint.setAntiAlias(true);
             }
 
-            if (textRect == null)
+            if (textRect == null) {
                 textRect = new Rect();
+            }
 
             // 判断是否被选择
             if (isSelected()) {
@@ -698,11 +656,11 @@ public class ScrollerNumberPicker extends View {
                 // 获取距离标准位置的距离
                 float moveToSelect = moveToSelected();
                 moveToSelect = moveToSelect > 0 ? moveToSelect : moveToSelect
-                        * (-1);
+                    * (-1);
                 // 计算当前字体大小
                 float textSize = (float) normalFont
-                        + ((float) (selectedFont - normalFont) * (1.0f - (float) moveToSelect
-                        / (float) unitHeight));
+                    + ((float) (selectedFont - normalFont) * (1.0f - (float) moveToSelect
+                    / (float) unitHeight));
                 textPaint.setTextSize(textSize);
             } else {
                 textPaint.setColor(normalColor);
@@ -712,33 +670,27 @@ public class ScrollerNumberPicker extends View {
             // 返回包围整个字符串的最小的一个Rect区域
             textPaint.getTextBounds(itemText, 0, itemText.length(), textRect);
             // 判断是否可视
-            if (!isInView())
+            if (!isInView()) {
                 return;
-
+            }
             // 绘制内容
-            canvas.drawText(itemText, x + controlWidth / 2 - textRect.width()
-                            / 2, y + move + unitHeight / 2 + textRect.height() / 2,
-                    textPaint);
-
+            canvas.drawText(itemText, x + (controlWidth - textRect.width() - textRect.left) / 2,
+                y + move + unitHeight / 2 + textRect.height() / 2, textPaint);
         }
 
         /**
          * 是否在可视界面内
-         *
-         * @param rect
-         * @return
          */
         public boolean isInView() {
             if (y + move > controlHeight
-                    || (y + move + unitHeight / 2 + textRect.height() / 2) < 0)
+                || (y + move + unitHeight / 2 + textRect.height() / 2) < 0) {
                 return false;
+            }
             return true;
         }
 
         /**
          * 移动距离
-         *
-         * @param _move
          */
         public void move(int _move) {
             this.move = _move;
@@ -746,8 +698,6 @@ public class ScrollerNumberPicker extends View {
 
         /**
          * 设置新的坐标
-         *
-         * @param move
          */
         public void newY(int _move) {
             this.move = 0;
@@ -756,22 +706,23 @@ public class ScrollerNumberPicker extends View {
 
         /**
          * 判断是否在选择区域内
-         *
-         * @return
          */
         public boolean isSelected() {
             if ((y + move) >= controlHeight / 2 - unitHeight / 2 + 2
-                    && (y + move) <= controlHeight / 2 + unitHeight / 2 - 2)
+                && (y + move) <= controlHeight / 2 + unitHeight / 2 - 2) {
                 return true;
+            }
             if ((y + move + unitHeight) >= controlHeight / 2 - unitHeight / 2
-                    + 2
-                    && (y + move + unitHeight) <= controlHeight / 2
-                    + unitHeight / 2 - 2)
+                + 2
+                && (y + move + unitHeight) <= controlHeight / 2
+                + unitHeight / 2 - 2) {
                 return true;
+            }
             if ((y + move) <= controlHeight / 2 - unitHeight / 2 + 2
-                    && (y + move + unitHeight) >= controlHeight / 2
-                    + unitHeight / 2 - 2)
+                && (y + move + unitHeight) >= controlHeight / 2
+                + unitHeight / 2 - 2) {
                 return true;
+            }
             return false;
         }
 
@@ -792,19 +743,12 @@ public class ScrollerNumberPicker extends View {
 
         /**
          * 结束选择
-         *
-         * @param id
-         * @param text
          */
         public void endSelect(int id, String text);
 
         /**
          * 选中的内容
-         *
-         * @param id
-         * @param text
          */
         public void selecting(int id, String text);
-
     }
 }
