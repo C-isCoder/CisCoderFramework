@@ -28,6 +28,7 @@ dependencies {
   compile fileTree(include: ['*.jar'], dir: 'libs')
   provided depend.v4
   provided project(':config')
+  compile files('libs/pinyin4j-2.5.0.jar')
 }
 uploadArchives {
   configuration = configurations.archives

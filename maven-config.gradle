@@ -81,7 +81,7 @@ ext {
   ]
 
   utils = [
-      version: '1.0.2',
+      version: '1.0.3',
       artifactId: 'utils',
       packaging: 'aar',
       description: 'utils library',

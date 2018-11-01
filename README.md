@@ -2,6 +2,12 @@
 
 ## 更新说明：
 
+### 2018-11-01
+
+* 拼音转换工具修改
+
+* `compile 'com.baichang.android.library:utils:1.0.3'`
+
 ### 2018-10-30
 
 * widget 修复城市选择 popupwindow 弹窗显示异常。

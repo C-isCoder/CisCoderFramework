@@ -1,62 +1,104 @@
 package com.baichang.android.utils.pinyin;
 
-/**
- * Created by guyacong on 2015/9/28.
- */
-public final class Pinyin {
+import android.text.TextUtils;
+import java.util.ArrayList;
+import net.sourceforge.pinyin4j.PinyinHelper;
+import net.sourceforge.pinyin4j.format.HanyuPinyinCaseType;
+import net.sourceforge.pinyin4j.format.HanyuPinyinOutputFormat;
+import net.sourceforge.pinyin4j.format.HanyuPinyinToneType;
+import net.sourceforge.pinyin4j.format.exception.BadHanyuPinyinOutputFormatCombination;
 
-    private Pinyin() {
-        //no instance
-    }
+public class Pinyin {
+    private static final HanyuPinyinOutputFormat sFormat = new HanyuPinyinOutputFormat();
 
-    /**
-     * return pinyin if c is chinese in uppercase, String.valueOf(c) otherwise.
-     */
-    public static String toPinyin(char c) {
-        if (isChinese(c)) {
-            if (c == PinyinData.CHAR_12295) {
-                return PinyinData.PINYIN_12295;
-            } else {
-                return PinyinData.PINYIN_TABLE[getPinyinCode(c)];
+    public static String getSignPinyin(String hanZi) {
+        if (TextUtils.isEmpty(hanZi)) {
+            throw new NullPointerException("Han Zi not null.");
+        }
+        sFormat.setToneType(HanyuPinyinToneType.WITHOUT_TONE);
+        sFormat.setCaseType(HanyuPinyinCaseType.UPPERCASE);
+        StringBuilder result = new StringBuilder();
+        char[] hans = hanZi.toCharArray();
+        for (char c : hans) {
+            String[] pinyin = null;
+            try {
+                pinyin = PinyinHelper.toHanyuPinyinStringArray(c, sFormat);
+            } catch (BadHanyuPinyinOutputFormatCombination badHanyuPinyinOutputFormatCombination) {
+                badHanyuPinyinOutputFormatCombination.printStackTrace();
             }
+            if (pinyin == null) {
+                result.append(c);
+            } else {
+                // 默认取第一个拼音，不考虑声调和多音字
+                result.append(pinyin[0]);
+            }
+        }
+        return result.toString();
+    }
+
+    public static String getSignPinyin(char hanZi) {
+        if (hanZi == 0) {
+            throw new NullPointerException("Han Zi not null.");
+        }
+        sFormat.setToneType(HanyuPinyinToneType.WITHOUT_TONE);
+        sFormat.setCaseType(HanyuPinyinCaseType.UPPERCASE);
+        StringBuilder result = new StringBuilder();
+        String[] pinyin = null;
+        try {
+            pinyin = PinyinHelper.toHanyuPinyinStringArray(hanZi, sFormat);
+        } catch (BadHanyuPinyinOutputFormatCombination badHanyuPinyinOutputFormatCombination) {
+            badHanyuPinyinOutputFormatCombination.printStackTrace();
+        }
+        if (pinyin == null) {
+            result.append(hanZi);
         } else {
-            return String.valueOf(c);
+            // 默认取第一个拼音，不考虑声调和多音字
+            result.append(pinyin[0]);
         }
+        return result.toString();
     }
 
-    /**
-     * return whether c is chinese
-     */
-    public static boolean isChinese(char c) {
-        return (PinyinData.MIN_VALUE <= c && c <= PinyinData.MAX_VALUE
-                && getPinyinCode(c) > 0)
-                || PinyinData.CHAR_12295 == c;
+    public static ArrayList<String[]> getMultiplePinyin(String hanZi) {
+        if (TextUtils.isEmpty(hanZi)) {
+            throw new NullPointerException("Han Zi not null.");
+        }
+        sFormat.setToneType(HanyuPinyinToneType.WITHOUT_TONE);
+        sFormat.setCaseType(HanyuPinyinCaseType.UPPERCASE);
+        final char[] hans = hanZi.toCharArray();
+        final ArrayList<String[]> result = new ArrayList<>();
+        for (char c : hans) {
+            String[] pinyin = null;
+            try {
+                pinyin = PinyinHelper.toHanyuPinyinStringArray(c, sFormat);
+            } catch (BadHanyuPinyinOutputFormatCombination badHanyuPinyinOutputFormatCombination) {
+                badHanyuPinyinOutputFormatCombination.printStackTrace();
+            }
+            if (pinyin != null) {
+                // 默认取第一个拼音，不考虑声调和多音字
+                result.add(pinyin);
+            }
+        }
+        return result;
     }
 
-    private static int getPinyinCode(char c) {
-        int offset = c - PinyinData.MIN_VALUE;
-        if (0 <= offset && offset < PinyinData.PINYIN_CODE_1_OFFSET) {
-            return decodeIndex(PinyinCode1.PINYIN_CODE_PADDING, PinyinCode1.PINYIN_CODE, offset);
-        } else if (PinyinData.PINYIN_CODE_1_OFFSET <= offset
-                && offset < PinyinData.PINYIN_CODE_2_OFFSET) {
-            return decodeIndex(PinyinCode2.PINYIN_CODE_PADDING, PinyinCode2.PINYIN_CODE,
-                    offset - PinyinData.PINYIN_CODE_1_OFFSET);
+    public static String getFirstIndexPinyin(String hanZi) {
+        if (TextUtils.isEmpty(hanZi)) {
+            throw new NullPointerException("Han Zi not null.");
+        }
+        sFormat.setToneType(HanyuPinyinToneType.WITHOUT_TONE);
+        sFormat.setCaseType(HanyuPinyinCaseType.UPPERCASE);
+        char[] hans = hanZi.toCharArray();
+        String[] pinyin = null;
+        try {
+            pinyin = PinyinHelper.toHanyuPinyinStringArray(hans[0], sFormat);
+        } catch (BadHanyuPinyinOutputFormatCombination badHanyuPinyinOutputFormatCombination) {
+            badHanyuPinyinOutputFormatCombination.printStackTrace();
+        }
+        if (pinyin == null) {
+            return "";
         } else {
-            return decodeIndex(PinyinCode3.PINYIN_CODE_PADDING, PinyinCode3.PINYIN_CODE,
-                    offset - PinyinData.PINYIN_CODE_2_OFFSET);
+            // 默认取第一个拼音，不考虑声调和多音字
+            return pinyin[0].substring(0, 1);
         }
-    }
-
-    private static short decodeIndex(byte[] paddings, byte[] indexes, int offset) {
-        //CHECKSTYLE:OFF
-        int index1 = offset / 8;
-        int index2 = offset % 8;
-        short realIndex;
-        realIndex = (short) (indexes[offset] & 0xff);
-        //CHECKSTYLE:ON
-        if ((paddings[index1] & PinyinData.BIT_MASKS[index2]) != 0) {
-            realIndex = (short) (realIndex | PinyinData.PADDING_MASK);
-        }
-        return realIndex;
     }
 }
