@@ -1,6 +1,5 @@
 package com.baichang.android.common;
 
-import android.annotation.TargetApi;
 import android.app.DownloadManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -76,13 +75,13 @@ public class BCAppUpdateManager {
         builder.setMessage(updateMsg);
         builder.setPositiveButton("是", new DialogInterface.OnClickListener() {
             @Override public void onClick(DialogInterface dialog, int which) {
+                downloadApk();
                 //强制升级
                 if (mCoerce) {
                     System.exit(0);
                 } else {
                     dialog.dismiss();
                 }
-                downloadApk();
             }
         });
         builder.setNegativeButton("否", new DialogInterface.OnClickListener() {
@@ -102,8 +101,7 @@ public class BCAppUpdateManager {
     /**
      * 下载apk
      */
-
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB) private void downloadApk() {
+    private void downloadApk() {
         mDownloadManager = (DownloadManager) mContext.getSystemService(Context.DOWNLOAD_SERVICE);
         DownloadManager.Request request = new DownloadManager.Request(Uri.parse(apkUrl));
         request.setNotificationVisibility(

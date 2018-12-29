@@ -121,8 +121,7 @@ public class InteractionPhotoSelectDialog extends DialogFragment implements View
       mVideoConfig = VideoConfig.get()
           .setTime(10 * 1000)
           .setProfile(CamcorderProfile.QUALITY_480P)
-          .setCompress(true)
-          .setCompressMode(VideoConfig.CompressMode.fast)
+          .setCompress(false)
           .check();
     } catch (NullRecordTimeException e) {
       mVideoConfig.setTime(10 * 1000);
@@ -310,7 +309,7 @@ public class InteractionPhotoSelectDialog extends DialogFragment implements View
         dismiss();
       }
       BCPhotoFragUtil.cleanActivity();
-    } else if (requestCode == VideoConfig.REQUESR_RECORD_MEDIA) {
+    } else if (requestCode == VideoConfig.REQUEST_RECORD_MEDIA) {
       VideoInfo videoInfo = ERecorderActivityImpl.getVedioInfo(data);
       if (videoInfo == null) {
         Toast.makeText(getActivity(), "视频拍摄失败", Toast.LENGTH_SHORT).show();

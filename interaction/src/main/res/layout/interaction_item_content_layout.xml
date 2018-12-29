@@ -86,10 +86,26 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_marginTop="8dp"
+      android:ellipsize="end"
       android:lineSpacingExtra="4dp"
       android:textColor="@color/cm_tv_black2"
       android:textSize="@dimen/cm_tv_size_body13"
       tools:text="长期极影各类进口车，免税车，中东霸道、路虎、卡宴、多种车型任你挑。"
+      />
+  <TextView
+      android:id="@+id/item_interaction_content_tv_all"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:paddingBottom="4dp"
+      android:paddingEnd="4dp"
+      android:paddingLeft="0dp"
+      android:paddingRight="4dp"
+      android:paddingStart="0dp"
+      android:paddingTop="4dp"
+      android:text="全文"
+      android:textColor="@drawable/interaction_content_item_btn_bg"
+      android:textSize="@dimen/cm_tv_size_body12"
+      android:visibility="gone"
       />
 
   <com.baichang.android.circle.widget.photocontents.PhotoContents

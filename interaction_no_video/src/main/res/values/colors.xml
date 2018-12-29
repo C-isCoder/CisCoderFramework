@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+   <color name="interaction_colorPrimary">@color/interaction_text_font</color>
+   <color name="interaction_colorPrimaryDark">@color/interaction_text_font</color>
+   <color name="interaction_colorAccent">@color/interaction_text_font</color>
+
+
+   <!--互动-->
+   <color name="interaction_button_normal_color">@color/interaction_text_font</color>
+   <color name="interaction_button_press_color">#d5d5d5</color>
+   <color name="interaction_layout_background">#f0eff5</color>
+   <color name="interaction_top_bar_color">@android:color/white</color>
+   <color name="interaction_top_title_color">@android:color/white</color>
+   <color name="interaction_text_font">#4183ff</color>
+   <color name="interaction_me_report_background">#fafafa</color>
+   <color name="interaction_line_horizontal">#fafafa</color>
+
+</resources>

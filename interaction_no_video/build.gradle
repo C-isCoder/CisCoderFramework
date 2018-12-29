@@ -1,0 +1,68 @@
+apply plugin: 'maven'
+apply plugin: 'com.android.library' // 仓库
+apply from: '../maven-config.gradle'
+apply from: '../depend-config.gradle'
+
+android {
+  compileSdkVersion android.cSdkVersion
+  buildToolsVersion android.bToolsVersion
+
+  defaultConfig {
+    minSdkVersion android.mSdkVersion
+    targetSdkVersion android.tSdkVersion
+    ndk {
+      abiFilters 'armeabi-v7a', 'x86', 'armeabi', 'arm64-v8a' //or armeabi、arm64-v8a、x86
+    }
+  }
+  buildTypes {
+    release {
+      minifyEnabled false
+      proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+    }
+  }
+}
+
+dependencies {
+  compile fileTree(include: ['*.jar'], dir: 'libs')
+
+  provided project(':config')
+  provided project(':request')
+  compile 'com.baichang.android.library:widget:1.0.1'
+  provided project(':imageloader')
+  provided project(':common')
+  provided project(':utils')
+  provided depend.v4
+
+  compile depend.design
+  compile depend.recyclerview
+  compile depend.glide_transformations
+  compile depend.glide_gpuimage
+  compile depend.boxing
+  compile depend.picasso
+  compile depend.eventbus
+  compile depend.imageCompressed
+}
+uploadArchives {
+  configuration = configurations.archives
+  repositories {
+    mavenDeployer {
+      snapshotRepository(url: maven.snapshot) {
+        authentication(userName: maven.name, password: maven.password)
+      }
+      repository(url: maven.repository) {
+        authentication(userName: maven.name, password: maven.password)
+      }
+      pom.project {
+        version interaction_no_video.version
+        artifactId interaction_no_video.artifactId
+        groupId interaction_no_video.groupId
+        packaging interaction_no_video.packaging
+        description interaction_no_video.description
+      }
+    }
+  }
+}
+
+artifacts {
+  archives file(interaction_no_video.artifacts)
+}

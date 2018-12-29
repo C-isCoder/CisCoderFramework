@@ -11,47 +11,53 @@ import com.baichang.android.circle.entity.InteractionUserData;
 
 public interface InteractionConfigContract {
 
-  int getTextFontColor();
+    int getTextFontColor();
 
-  int getTopBarColor();
+    int getTopBarColor();
 
-  int getButtonDrawableRes();
+    int getButtonDrawableRes();
 
-  int getShareDrawableRes();
+    int getShareDrawableRes();
 
-  int getCommentDrawableRes();
+    int getCommentDrawableRes();
 
-  int getPraiseDrawableRes();
+    int getPraiseDrawableRes();
 
-  int getCollectDrawableRes();
+    int getCollectDrawableRes();
 
-  int getBusinessDrawableRes();
+    int getBusinessDrawableRes();
 
-  int getBackDrawableRes();
+    int getBackDrawableRes();
 
-  int getBusinessBrandRes();
+    int getBusinessBrandRes();
 
-  int getTitleColor();
+    int getTitleColor();
 
-  int getPublishTitleColor();
+    int getPublishTitleColor();
 
-  InteractionListener getListener();
+    InteractionListener getListener();
 
-  String getTitleText();
+    String getTitleText();
 
-  boolean isNeedBusinessStore();
+    boolean isNeedBusinessStore();
 
-  boolean isNeedSetTitleHeight();
+    boolean isNeedSetTitleHeight();
 
-  boolean isNeedShowBusinessBrand();
+    boolean isNeedShowBusinessBrand();
 
-  boolean isNeedShare();
+    boolean isNeedShare();
 
-  void share(Activity activity, String title, String summary, String url);
+    boolean isNeedShowCircleTitle();
 
-  void businessStore(String id);
+    boolean isNeedWeChatCircleDisplayMax6();
 
-  InteractionUserData getUser();
+    void share(Activity activity, String title, String summary, String url);
 
-  String getInteractionUrl();
+    void businessStore(String id);
+
+    InteractionUserData getUser();
+
+    String getInteractionUrl();
+
+    int getDisplayDisplay();
 }

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+   xmlns:tools="http://schemas.android.com/tools"
+   android:id="@+id/item_interaction_dialog_tv_name"
+   android:layout_width="match_parent"
+   android:layout_height="44dp"
+   android:paddingLeft="10dp"
+   android:paddingRight="10dp"
+   android:background="?android:attr/selectableItemBackground"
+   android:drawableBottom="@drawable/interaction_horizontal_line"
+   android:gravity="center_vertical"
+   android:textColor="@color/cm_tv_black1"
+   android:textSize="@dimen/cm_tv_size_body13"
+   tools:text="热门互动" />

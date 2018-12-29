@@ -22,8 +22,8 @@ import android.widget.ImageView;
 import android.widget.Toast;
 import com.baichang.android.config.ConfigurationImpl;
 import com.baichang.android.widget.R;
+import com.baichang.android.widget.photoView.OnViewTapListener;
 import com.baichang.android.widget.photoView.PhotoView;
-import com.baichang.android.widget.photoView.PhotoViewAttacher.OnViewTapListener;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
@@ -35,128 +35,130 @@ import java.io.IOException;
 public class PhotoGalleryFragment extends Fragment
     implements OnViewTapListener, OnLongClickListener {
 
-  private static final String PHOTO_PARAM = "photo_param";
-  private static final String LOCAL_PARAM = "local_param";
-  private PhotoView mPhoto;
-  private String imageUrl;
-  private boolean isLocal; // 是否加载本地
+    private static final String PHOTO_PARAM = "photo_param";
+    private static final String LOCAL_PARAM = "local_param";
+    private PhotoView mPhoto;
+    private String imageUrl;
+    private boolean isLocal; // 是否加载本地
 
-  public PhotoGalleryFragment() {
-  }
-
-  public static PhotoGalleryFragment newInstance(String param, boolean isLocal) {
-    PhotoGalleryFragment fragment = new PhotoGalleryFragment();
-    Bundle args = new Bundle();
-    args.putString(PHOTO_PARAM, param);
-    args.putBoolean(LOCAL_PARAM, isLocal);
-    fragment.setArguments(args);
-    return fragment;
-  }
-
-  @Override public void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    if (getArguments() != null) {
-      imageUrl = getArguments().getString(PHOTO_PARAM);
-      isLocal = getArguments().getBoolean(LOCAL_PARAM);
-    }
-  }
-
-  @Override public View onCreateView(LayoutInflater inflater, ViewGroup container,
-      Bundle savedInstanceState) {
-    return createView(inflater, container);
-  }
-
-  private View createView(LayoutInflater inflater, ViewGroup container) {
-    View view = inflater.inflate(R.layout.fragment_photo_gallery_image_banner, container, false);
-    mPhoto = (PhotoView) view.findViewById(R.id.fragment_photo_gallery_image_banner_image);
-    mPhoto.setOnViewTapListener(this);
-    mPhoto.setOnLongClickListener(this);
-    //ImageLoader.loadImage(getActivity().getApplicationContext(), imageUrl, mPhoto);
-    // 转成Drawable 加载，不然下面长按保存会报错。
-    Glide.with(getActivity())
-        .load(isLocal ? imageUrl : ConfigurationImpl.get().getApiLoadImage() + imageUrl)
-        .asBitmap()
-        .into(new SimpleTarget<Bitmap>() {
-          @Override public void onResourceReady(Bitmap resource,
-              GlideAnimation<? super Bitmap> glideAnimation) {
-            mPhoto.setImageBitmap(resource);
-          }
-        });
-    return view;
-  }
-
-  @Override public void onViewTap(View view, float x, float y) {
-    getActivity().finish();
-  }
-
-  @Override public boolean onLongClick(final View v) {
-    new Builder(getActivity()).setMessage("保存图片")
-        .setPositiveButton("保存", new DialogInterface.OnClickListener() {
-          @Override public void onClick(DialogInterface dialog, int which) {
-            BitmapDrawable drawable = (BitmapDrawable) ((ImageView) v).getDrawable();
-            if (drawable != null) {
-              saveBitmap(drawable.getBitmap());
-            }
-          }
-        })
-        .setNegativeButton("取消", null)
-        .create()
-        .show();
-    return true;
-  }
-
-  private void saveBitmap(Bitmap bitmap) {
-    String path = saveImageToGallery(getActivity(), bitmap);
-    if (TextUtils.isEmpty(path)) {
-      Toast.makeText(getActivity(), "保存失败", Toast.LENGTH_SHORT).show();
-    } else {
-      Toast.makeText(getActivity(), "保存成功,请到相册查看 " + path, Toast.LENGTH_SHORT).show();
-    }
-  }
-
-  /**
-   * 保存图片到指定目录，并且更新图库
-   *
-   * @param context 上下文
-   * @param bmp 要保存的Bitmap
-   * @return 文件路径
-   */
-  private String saveImageToGallery(Context context, Bitmap bmp) {
-    PackageManager manager = context.getPackageManager();
-    ApplicationInfo info = null;
-    try {
-      info = manager.getApplicationInfo(context.getPackageName(), 0);
-    } catch (PackageManager.NameNotFoundException e) {
-      e.printStackTrace();
-    }
-    String appName = (String) manager.getApplicationLabel(info);
-    // 首先保存图片
-    File appDir = context.getExternalFilesDir(appName);
-    if (!appDir.exists()) {
-      appDir.mkdir();
-    }
-    String fileName = System.currentTimeMillis() + ".jpg";
-    File file = new File(appDir, fileName);
-    try {
-      FileOutputStream fos = new FileOutputStream(file);
-      bmp.compress(CompressFormat.JPEG, 100, fos);
-      fos.flush();
-      fos.close();
-    } catch (IOException e) {
-      e.printStackTrace();
+    public PhotoGalleryFragment() {
     }
 
-    // 其次把文件插入到系统图库
-    try {
-      MediaStore.Images.Media.insertImage(context.getContentResolver(), file.getAbsolutePath(),
-          fileName, null);
-    } catch (FileNotFoundException e) {
-      e.printStackTrace();
+    public static PhotoGalleryFragment newInstance(String param, boolean isLocal) {
+        PhotoGalleryFragment fragment = new PhotoGalleryFragment();
+        Bundle args = new Bundle();
+        args.putString(PHOTO_PARAM, param);
+        args.putBoolean(LOCAL_PARAM, isLocal);
+        fragment.setArguments(args);
+        return fragment;
     }
-    // 最后通知图库更新
-    String path = file.getAbsolutePath();
-    context.sendBroadcast(
-        new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse("file://" + path)));
-    return path;
-  }
+
+    @Override public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            imageUrl = getArguments().getString(PHOTO_PARAM);
+            isLocal = getArguments().getBoolean(LOCAL_PARAM);
+        }
+    }
+
+    @Override public View onCreateView(LayoutInflater inflater, ViewGroup container,
+        Bundle savedInstanceState) {
+        return createView(inflater, container);
+    }
+
+    private View createView(LayoutInflater inflater, ViewGroup container) {
+        View view =
+            inflater.inflate(R.layout.fragment_photo_gallery_image_banner, container, false);
+        mPhoto = (PhotoView) view.findViewById(R.id.fragment_photo_gallery_image_banner_image);
+        mPhoto.setOnViewTapListener(this);
+        mPhoto.setOnLongClickListener(this);
+        //ImageLoader.loadImage(getActivity().getApplicationContext(), imageUrl, mPhoto);
+        // 转成Drawable 加载，不然下面长按保存会报错。
+        Glide.with(getActivity())
+            .load(isLocal ? imageUrl : ConfigurationImpl.get().getApiLoadImage() + imageUrl)
+            .asBitmap()
+            .into(new SimpleTarget<Bitmap>() {
+                @Override public void onResourceReady(Bitmap resource,
+                    GlideAnimation<? super Bitmap> glideAnimation) {
+                    mPhoto.setImageBitmap(resource);
+                }
+            });
+        return view;
+    }
+
+    @Override public void onViewTap(View view, float x, float y) {
+        getActivity().finish();
+    }
+
+    @Override public boolean onLongClick(final View v) {
+        new Builder(getActivity()).setMessage("保存图片")
+            .setPositiveButton("保存", new DialogInterface.OnClickListener() {
+                @Override public void onClick(DialogInterface dialog, int which) {
+                    BitmapDrawable drawable = (BitmapDrawable) ((ImageView) v).getDrawable();
+                    if (drawable != null) {
+                        saveBitmap(drawable.getBitmap());
+                    }
+                }
+            })
+            .setNegativeButton("取消", null)
+            .create()
+            .show();
+        return true;
+    }
+
+    private void saveBitmap(Bitmap bitmap) {
+        String path = saveImageToGallery(getActivity(), bitmap);
+        if (TextUtils.isEmpty(path)) {
+            Toast.makeText(getActivity(), "保存失败", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(getActivity(), "保存成功,请到相册查看 " + path, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    /**
+     * 保存图片到指定目录，并且更新图库
+     *
+     * @param context 上下文
+     * @param bmp 要保存的Bitmap
+     * @return 文件路径
+     */
+    private String saveImageToGallery(Context context, Bitmap bmp) {
+        PackageManager manager = context.getPackageManager();
+        ApplicationInfo info = null;
+        try {
+            info = manager.getApplicationInfo(context.getPackageName(), 0);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        String appName = (String) manager.getApplicationLabel(info);
+        // 首先保存图片
+        File appDir = context.getExternalFilesDir(appName);
+        if (!appDir.exists()) {
+            appDir.mkdir();
+        }
+        String fileName = System.currentTimeMillis() + ".jpg";
+        File file = new File(appDir, fileName);
+        try {
+            FileOutputStream fos = new FileOutputStream(file);
+            bmp.compress(CompressFormat.JPEG, 100, fos);
+            fos.flush();
+            fos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // 其次把文件插入到系统图库
+        try {
+            MediaStore.Images.Media.insertImage(context.getContentResolver(),
+                file.getAbsolutePath(),
+                fileName, null);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        // 最后通知图库更新
+        String path = file.getAbsolutePath();
+        context.sendBroadcast(
+            new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse("file://" + path)));
+        return path;
+    }
 }

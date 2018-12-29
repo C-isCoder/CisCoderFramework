@@ -1,54 +1,56 @@
 apply plugin: 'com.android.library'
 apply plugin: 'maven'
-android {
-    compileSdkVersion rootProject.ext.android.compileSdkVersion
-    buildToolsVersion rootProject.ext.android.buildToolsVersion
+apply from: '../maven-config.gradle'
+apply from: '../depend-config.gradle'
 
-    defaultConfig {
-        minSdkVersion rootProject.ext.android.minSdkVersion
-        targetSdkVersion rootProject.ext.android.targetSdkVersion
+android {
+  compileSdkVersion android.cSdkVersion
+  buildToolsVersion android.bToolsVersion
+
+  defaultConfig {
+    minSdkVersion android.mSdkVersion
+    targetSdkVersion android.tSdkVersion
+  }
+  buildTypes {
+    release {
+      minifyEnabled false
+      proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
     }
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
+  }
+  repositories {
+    flatDir {
+      dirs 'libs'
     }
-    repositories {
-        flatDir {
-            dirs 'libs'
-        }
-    }
+  }
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    provided rootProject.ext.depend.v4
-    provided project(':config')
+  compile fileTree(include: ['*.jar'], dir: 'libs')
+  provided depend.v4
+  provided project(':config')
+  compile files('libs/pinyin4j-2.5.0.jar')
 }
 uploadArchives {
-    configuration = configurations.archives
-    repositories {
-        mavenDeployer {
-            snapshotRepository(url: rootProject.ext.maven.snapshot) {
-                authentication(userName: rootProject.ext.maven.name,
-                        password: rootProject.ext.maven.password)
-            }
-            repository(url: rootProject.ext.maven.repository) {
-                authentication(userName: rootProject.ext.maven.name,
-                        password: rootProject.ext.maven.password)
-            }
-            pom.project {
-                version rootProject.ext.utils.version
-                artifactId rootProject.ext.utils.artifactId
-                groupId rootProject.ext.utils.groupId
-                packaging rootProject.ext.utils.packaging
-                description rootProject.ext.utils.description
-            }
-        }
+  configuration = configurations.archives
+  repositories {
+    mavenDeployer {
+      snapshotRepository(url: maven.snapshot) {
+        authentication(userName: maven.name, password: maven.password)
+      }
+      repository(url: maven.repository) {
+        authentication(userName: maven.name, password: maven.password)
+      }
+      pom.project {
+        version utils.version
+        artifactId utils.artifactId
+        groupId utils.groupId
+        packaging utils.packaging
+        description utils.description
+      }
     }
+  }
 }
 
 artifacts {
-    archives file(rootProject.ext.utils.artifacts)
+  archives file(utils.artifacts)
 }

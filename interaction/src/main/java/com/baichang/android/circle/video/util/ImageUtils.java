@@ -139,7 +139,8 @@ public class ImageUtils {
             e.printStackTrace();
         }
         // 最后通知图库更新
-        context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse("file://" + path)));
+        context.sendBroadcast(new Intent(
+                Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse("file://" + path)));
     }
 
     /**
@@ -168,7 +169,8 @@ public class ImageUtils {
             e.printStackTrace();
         }
         // 最后通知图库更新
-        context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse("file://" + path)));
+        context.sendBroadcast(new Intent(
+                Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse("file://" + path)));
     }
 
     public static Bitmap drawBg4Bitmap(int bgColor, int bitColot, Bitmap orginBitmap) {

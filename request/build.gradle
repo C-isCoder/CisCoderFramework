@@ -1,56 +1,55 @@
 apply plugin: 'com.android.library'
 apply plugin: 'maven'
+apply from: '../maven-config.gradle'
+apply from: '../depend-config.gradle'
 
 android {
-    compileSdkVersion rootProject.ext.android.compileSdkVersion
-    buildToolsVersion rootProject.ext.android.buildToolsVersion
+  compileSdkVersion android.cSdkVersion
+  buildToolsVersion android.bToolsVersion
 
-    defaultConfig {
-        minSdkVersion rootProject.ext.android.minSdkVersion
-        targetSdkVersion rootProject.ext.android.targetSdkVersion
+  defaultConfig {
+    minSdkVersion android.mSdkVersion
+    targetSdkVersion android.tSdkVersion
+  }
+  buildTypes {
+    release {
+      minifyEnabled false
+      proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
     }
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-    }
-    dependencies {
-        compile fileTree(include: ['*.jar'], dir: 'libs')
-        compile rootProject.ext.depend.retrofit
-        compile rootProject.ext.depend.urlconnection
-        compile rootProject.ext.depend.gsonconverter
-        compile rootProject.ext.depend.rxjavaadapter
-        compile rootProject.ext.depend.rxandroid
-        compile rootProject.ext.depend.v7
-        compile rootProject.ext.depend.logger
-        provided project(':config')
-        provided project(':widget')
-    }
+  }
+  dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile depend.retrofit
+    compile depend.urlconnection
+    compile depend.gsonconverter
+    compile depend.rxjavaadapter
+    compile depend.rxandroid
+    compile depend.v7
+    provided project(':config')
+    provided project(':widget')
+  }
 }
 uploadArchives {
-    configuration = configurations.archives
-    repositories {
-        mavenDeployer {
-            snapshotRepository(url: rootProject.ext.maven.snapshot) {
-                authentication(userName: rootProject.ext.maven.name,
-                        password: rootProject.ext.maven.password)
-            }
-            repository(url: rootProject.ext.maven.repository) {
-                authentication(userName: rootProject.ext.maven.name,
-                        password: rootProject.ext.maven.password)
-            }
-            pom.project {
-                version rootProject.ext.request.version
-                artifactId rootProject.ext.request.artifactId
-                groupId rootProject.ext.request.groupId
-                packaging rootProject.ext.request.packaging
-                description rootProject.ext.request.description
-            }
-        }
+  configuration = configurations.archives
+  repositories {
+    mavenDeployer {
+      snapshotRepository(url: maven.snapshot) {
+        authentication(userName: maven.name, password: maven.password)
+      }
+      repository(url: maven.repository) {
+        authentication(userName: maven.name, password: maven.password)
+      }
+      pom.project {
+        version request.version
+        artifactId request.artifactId
+        groupId request.groupId
+        packaging request.packaging
+        description request.description
+      }
     }
+  }
 }
 
 artifacts {
-    archives file(rootProject.ext.request.artifacts)
+  archives file(request.artifacts)
 }

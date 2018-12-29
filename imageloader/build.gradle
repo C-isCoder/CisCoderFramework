@@ -1,12 +1,15 @@
 apply plugin: 'com.android.library'
 apply plugin: 'maven'
+apply from: '../maven-config.gradle'
+apply from: '../depend-config.gradle'
+
 android {
-    compileSdkVersion rootProject.ext.android.compileSdkVersion
-    buildToolsVersion rootProject.ext.android.buildToolsVersion
+    compileSdkVersion android.cSdkVersion
+    buildToolsVersion android.bToolsVersion
 
     defaultConfig {
-        minSdkVersion rootProject.ext.android.minSdkVersion
-        targetSdkVersion rootProject.ext.android.targetSdkVersion
+        minSdkVersion android.mSdkVersion
+        targetSdkVersion android.tSdkVersion
     }
     buildTypes {
         release {
@@ -19,33 +22,33 @@ android {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     //图片加载
-    compile rootProject.ext.depend.glide
-    provided rootProject.ext.depend.v4
+    compile depend.glide
+    provided depend.v4
     provided project(':config')
 }
 uploadArchives {
     configuration = configurations.archives
     repositories {
         mavenDeployer {
-            snapshotRepository(url: rootProject.ext.maven.snapshot) {
-                authentication(userName: rootProject.ext.maven.name,
-                        password: rootProject.ext.maven.password)
+            snapshotRepository(url: maven.snapshot) {
+                authentication(userName: maven.name,
+                        password: maven.password)
             }
-            repository(url: rootProject.ext.maven.repository) {
-                authentication(userName: rootProject.ext.maven.name,
-                        password: rootProject.ext.maven.password)
+            repository(url: maven.repository) {
+                authentication(userName: maven.name,
+                        password: maven.password)
             }
             pom.project {
-                version rootProject.ext.imageloader.version
-                artifactId rootProject.ext.imageloader.artifactId
-                groupId rootProject.ext.imageloader.groupId
-                packaging rootProject.ext.imageloader.packaging
-                description rootProject.ext.imageloader.description
+                version imageloader.version
+                artifactId imageloader.artifactId
+                groupId imageloader.groupId
+                packaging imageloader.packaging
+                description imageloader.description
             }
         }
     }
 }
 
 artifacts {
-    archives file(rootProject.ext.imageloader.artifacts)
+    archives file(imageloader.artifacts)
 }
