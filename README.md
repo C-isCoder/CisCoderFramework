@@ -2,6 +2,12 @@
 
 ## 更新说明：
 
+### 2019-01-08
+
+* 修复 request 请求无网的时候报错提示。
+
+* `compile 'com.baichang.android.library:request:1.0.7'`
+ 
 ### 2018-11-01
 
 * 拼音转换工具修改

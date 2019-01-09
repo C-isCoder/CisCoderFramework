@@ -49,25 +49,25 @@ public class HttpLoggerInterceptor implements Interceptor {
         newUrl.addQueryParameter("sign", md5).addQueryParameter("token", token);
         if (ConfigurationImpl.get().isDebug()) {
             Log.i(TAG, "REQUEST:\n"
-                + "param->[T_T] ："
-                + parameter
-                + "\n"
-                + "url->[=_=]   ："
-                + url
-                + "\n"
-                + "sign->[o_o]  ："
-                + md5
-                + "\n"
-                + "token->[$_$] ："
-                + token
-                + "\n"
-                + "method->[^_^]："
-                + request.method());
+              + "param->[T_T] ："
+              + parameter
+              + "\n"
+              + "url->[=_=]   ："
+              + url
+              + "\n"
+              + "sign->[o_o]  ："
+              + md5
+              + "\n"
+              + "token->[$_$] ："
+              + token
+              + "\n"
+              + "method->[^_^]："
+              + request.method());
         }
         Request.Builder requestBuilder = request.newBuilder()
-            .method(request.method(), request.body())
-            .url(newUrl.build())
-            .addHeader("Authorization", token);
+          .method(request.method(), request.body())
+          .url(newUrl.build())
+          .addHeader("Authorization", token);
         newRequest = requestBuilder.build();
         if (ConfigurationImpl.get().isDebug()) {
             long startNs = System.nanoTime();
@@ -100,17 +100,24 @@ public class HttpLoggerInterceptor implements Interceptor {
             }
             if (contentLength != 0 && ConfigurationImpl.get().isDebug()) {
                 Log.d(TAG, "RESPONSE:\n"
-                    + "url:"
-                    + response.request().url()
-                    + "\n"
-                    + "timer:"
-                    + tookMs
-                    + "ms\n"
-                    + responseBuffer.clone().readString(charset));
+                  + "url:"
+                  + response.request().url()
+                  + "\n"
+                  + "timer:"
+                  + tookMs
+                  + "ms\n"
+                  + responseBuffer.clone().readString(charset));
             }
             return response;
         } else {
-            return chain.proceed(newRequest);
+            try {
+                return chain.proceed(newRequest);
+            } catch (Exception e) {
+                if (ConfigurationImpl.get().isDebug()) {
+                    Log.e(TAG, error_msg + ": " + e.getMessage());
+                }
+                throw new HttpException(error_msg);
+            }
         }
     }
 

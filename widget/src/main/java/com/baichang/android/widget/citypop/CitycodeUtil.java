@@ -9,7 +9,7 @@ import java.util.List;
  *
  * @author zd
  */
-public class CityCodeUtil {
+class CityCodeUtil {
 
     private ArrayList<String> province_list = new ArrayList<String>();
     private ArrayList<String> city_list = new ArrayList<String>();
