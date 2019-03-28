@@ -2,6 +2,14 @@
 
 ## 更新说明：
 
+### 2019-03-28
+
+* 修复 interaction 和 interaction_no_video 两个库引用的 widget 包版本过低
+
+* `compile 'com.baichang.android.module:interaction:0.0.5'`
+
+* `compile 'com.baichang.android.module:interaction_no_video:0.0.2'`
+
 ### 2019-01-08
 
 * 修复 request 请求无网的时候报错提示。
@@ -573,9 +581,11 @@ BCUmUtil.setShareMedia(SHARE_MEDIA[] displayList //要分享的 )
 
 * 基础配置  `compile 'com.baichang.android.library:config:1.0.1'`
 
-* 佰昌互动  `compile 'com.baichang.android.module:interaction:0.0.4'`**可发小视频**
+* 佰昌互动 `compile
+  'com.baichang.android.module:interaction:0.0.5'`**可发小视频**
 
-* 佰昌互动  `compile 'com.baichang.android.module:interaction:0.0.1'`**无小视频**
+* 佰昌互动 `compile
+  'com.baichang.android.module:interaction:0.0.2'`**无小视频**
 
 * 友盟分享  `compile 'com.baichang.android.library:umShare:2.0.1'`
 

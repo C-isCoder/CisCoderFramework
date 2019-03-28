@@ -1,18 +1,12 @@
 package com.baichang.android.circle.common;
 
 import android.content.Context;
-import android.support.annotation.Nullable;
 import android.text.TextUtils;
-import com.baichang.android.circle.BuildConfig;
 import com.baichang.android.circle.R;
 import com.baichang.android.circle.entity.InteractionUserData;
 import com.baichang.android.common.BCApplication;
 import com.baichang.android.config.Configuration;
 import com.baichang.android.config.ConfigurationImpl;
-import com.orhanobut.logger.AndroidLogAdapter;
-import com.orhanobut.logger.FormatStrategy;
-import com.orhanobut.logger.Logger;
-import com.orhanobut.logger.PrettyFormatStrategy;
 
 /**
  * Created by iCong. Time:2016/11/25-14:48.
@@ -25,11 +19,11 @@ public class InteractionApplication extends BCApplication implements Configurati
     //user
     private static InteractionUserData USER = null;
 
-    @Override public void onCreate() {
+    @Override
+    public void onCreate() {
         super.onCreate();
         //配置URL TOKEN
         ConfigurationImpl.init(this);
-        initLogger();
         //互动 配置
         //    InteractionConfig.getInstance()
         //        .setTextFontColor(R.color.cm_btn_orange_yellow)
@@ -49,18 +43,9 @@ public class InteractionApplication extends BCApplication implements Configurati
         //        });
     }
 
-    private void initLogger() {
-        FormatStrategy formatStrategy = PrettyFormatStrategy.newBuilder()
-                .showThreadInfo(false)
-                .methodCount(0)
-                .methodOffset(7)
-                .tag("REQUEST")
-                .build();
-        Logger.addLogAdapter(new AndroidLogAdapter(formatStrategy) {
-            @Override public boolean isLoggable(int priority, @Nullable String tag) {
-                return BuildConfig.DEBUG;
-            }
-        });
+    @Override
+    protected void initACache() {
+
     }
 
     public static void setToken(String Token) {
@@ -78,45 +63,60 @@ public class InteractionApplication extends BCApplication implements Configurati
         return USER;
     }
 
-    @Override public String getApiDefaultHost() {
+    @Override
+    public String getApiDefaultHost() {
         return InteractionAPIConstants.API_DEFAULT_HOST;
     }
 
-    @Override public String getApiWebView() {
+    @Override
+    public String getApiWebView() {
         return "";
     }
 
-    @Override public Context getAppContext() {
+    @Override
+    public Context getAppContext() {
         return getApplicationContext();
     }
 
-    @Override public String getApiUploadImage() {
+    @Override
+    public String getApiUploadImage() {
         return InteractionAPIConstants.API_UPLOAD_IMAGE;
     }
 
-    @Override public String getApiLoadImage() {
+    @Override
+    public String getApiLoadImage() {
         return InteractionAPIConstants.API_LOAD_IMAGE;
     }
 
-    @Override public String getToken() {
+    @Override
+    public String getToken() {
         return TextUtils.isEmpty(TOKEN) ? InteractionDiskCache.getToken() : TOKEN;
     }
 
-    @Override public String getApiDownload() {
+    @Override
+    public String getApiDownload() {
         return "";
     }
 
-    @Override public String getApiUpload() {
+    @Override
+    public String getApiUpload() {
         return InteractionAPIConstants.API_UPLOAD_IMAGE;
     }
 
-    @Override public void refreshToken() {
+    @Override
+    public void refreshToken() {
 
     }
 
-    @Override public int getAppBarColor() {
+    @Override
+    public int getAppBarColor() {
         return InteractionConfig.getInstance().getTextFontColor() == -1
-                ? R.color.interaction_text_font
-                : InteractionConfig.getInstance().getTextFontColor();
+            ? R.color.interaction_text_font
+            : InteractionConfig.getInstance().getTextFontColor();
+    }
+
+    @Override
+    public boolean isDebug() {
+        return false;
     }
 }

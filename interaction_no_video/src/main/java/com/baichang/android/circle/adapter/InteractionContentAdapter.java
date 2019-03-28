@@ -46,8 +46,6 @@ import java.util.List;
 
 public class InteractionContentAdapter extends Adapter<ViewHolder> {
 
-    private static final String TAG = "CID";
-    //private List<InteractionListData> mList = InteractionDiskCache.getCache();
     private List<InteractionListData> mList = new ArrayList<>();
     private int mType;
 
@@ -55,12 +53,14 @@ public class InteractionContentAdapter extends Adapter<ViewHolder> {
         mType = type;
     }
 
-    @Override public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    @Override
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         return new ViewHolder(LayoutInflater.from(parent.getContext())
             .inflate(R.layout.interaction_item_content_layout, parent, false));
     }
 
-    @Override public void onBindViewHolder(final ViewHolder holder, final int position) {
+    @Override
+    public void onBindViewHolder(final ViewHolder holder, int position) {
         final InteractionListData data = mList.get(position);
         ImageLoader.loadImageError(holder.itemView.getContext(), data.avatar,
             R.mipmap.interaction_icon_default, holder.ivAvatar);
@@ -85,9 +85,10 @@ public class InteractionContentAdapter extends Adapter<ViewHolder> {
                 holder.tvAll.setVisibility(View.GONE);
             }
             holder.tvAll.setOnClickListener(new OnClickListener() {
-                @Override public void onClick(View v) {
+                @Override
+                public void onClick(View v) {
                     data.isShowAll = !data.isShowAll;
-                    notifyItemChanged(position);
+                    notifyItemChanged(holder.getAdapterPosition());
                 }
             });
         } else {
@@ -218,7 +219,8 @@ public class InteractionContentAdapter extends Adapter<ViewHolder> {
         void cancel(InteractionListData data);
     }
 
-    @Override public int getItemCount() {
+    @Override
+    public int getItemCount() {
         return mList == null ? 0 : mList.size();
     }
 
@@ -284,13 +286,14 @@ public class InteractionContentAdapter extends Adapter<ViewHolder> {
             int deleteDrawableRes = InteractionConfig.getInstance().getButtonDrawableRes();
             if (deleteDrawableRes != -1) {
                 ColorStateList stateList = new ColorStateList(
-                    new int[][] { new int[] { android.R.attr.state_pressed }, new int[] { 0 } },
-                    new int[] { deleteDrawableRes, R.color.cm_tv_black1 });
+                    new int[][]{new int[]{android.R.attr.state_pressed}, new int[]{0}},
+                    new int[]{deleteDrawableRes, R.color.cm_tv_black1});
                 tvButton.setTextColor(stateList);
             }
         }
 
-        @Override public void onItemClick(PhotoContents photoContents, int position) {
+        @Override
+        public void onItemClick(PhotoContents photoContents, int position) {
             InteractionListData data = mList.get(getAdapterPosition());
             List<ImageInfo> imageInfoList = new ArrayList<>();
             for (int i = 0; i < data.images.size(); i++) {
@@ -314,7 +317,8 @@ public class InteractionContentAdapter extends Adapter<ViewHolder> {
             ((Activity) photoContents.getContext()).overridePendingTransition(0, 0);
         }
 
-        @Override public boolean onTouch(View v, MotionEvent event) {
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
             long upTime;
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
@@ -332,7 +336,8 @@ public class InteractionContentAdapter extends Adapter<ViewHolder> {
             return true;
         }
 
-        @Override public void onClick(View v) {
+        @Override
+        public void onClick(View v) {
             int i = v.getId();
             if (i == tvPraise.getId()) {
                 if (interactionClickListener != null) {
@@ -386,12 +391,14 @@ public class InteractionContentAdapter extends Adapter<ViewHolder> {
             return convertView;
         }
 
-        @Override public void onBindData(int position, @NonNull ImageView convertView) {
+        @Override
+        public void onBindData(int position, @NonNull ImageView convertView) {
             ImageLoader.loadImageError(convertView.getContext(), mImageList.get(position),
                 R.mipmap.interaction_place_image, convertView);
         }
 
-        @Override public int getCount() {
+        @Override
+        public int getCount() {
             return mImageList.size();
         }
 

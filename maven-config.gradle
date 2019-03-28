@@ -99,7 +99,7 @@ ext {
   ]
 
   interaction = [
-      version: '0.0.4',
+      version: '0.0.5',
       artifactId: 'interaction',
       packaging: 'aar',
       description: 'Interaction Model',
@@ -117,7 +117,7 @@ ext {
   ]
 
   interaction_no_video = [
-      version: '0.0.1',
+      version: '0.0.2',
       artifactId: 'interaction_no_video',
       packaging: 'aar',
       description: 'Interaction Model no small video',

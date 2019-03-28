@@ -27,7 +27,7 @@ dependencies {
 
   provided project(':config')
   provided project(':request')
-  compile 'com.baichang.android.library:widget:1.0.1'
+  compile 'com.baichang.android.library:widget:1.0.5'
   provided project(':imageloader')
   provided project(':common')
   provided project(':utils')
