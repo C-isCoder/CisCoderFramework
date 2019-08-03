@@ -22,7 +22,7 @@
 
 ### 2018-09-14
 
-* request 修改请求拦截，Header 添加 jwt
+* request 修改请求拦截，Header 添加 jwt
 
 * `compile 'com.baichang.android.library:request:1.0.6''`
 
