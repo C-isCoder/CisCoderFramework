@@ -1,5 +1,6 @@
 package com.baichang.android.request;
 
+import android.text.TextUtils;
 import android.util.Log;
 import com.baichang.android.config.ConfigurationImpl;
 import java.io.EOFException;
@@ -30,7 +31,8 @@ public class HttpLoggerInterceptor implements Interceptor {
     public HttpLoggerInterceptor() {
     }
 
-    @Override public Response intercept(Chain chain) throws IOException {
+    @Override
+    public Response intercept(Chain chain) throws IOException {
         Request request = chain.request();
         Request newRequest;
         RequestBody requestBody = request.body();
@@ -49,25 +51,25 @@ public class HttpLoggerInterceptor implements Interceptor {
         newUrl.addQueryParameter("sign", md5).addQueryParameter("token", token);
         if (ConfigurationImpl.get().isDebug()) {
             Log.i(TAG, "REQUEST:\n"
-              + "param->[T_T] ："
-              + parameter
-              + "\n"
-              + "url->[=_=]   ："
-              + url
-              + "\n"
-              + "sign->[o_o]  ："
-              + md5
-              + "\n"
-              + "token->[$_$] ："
-              + token
-              + "\n"
-              + "method->[^_^]："
-              + request.method());
+                + "param->[T_T] ："
+                + parameter
+                + "\n"
+                + "url->[=_=]   ："
+                + url
+                + "\n"
+                + "sign->[o_o]  ："
+                + md5
+                + "\n"
+                + "token->[$_$] ："
+                + token
+                + "\n"
+                + "method->[^_^]："
+                + request.method());
         }
         Request.Builder requestBuilder = request.newBuilder()
-          .method(request.method(), request.body())
-          .url(newUrl.build())
-          .addHeader("Authorization", token);
+            .method(request.method(), request.body())
+            .url(newUrl.build())
+            .addHeader("Authorization", TextUtils.isEmpty(token) ? "" : token);
         newRequest = requestBuilder.build();
         if (ConfigurationImpl.get().isDebug()) {
             long startNs = System.nanoTime();
@@ -100,13 +102,13 @@ public class HttpLoggerInterceptor implements Interceptor {
             }
             if (contentLength != 0 && ConfigurationImpl.get().isDebug()) {
                 Log.d(TAG, "RESPONSE:\n"
-                  + "url:"
-                  + response.request().url()
-                  + "\n"
-                  + "timer:"
-                  + tookMs
-                  + "ms\n"
-                  + responseBuffer.clone().readString(charset));
+                    + "url:"
+                    + response.request().url()
+                    + "\n"
+                    + "timer:"
+                    + tookMs
+                    + "ms\n"
+                    + responseBuffer.clone().readString(charset));
             }
             return response;
         } else {
